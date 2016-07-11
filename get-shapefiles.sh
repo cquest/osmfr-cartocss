@@ -78,4 +78,6 @@ echo "Downloading lowzoom raster"
 mkdir -p layers
 wget -O "layers/z7.tif" http://osm13.openstreetmap.fr/~cquest/z7.tif
 
+psql -d osm -U fr -c "CREATE TABLE params ( num integer, key text); INSERT INTO params (num, key) VALUES (128, 'buffer'), (0, 'x_bleed'), (0, 'y_bleed');" || true
+
 echo "...done!"
