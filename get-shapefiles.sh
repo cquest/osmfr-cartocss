@@ -73,4 +73,9 @@ ogr2ogr data/ne_10m_populated_places/ne_10m_populated_places_fixed.shp data/ne_1
 echo "cleaning up..."
 rm data/ne_10m_populated_places/ne_10m_populated_places.*
 
+# Getting z7.tif
+echo "Downloading lowzoom raster"
+mkdir -p layers
+wget -O "layers/z7.tif" http://osm13.openstreetmap.fr/~cquest/z7.tif
+
 echo "...done!"
