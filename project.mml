@@ -2071,7 +2071,7 @@
       ],
       "Datasource": {
         "type": "postgis",
-        "table": "(select ST_LineMerge(st_collect(way2)) as way, cast(regexp_replace(admin_level,'[^0-9]','','g') as integer) as admin_level, maritime from (select ST_SimplifyPreserveTopology(way,0.5) as way2,min(admin_level) as admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('0','1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') group by way, maritime) as admins group by admin_level, maritime order by 2 desc) as admin",
+        "table": "(select ST_LineMerge(st_collect(way2)) as way, cast(coalesce(nullif(regexp_replace(admin_level,'[^0-9]','','g'), ''), '0') as integer) as admin_level, maritime from (select ST_SimplifyPreserveTopology(way,0.5) as way2,min(admin_level) as admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('0','1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') group by way, maritime) as admins group by admin_level, maritime order by 2 desc) as admin",
         "extent_cache": "custom",
         "extent": "-20037508.34,-20037508.34,20037508.34,20037508.34",
         "key_field": "",
@@ -2101,7 +2101,7 @@
       ],
       "Datasource": {
         "type": "postgis",
-        "table": "(select way, admin_level from planet_osm_roads r where boundary='administrative' and admin_level not in ('2','3','4') order by cast(regexp_replace(admin_level,'[^0-9]','','g') as integer) desc ) as admin",
+        "table": "(select way, admin_level from planet_osm_roads r where boundary='administrative' and admin_level not in ('2','3','4') order by cast(coalesce(nullif(regexp_replace(admin_level,'[^0-9]','','g'), ''), '0') as integer) desc ) as admin",
         "extent_cache": "custom",
         "extent": "-20037508.34,-20037508.34,20037508.34,20037508.34",
         "key_field": "",
