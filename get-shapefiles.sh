@@ -79,5 +79,8 @@ mkdir -p layers
 wget -O "layers/z7.tif" http://osm13.openstreetmap.fr/~cquest/z7.tif
 
 psql -d osm -U fr -c "CREATE TABLE params ( num integer, key text); INSERT INTO params (num, key) VALUES (128, 'buffer'), (0, 'x_bleed'), (0, 'y_bleed');" || true
+# These tables are required, but should be filled with proper, real data.
+psql -d osm -U fr -c "create table bano (geo geometry(Point, 900913), num integer);" || true
+psql -d osm -U fr -c "create table contours (contour geometry(LineString, 900913), ele NUMERIC);" || true
 
 echo "...done!"
