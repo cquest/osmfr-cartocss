@@ -16,6 +16,31 @@ curl -z data/world_boundaries-spherical.tgz -L -o data/world_boundaries-spherica
 echo "expanding world_boundaries..."
 tar -xzf data/world_boundaries-spherical.tgz -C data/
 
+# simplified-land-polygons-complete-3857
+echo "downloading simplified-land-polygons-complete-3857..."
+curl -z "data/simplified-land-polygons-complete-3857.zip" -L -o "data/simplified-land-polygons-complete-3857.zip" "http://data.openstreetmapdata.com/simplified-land-polygons-complete-3857.zip"
+echo "simplified-land-polygons-complete-3857..."
+UNZIP_OPTS=-qqun
+unzip $UNZIP_OPTS data/simplified-land-polygons-complete-3857.zip \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.shp \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.shx \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.prj \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.dbf \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.cpg \
+  -d data/
+
+# land-polygons-split-3857
+echo "downloading land-polygons-split-3857..."
+curl -z "data/land-polygons-split-3857.zip" -L -o "data/land-polygons-split-3857.zip" "http://data.openstreetmapdata.com/land-polygons-split-3857.zip"
+echo "expanding land-polygons-split-3857..."
+unzip $UNZIP_OPTS data/land-polygons-split-3857.zip \
+  land-polygons-split-3857/land_polygons.shp \
+  land-polygons-split-3857/land_polygons.shx \
+  land-polygons-split-3857/land_polygons.prj \
+  land-polygons-split-3857/land_polygons.dbf \
+  land-polygons-split-3857/land_polygons.cpg \
+  -d data/
+
 # shoreline_300
 echo "dowloading shoreline_300..."
 curl -z data/shoreline_300.tar.bz2 -L -o data/shoreline_300.tar.bz2 http://tile.openstreetmap.org/shoreline_300.tar.bz2
