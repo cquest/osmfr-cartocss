@@ -16,6 +16,31 @@ curl -z data/world_boundaries-spherical.tgz -L -o data/world_boundaries-spherica
 echo "expanding world_boundaries..."
 tar -xzf data/world_boundaries-spherical.tgz -C data/
 
+# simplified-land-polygons-complete-3857
+echo "downloading simplified-land-polygons-complete-3857..."
+curl -z "data/simplified-land-polygons-complete-3857.zip" -L -o "data/simplified-land-polygons-complete-3857.zip" "http://data.openstreetmapdata.com/simplified-land-polygons-complete-3857.zip"
+echo "simplified-land-polygons-complete-3857..."
+UNZIP_OPTS=-qqun
+unzip $UNZIP_OPTS data/simplified-land-polygons-complete-3857.zip \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.shp \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.shx \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.prj \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.dbf \
+  simplified-land-polygons-complete-3857/simplified_land_polygons.cpg \
+  -d data/
+
+# land-polygons-split-3857
+echo "downloading land-polygons-split-3857..."
+curl -z "data/land-polygons-split-3857.zip" -L -o "data/land-polygons-split-3857.zip" "http://data.openstreetmapdata.com/land-polygons-split-3857.zip"
+echo "expanding land-polygons-split-3857..."
+unzip $UNZIP_OPTS data/land-polygons-split-3857.zip \
+  land-polygons-split-3857/land_polygons.shp \
+  land-polygons-split-3857/land_polygons.shx \
+  land-polygons-split-3857/land_polygons.prj \
+  land-polygons-split-3857/land_polygons.dbf \
+  land-polygons-split-3857/land_polygons.cpg \
+  -d data/
+
 # shoreline_300
 echo "dowloading shoreline_300..."
 curl -z data/shoreline_300.tar.bz2 -L -o data/shoreline_300.tar.bz2 http://tile.openstreetmap.org/shoreline_300.tar.bz2
@@ -26,13 +51,13 @@ tar -xjf data/shoreline_300.tar.bz2 -C data/shoreline_300/
 echo "dowloading ne_110m_admin_0_boundary_lines_land..."
 curl -z data/ne_110m_admin_0_boundary_lines_land.zip -L -o data/ne_110m_admin_0_boundary_lines_land.zip http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 echo "expanding ne_110m_admin_0_boundary_lines_land..."
-unzip -qq data/ne_110m_admin_0_boundary_lines_land.zip -d data/ne_110m_admin_0_boundary_lines_land/
+unzip $UNZIP_OPTS data/ne_110m_admin_0_boundary_lines_land.zip -d data/ne_110m_admin_0_boundary_lines_land/
 
 # ne_10m_populated_places
 echo "dowloading ne_10m_populated_places..."
 curl -z data/ne_10m_populated_places.zip -L -o data/ne_10m_populated_places.zip http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
 echo "expanding ne_10m_populated_places..."
-unzip -qq data/ne_10m_populated_places.zip -d data/ne_10m_populated_places/
+unzip $UNZIP_OPTS data/ne_10m_populated_places.zip -d data/ne_10m_populated_places/
 
 # processed_p
 echo "dowloading processed_p..."
@@ -47,5 +72,15 @@ ogr2ogr data/ne_10m_populated_places/ne_10m_populated_places_fixed.shp data/ne_1
 #clean up
 echo "cleaning up..."
 rm data/ne_10m_populated_places/ne_10m_populated_places.*
+
+# Getting z7.tif
+echo "Downloading lowzoom raster"
+mkdir -p layers
+wget -O "layers/z7.tif" http://osm13.openstreetmap.fr/~cquest/z7.tif
+
+psql -d osm -U fr -c "CREATE TABLE params ( num integer, key text); INSERT INTO params (num, key) VALUES (128, 'buffer'), (0, 'x_bleed'), (0, 'y_bleed');" || true
+# These tables are required, but should be filled with proper, real data.
+psql -d osm -U fr -c "create table bano (geo geometry(Point, 900913), num integer);" || true
+psql -d osm -U fr -c "create table contours (contour geometry(LineString, 900913), ele NUMERIC);" || true
 
 echo "...done!"
