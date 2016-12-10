@@ -36,9 +36,11 @@ Additionally you need some shapefiles.
 ## Scripted download
 
 To download the shapefiles you can run the following script from this directory. No further steps should be needed as the data has been processed and placed in the requisite directories.
+The second script is also needed by the style.
 
 ```
 sh get-shapefiles.sh
+sh get-layers.sh
 ```
 
 
