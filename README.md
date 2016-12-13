@@ -30,6 +30,9 @@ It's probably easiest to grab an PBF of OSM data from [metro.teczno.com](http://
 osm2pgsql -d gis ~/path/to/data.osm.pbf
 ```
 
+You also need to run the additions.sql file to create some extra tables in the database.
+
+
 Additionally you need some shapefiles.
 
 
