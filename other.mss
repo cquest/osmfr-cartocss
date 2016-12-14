@@ -317,7 +317,7 @@
   }
 }
 
-.text [zoom >= 8] {
+.text [zoom >= 12] {
   [place = 'island'][zoom >= 12]::place {
     text-name: "[name]";
     text-fill: #000;
@@ -366,10 +366,10 @@
       text-halo-radius: 1;
       text-wrap-width: 34;
       text-placement: interior;
-	  [zoom >= 19] {
-		text-size: 10;
-		text-dy: 10;
-	  }
+  	  [zoom >= 19] {
+    		text-size: 10;
+    		text-dy: 10;
+  	  }
     }
   }
 
@@ -384,8 +384,7 @@
   }
 
   [amenity = 'library']::amenity,
-  [amenity = 'theatre']::amenity
-   {
+  [amenity = 'theatre']::amenity {
     [zoom >= 16] {
       [zoom >= 16][zoom<17] { text-name: "[nom]"; }
       text-name: "[name]";
