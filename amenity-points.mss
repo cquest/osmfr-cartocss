@@ -126,6 +126,7 @@
     [amenity = 'fountain'][zoom >= 18] {
       marker-file: url('symbols/2016/fountain-14.svg');
       marker-placement: interior;
+      marker-fill: #07d;
       marker-clip: false;
     }
 
