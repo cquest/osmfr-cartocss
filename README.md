@@ -30,15 +30,20 @@ It's probably easiest to grab an PBF of OSM data from [metro.teczno.com](http://
 osm2pgsql -d gis ~/path/to/data.osm.pbf
 ```
 
+You also need to run the additions.sql file to create some extra tables in the database.
+
+
 Additionally you need some shapefiles.
 
 
 ## Scripted download
 
 To download the shapefiles you can run the following script from this directory. No further steps should be needed as the data has been processed and placed in the requisite directories.
+The second script is also needed by the style.
 
 ```
 sh get-shapefiles.sh
+sh get-layers.sh
 ```
 
 
