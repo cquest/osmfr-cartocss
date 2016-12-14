@@ -184,7 +184,35 @@
   }
 }
 
-#area-text [zoom >= 8] {
+#highway-junctions {
+  [type='motorway_junction'][zoom >= 11]   {
+    ref/text-name: "[ref]";
+    ref/text-size: 9;
+    ref/text-fill: #6666ff;
+    ref/text-min-distance: 2;
+    ref/text-face-name: @oblique-fonts;
+    ref/text-halo-radius: 1;
+    ref/text-wrap-width: 12;
+    [zoom >= 13] {
+      name/text-name: "[nom]";
+      name/text-size: 8;
+      name/text-fill: #6666ff;
+      name/text-dy: -8;
+      name/text-face-name: @oblique-fonts;
+      name/text-halo-radius: 1;
+      name/text-wrap-character: ";";
+      name/text-wrap-width: 2;
+      name/text-min-distance: 2;
+    }
+    [zoom >= 15] {
+      ref/text-size: 12;
+      name/text-size: 11;
+      name/text-dy: -10;
+    }
+  }
+}
+
+#area-text [zoom >= 14] {
   ::long {
     [way_area >= 150000][zoom >= 14],
     [way_area >= 50000][zoom >= 15],
@@ -289,35 +317,8 @@
 
 }
 
-#highway-junctions {
-  [type='motorway_junction'][zoom >= 11]   {
-    ref/text-name: "[ref]";
-    ref/text-size: 9;
-    ref/text-fill: #6666ff;
-    ref/text-min-distance: 2;
-    ref/text-face-name: @oblique-fonts;
-    ref/text-halo-radius: 1;
-    ref/text-wrap-width: 12;
-    [zoom >= 13] {
-      name/text-name: "[nom]";
-      name/text-size: 8;
-      name/text-fill: #6666ff;
-      name/text-dy: -8;
-      name/text-face-name: @oblique-fonts;
-      name/text-halo-radius: 1;
-      name/text-wrap-character: ";";
-      name/text-wrap-width: 2;
-      name/text-min-distance: 2;
-    }
-    [zoom >= 15] {
-      ref/text-size: 12;
-      name/text-size: 11;
-      name/text-dy: -10;
-    }
-  }
-}
-
-.text [zoom >= 12] {
+#text-poly-lz [zoom >= 12][zoom<=14],
+#text-poly [zoom >= 15] {
   [place = 'island'][zoom >= 12]::place {
     text-name: "[name]";
     text-fill: #000;
@@ -499,7 +500,6 @@
     }
   }
 
-  [landuse = 'forest'][zoom >= 15]::landuse,
   [natural = 'wood'][zoom >= 15]::natural {
     text-name: "[name]";
     text-fill: #060;
@@ -630,7 +630,6 @@
     }
   }
 
-  [natural = 'water']::natural,
   [natural = 'lake']::natural,
   [landuse = 'reservoir']::landuse,
   [landuse = 'basin']::landuse {
@@ -873,19 +872,6 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 70;
-  }
-
-  [leisure = 'marina'][zoom >= 15]::leisure {
-    text-name: "[name]";
-    text-size: 8;
-    text-fill: blue;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 30;
-    text-placement: interior;
-    [zoom >= 17] {
-      text-size: 10;
-    }
   }
 
   [leisure = 'golf_course'][zoom >= 14]::leisure {

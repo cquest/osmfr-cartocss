@@ -2304,6 +2304,34 @@
       "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
       "advanced": {}
     },
+    { "name": "text-poly-lz",
+      "extent": [
+        -179.99999692067183,
+        -84.96651228427099,
+        179.99999692067183,
+        84.96651228427098
+      ],
+      "Datasource": {
+        "type": "postgis",
+        "table": " /* text-poly-lz */ (select way,osm_id, coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom, leisure,\"natural\",place,tourism,to_int(coalesce(tags->'ele',tags->'ele:local')) as ele,tags->'mountain_pass' as mountain_pass, military,'no'::text as point, way_area, NULL as way_len, power  from planet_osm_polygon where leisure is not null or tourism is not null or place='island' or military='danger_area' or power in ('generator','substation','sub_station','plant')  UNION  select way,osm_id, coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom, leisure,\"natural\",place,tourism,to_int(coalesce(tags->'ele',tags->'ele:local')) as ele,tags->'mountain_pass' as mountain_pass, military,'yes'::text as point, 0 as way_area, NULL as way_len, power  from planet_osm_point where leisure is not null or tourism is not null  or place='island' or military='danger_area' or power in ('generator','substation','sub_station','plant')  order by way_area desc ) as text",
+        "extent_cache": "custom",
+        "extent": "-20037508.34,-20037508.34,20037508.34,20037508.34",
+        "key_field": "",
+        "geometry_field": "way",
+        "dbname": "osm",
+        "asynchronous_request": "true",
+        "max_async_connection": "6",
+        "srid": "3857",
+        "host": "localhost",
+        "user": "fr",
+        "password": "m4d31nfr4nc3"
+      },
+      "id": "text-poly-lz",
+      "srs-name": "3857",
+      "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
+      "advanced": {},
+      "geometry": "point"
+    },
     { "name": "text-poly",
       "extent": [
         -179.99999692067183,
@@ -2313,7 +2341,7 @@
       ],
       "Datasource": {
         "type": "postgis",
-        "table": " /* text-poly */ (select way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom, aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars,to_int(coalesce(tags->'ele',tags->'ele:local')) as ele,tags->'mountain_pass' as mountain_pass, ref,military,waterway,historic,'no'::text as point, way_area, NULL as way_len, initcap(replace(replace(replace(replace(tags->'school:FR','maternelle','école mat.'),'élémentaire','école'),'primaire','école'),'secondaire','collège-Lycée')) as ecole, power  from planet_osm_polygon where amenity is not null and amenity not in ('townhall') or shop is not null  or leisure is not null or landuse is not null or tourism is not null or (\"natural\" is not null AND tags->'water' != 'river')  or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or power in ('generator','substation','sub_station','plant')  UNION  select way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars, to_int(coalesce(ele,tags->'ele:local')) as ele, tags->'mountain_pass' as mountain_pass, ref, military, waterway, historic,'yes'::text as point, 0 as way_area, NULL as way_len, initcap(replace(replace(replace(replace(tags->'school:FR','maternelle','école mat.'),'élémentaire','école'),'primaire','école'),'secondaire','collège-Lycée')) as ecole, power  from planet_osm_point where amenity is not null and amenity not in ('townhall') or shop is not null  or leisure is not null or landuse is not null or tourism is not null or \"natural\" is not null or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or tags->'mountain_pass'='yes'  or power in ('generator','substation','sub_station','plant')  order by prio desc,way_area desc ) as text",
+        "table": " /* text-poly */ (select way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,  fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom, aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars,to_int(coalesce(tags->'ele',tags->'ele:local')) as ele,tags->'mountain_pass' as mountain_pass, ref,military,waterway,historic,'no'::text as point, way_area, NULL as way_len, initcap(replace(replace(replace(replace(tags->'school:FR','maternelle','école mat.'),'élémentaire','école'),'primaire','école'),'secondaire','collège-Lycée')) as ecole, power  from planet_osm_polygon where amenity is not null and amenity not in ('townhall') or shop is not null  or leisure is not null or landuse is not null or tourism is not null or (\"natural\" is not null AND tags->'water' != 'river')  or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or power in ('generator','substation','sub_station','plant')  UNION  select way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,  fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars, to_int(coalesce(ele,tags->'ele:local')) as ele, tags->'mountain_pass' as mountain_pass, ref, military, waterway, historic,'yes'::text as point, 0 as way_area, NULL as way_len, initcap(replace(replace(replace(replace(tags->'school:FR','maternelle','école mat.'),'élémentaire','école'),'primaire','école'),'secondaire','collège-Lycée')) as ecole, power  from planet_osm_point where amenity is not null and amenity not in ('townhall') or shop is not null  or leisure is not null or landuse is not null or tourism is not null or \"natural\" is not null or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or tags->'mountain_pass'='yes'  or power in ('generator','substation','sub_station','plant')  order by prio desc,way_area desc ) as text",
         "extent_cache": "custom",
         "extent": "-20037508.34,-20037508.34,20037508.34,20037508.34",
         "key_field": "",
@@ -2327,7 +2355,6 @@
         "password": "m4d31nfr4nc3"
       },
       "id": "text-poly",
-      "class": "text",
       "srs-name": "3857",
       "srs": "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over",
       "advanced": {},
