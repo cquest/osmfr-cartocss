@@ -10,7 +10,7 @@
     [zoom>=15][zoom<18][nom!=''] { text-name: "[nom]"; }
     [admin_level=7][insee!=''] /* traitement spécifique des noms d'arrondissements */
     {
-     	text-name: '      '+[name]+' (arrond.)      ';
+   	text-name: '      '+[name]+' (arrond.)      ';
     }
     text-name: '      '+[name]+'      ';
     text-fill: @admin-boundaries;
@@ -22,7 +22,7 @@
     text-min-padding: 50;
     text-min-distance: 50;
     text-max-char-angle-delta: 10;
-    text-dy: 5;
+    text-dy: 7;
     text-spacing: 500;
   }
 }
