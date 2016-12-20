@@ -1029,15 +1029,13 @@
       [zoom>=17][way_area>10000],
       [zoom>=18][way_area>5000] {
         text-size: 11;
-        text-wrap-width: 20;
+        text-wrap-width: 40;
       }
   	  text-fill: #440;
   	  text-face-name: @book-fonts;
-  	  text-halo-radius: 2;
-  	  text-wrap-width: 14;
+  	  text-halo-radius: 1.5;
+  	  text-wrap-width: 25;
   	  text-placement: interior;
-  		text-label-position-tolerance: 0;
-
     }
   }
 
@@ -1053,11 +1051,11 @@
     [zoom>=17][way_area>10000],
     [zoom>=18][way_area>5000] {
       text-size: 11;
-      text-wrap-width: 20;
+      text-wrap-width: 40;
     }
 	  text-fill: #440;
 	  text-face-name: @book-fonts;
-	  text-halo-radius: 2;
+	  text-halo-radius: 1.5;
 	  text-wrap-width: 0;
 	  text-placement: interior;
     }
