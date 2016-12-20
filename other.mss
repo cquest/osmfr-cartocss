@@ -2135,7 +2135,10 @@
         line-join: round;
         line-width: 2;
         line-dasharray: 1,6;
-        [railway = 'abandoned'] {line-dasharray: 1,10;}
+        [railway = 'abandoned'] {
+          line-cap: round;
+          line-dasharray: 0.1,10;
+        }
       }
     }
 
