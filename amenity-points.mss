@@ -91,6 +91,7 @@
     [amenity = 'taxi'][zoom >= 17] {
       point-file: url('symbols/taxi_rank.svg');
       point-placement: interior;
+      [indoor='yes'] { point-opacity: 0.5; }
     }
 
     [amenity = 'cafe'][zoom >=17] {
@@ -102,6 +103,7 @@
     [amenity = 'car_sharing'][zoom >= 16] {
       point-file: url('symbols/car_share.svg');
       point-placement: interior;
+      [indoor='yes'] { point-opacity: 0.5; }
     }
 
     [amenity = 'chalet'][zoom >= 17] {
@@ -326,6 +328,7 @@
     [amenity = 'bench'][zoom >= 19] {
       point-file: url('symbols/bench.svg');
       point-placement: interior;
+      [indoor='yes'] { point-opacity: 0.5; }
     }
 
     [emergency = 'aed'][zoom >= 17],
@@ -441,6 +444,7 @@
       marker-fill: @brown-poi;
       marker-placement: interior;
       marker-clip: false;
+      [indoor='yes'] { marker-opacity: 0.5; }
     }
 
     [historic = 'archaeological_site'][zoom >= 16] {
@@ -481,6 +485,7 @@
       marker-placement: interior;
       marker-clip: false;
      [organic='yes'],[organic='only'] { marker-file: url('symbols/supermarket-organic.svg');}
+     [indoor='yes'] { marker-opacity: 0.5; }
     }
 
     [shop = 'mall'],
