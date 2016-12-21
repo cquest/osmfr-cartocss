@@ -267,15 +267,21 @@
     text-fill: #333; // léger gris par défaut
     [landuse!=''] {
     	text-face-name: @oblique-fonts;
-    	text-fill: #444; // industrial, residential
-    	[landuse='water'] {text-fill: #068;}
-      [landuse='forest'],[landuse='wood'] {text-fill: #050;}
-      [landuse='retail'] {text-fill: @shop-icon;}
+    	text-fill: #444; // industrial, residential, brownfield, cemetery, construction, farm/farmland/farmyard, garages,landfill, quarry, railway
+    	[landuse='water'],[landuse='reservoir'],[landuse='basin'],[landuse='salt_pond'] {text-fill: #068;}
+      [landuse='forest'],[landuse='wood'],[landuse='allotments'],[landuse='meadow'],
+      [landuse='vineyard'],[landuse='orchard'],[landuse='grass'],[landuse='greenhouse_horticulture'],
+      [landuse='recreation_ground']
+      {
+        text-fill: #050;
+      }
+      [landuse='retail'] {text-fill: darken(@shop-icon,25%);}
+      [landuse='commercial'] {text-fill:  darken(pink,50%);}
       [landuse='military'] {text-fill: #c00;}
     }
     [leisure!=''] {
       text-face-name: @oblique-fonts;
-      text-fill: #060;
+      text-fill: #060; // nature_reserve, playground, pitch, golf_course, garden, horse_riding, stadium...
       [leisure='marina'] {text-fill: #068;}
     }
     [heritage!=''] {
@@ -287,6 +293,21 @@
 
 #text-poly-lz [zoom >= 12][zoom<=14],
 #text-poly [zoom >= 15] {
+  /* Hummm */
+/*
+  [point = 'yes'][leisure != '']::point,
+  [point = 'yes'][landuse != '']::point {
+    [zoom >= 15] {
+      text-name: "[name]";
+      text-size: 9;
+      text-fill: red;
+      text-face-name: @bold-fonts;
+      text-halo-radius: 2;
+      text-wrap-width: 30;
+    }
+  }
+*/
+
   [place = 'island'][zoom >= 12]::place {
     text-name: "[name]";
     text-fill: #000;
@@ -306,41 +327,6 @@
     [zoom>=17][way_area>25000],
     [zoom>=18][way_area>10000] {
       text-size: 14;
-    }
-  }
-
-  [amenity = 'restaurant']::amenity {
-    [zoom >= 17] {
-      text-name: "[name]";
-      text-fill: #734a08;
-      text-size: 10;
-      text-dy: 9;
-      text-face-name: @book-fonts;
-      text-halo-radius: 1;
-      text-wrap-width: 40;
-      text-placement: interior;
-    }
-  }
-
-  [amenity = 'pub']::amenity,
-  [amenity = 'cafe']::amenity,
-  [amenity = 'fast_food']::amenity,
-  [amenity = 'beirgarten']::amenity,
-  [amenity = 'bar']::amenity {
-    [zoom >= 17] {
-      text-name: "[name]";
-      text-fill: #734a08;
-      text-size: 9;
-      text-dy: 9;
-      text-face-name: @book-fonts;
-      text-halo-radius: 1;
-      text-wrap-width: 40;
-      text-placement: interior;
-  	  [zoom >= 19] {
-    		text-size: 10;
-    		text-dy: 10;
-  	  }
-      [amenity = 'bar'] {text-dy: 12;}
     }
   }
 
@@ -370,26 +356,6 @@
     }
   }
 
-  [amenity = 'cinema'][zoom >= 17]::amenity {
-    text-name: "[name]";
-    text-size: 10;
-    text-fill: #734a08;
-    text-dy: 14;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-wrap-width: 40;
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-    }
-  }
-
   [amenity = 'parking'][zoom >= 17]::amenity {
     text-name: "[name]";
     text-size: 9;
@@ -402,6 +368,21 @@
     [access != ''][access != 'public'][access != 'yes'] {
       text-fill: #66ccaf;
     }
+	  [zoom >= 19] {
+		text-size: 10;
+		text-dy: 10;
+	  }
+  }
+
+  [amenity = 'embassy'][zoom >= 17]::amenity {
+    text-name: "[name]";
+    text-size: 9;
+    text-fill: #0066ff;
+    text-dy: 8;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-placement: interior;
+    text-wrap-width: 60;
 	  [zoom >= 19] {
 		text-size: 10;
 		text-dy: 10;
@@ -623,19 +604,6 @@
     }
   }
 
-  /* Hmmm */
-  [point = 'yes'][leisure != '']::point,
-  [point = 'yes'][landuse != '']::point {
-    [zoom >= 15] {
-      text-name: "[name]";
-      text-size: 9;
-      text-fill: #000;
-      text-face-name: @book-fonts;
-      text-halo-radius: 2;
-      text-wrap-width: 30;
-    }
-  }
-
   [natural = 'bay'][zoom >= 14]::natural {
     text-name: "[name]";
     text-size: 10;
@@ -707,149 +675,6 @@
     ele/text-placement: interior;
   }
 
-  [amenity = 'bank'][zoom >= 17]::amenity {
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: black;
-    text-dy: 9;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-face-name: @book-fonts;
-    text-wrap-width: 40;
-	  [zoom >= 19] {
-		text-size: 10;
-		text-dy: 10;
-	  }
-  }
-
-  [tourism = 'hotel']::tourism,
-  [tourism = 'hostel']::tourism,
-  [tourism = 'chalet']::tourism {
-    [zoom >= 17] {
-      text-name: "[name]+'\n'+[stars]";
-      text-size: 10;
-      text-fill: #0066ff;
-      text-dy: 11;
-      text-face-name: @book-fonts;
-      text-halo-radius: 1;
-      text-placement: interior;
-      text-wrap-width: 60;
-    }
-  }
-
-  [amenity = 'embassy'][zoom >= 17]::amenity {
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: #0066ff;
-    text-dy: 8;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-wrap-width: 60;
-	  [zoom >= 19] {
-		text-size: 10;
-		text-dy: 10;
-	  }
-  }
-
-  [tourism = 'guest_house'][zoom >= 17]::tourism {
-    text-name: "[name]";
-    text-size: 8;
-    text-fill: #0066ff;
-    text-dy: 9;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-wrap-width: 40;
-	  [zoom >= 19] {
-  		text-size: 10;
-  		text-dy: 10;
-  	  }
-  }
-
-  [tourism = 'bed_and_breakfast'][zoom >= 17]::tourism {
-    text-name: "[name]";
-    text-size: 8;
-    text-fill: #0066ff;
-    text-dy: 7;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-wrap-width: 40;
-	  [zoom >= 19] {
-  		text-size: 10;
-  		text-dy: 10;
-  	  }
-  }
-
-  [amenity = 'fuel']::amenity {
-    [zoom >= 17] {
-      text-name: "[name]";
-      text-size: 9;
-      text-fill: #0066ff;
-      text-dy: 9;
-      text-face-name: @book-fonts;
-      text-halo-radius: 1;
-      text-wrap-width: 40;
-  	  [zoom >= 19] {
-    		text-size: 10;
-    		text-dy: 10;
-    	  }
-    }
-  }
-
-  [tourism = 'camp_site'][zoom >= 17]::tourism {
-    text-name: "[name]";
-    text-size: 10;
-    text-fill: #0066ff;
-    text-dy: 15;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 60;
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-      text-wrap-width: 70;
-    }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-      text-wrap-width: 80;
-    }
-  }
-
-  [tourism = 'caravan_site'][zoom >= 17]::tourism {
-    text-name: "[name]";
-    text-size: 10;
-    text-fill: #0066ff;
-    text-dy: 19;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 60;
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-      text-wrap-width: 70;
-    }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-      text-wrap-width: 80;
-    }
-  }
-
-  [waterway = 'lock'][zoom >= 15]::waterway {
-    text-name: "[name]";
-    text-size: 9;
-    text-dy: 10;
-    text-fill: #0066ff;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 70;
-  }
-
   [leisure = 'golf_course'][zoom >= 14]::leisure {
     text-name: "[name]";
     text-size: 10;
@@ -879,32 +704,6 @@
     [zoom>=18][way_area>10000] {
       text-size: 14;
       text-wrap-width: 60;
-    }
-  }
-
-  [tourism = 'theme_park'][zoom >= 14]::tourism {
-    text-name: "[name]";
-    text-size: 8;
-    text-fill: #734a08;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 30;
-    text-placement: interior;
-    [zoom >= 16] {
-      text-size: 10;
-    }
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
     }
   }
 
@@ -1111,6 +910,260 @@
     }
  }
 
+ [military = 'danger_area'][zoom >= 12]::military {
+   text-name: "[name]";
+   text-size: 9;
+   text-fill: pink;
+   text-face-name: @bold-fonts;
+   text-halo-radius: 1;
+   text-wrap-width: 40;
+   text-placement: interior;
+ }
+
+ [aeroway = 'gate'][zoom >= 17]::aeroway {
+   text-name: "[ref]";
+   text-size: 9;
+   text-fill: #aa66cc;
+   text-face-name: @bold-fonts;
+   text-halo-radius: 1;
+   text-wrap-width: 40;
+   text-placement: interior;
+   [zoom >= 18] {  text-size: 12; }
+ }
+
+ [amenity = 'recycling'][zoom >= 17]::amenity {
+   text-name: "[name]";
+   text-size: 9;
+   text-face-name: @book-fonts;
+   text-halo-radius: 1;
+   text-wrap-width: 40;
+   text-placement: interior;
+   text-dy: 8;
+ }
+
+ [power = 'plant'][zoom >= 12]::power,
+ [power != ''][zoom >= 15]::power {
+   text-name: "[name]";
+   text-size: 10;
+   text-face-name: @book-fonts;
+   text-halo-radius: 1;
+   text-wrap-width: 60;
+   text-placement: interior;
+   [power != 'generator'] { text-dy: 12; }
+ }
+
+// éléments avec un nom "commercial" à supprimer si besoin
+
+
+  [amenity = 'restaurant']::amenity {
+    [zoom >= 17] {
+      text-name: "[name]";
+      text-fill: #734a08;
+      text-size: 10;
+      text-dy: 9;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-placement: interior;
+    }
+  }
+
+  [amenity = 'pub']::amenity,
+  [amenity = 'cafe']::amenity,
+  [amenity = 'fast_food']::amenity,
+  [amenity = 'beirgarten']::amenity,
+  [amenity = 'bar']::amenity {
+    [zoom >= 17] {
+      text-name: "[name]";
+      text-fill: #734a08;
+      text-size: 9;
+      text-dy: 9;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-placement: interior;
+  	  [zoom >= 19] {
+    		text-size: 10;
+    		text-dy: 10;
+  	  }
+      [amenity = 'bar'] {text-dy: 12;}
+    }
+  }
+
+  [amenity = 'cinema'][zoom >= 17]::amenity {
+    text-name: "[name]";
+    text-size: 10;
+    text-fill: #734a08;
+    text-dy: 14;
+    text-face-name: @bold-fonts;
+    text-halo-radius: 1;
+    text-placement: interior;
+    text-wrap-width: 40;
+    // variation de la texte du texte en fonction de la surface du polygone
+    [zoom>=17][way_area>10000],
+    [zoom>=18][way_area> 5000] {
+      text-size: 12;
+    }
+    [zoom>=17][way_area>25000],
+    [zoom>=18][way_area>10000] {
+      text-size: 14;
+    }
+  }
+
+  [amenity = 'bank'][zoom >= 17]::amenity {
+    text-name: "[name]";
+    text-size: 9;
+    text-fill: black;
+    text-dy: 9;
+    text-halo-radius: 1;
+    text-placement: interior;
+    text-face-name: @book-fonts;
+    text-wrap-width: 40;
+	  [zoom >= 19] {
+		text-size: 10;
+		text-dy: 10;
+	  }
+  }
+
+  [tourism = 'hotel']::tourism,
+  [tourism = 'hostel']::tourism,
+  [tourism = 'chalet']::tourism {
+    [zoom >= 17] {
+      text-name: "[name]+'\n'+[stars]";
+      text-size: 10;
+      text-fill: #0066ff;
+      text-dy: 11;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-placement: interior;
+      text-wrap-width: 60;
+    }
+  }
+
+  [tourism = 'guest_house'][zoom >= 17]::tourism {
+    text-name: "[name]";
+    text-size: 8;
+    text-fill: #0066ff;
+    text-dy: 9;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-placement: interior;
+    text-wrap-width: 40;
+	  [zoom >= 19] {
+  		text-size: 10;
+  		text-dy: 10;
+  	  }
+  }
+
+  [tourism = 'bed_and_breakfast'][zoom >= 17]::tourism {
+    text-name: "[name]";
+    text-size: 8;
+    text-fill: #0066ff;
+    text-dy: 7;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-placement: interior;
+    text-wrap-width: 40;
+	  [zoom >= 19] {
+  		text-size: 10;
+  		text-dy: 10;
+  	  }
+  }
+
+  [amenity = 'fuel']::amenity {
+    [zoom >= 17] {
+      text-name: "[name]";
+      text-size: 9;
+      text-fill: #0066ff;
+      text-dy: 9;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+  	  [zoom >= 19] {
+    		text-size: 10;
+    		text-dy: 10;
+    	  }
+    }
+  }
+
+  [tourism = 'camp_site'][zoom >= 17]::tourism {
+    text-name: "[name]";
+    text-size: 10;
+    text-fill: #0066ff;
+    text-dy: 15;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 60;
+    // variation de la texte du texte en fonction de la surface du polygone
+    [zoom>=17][way_area>10000],
+    [zoom>=18][way_area> 5000] {
+      text-size: 12;
+      text-wrap-width: 70;
+    }
+    [zoom>=17][way_area>25000],
+    [zoom>=18][way_area>10000] {
+      text-size: 14;
+      text-wrap-width: 80;
+    }
+  }
+
+  [tourism = 'caravan_site'][zoom >= 17]::tourism {
+    text-name: "[name]";
+    text-size: 10;
+    text-fill: #0066ff;
+    text-dy: 19;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 60;
+    // variation de la texte du texte en fonction de la surface du polygone
+    [zoom>=17][way_area>10000],
+    [zoom>=18][way_area> 5000] {
+      text-size: 12;
+      text-wrap-width: 70;
+    }
+    [zoom>=17][way_area>25000],
+    [zoom>=18][way_area>10000] {
+      text-size: 14;
+      text-wrap-width: 80;
+    }
+  }
+
+  [waterway = 'lock'][zoom >= 15]::waterway {
+    text-name: "[name]";
+    text-size: 9;
+    text-dy: 10;
+    text-fill: #0066ff;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 70;
+  }
+
+  [tourism = 'theme_park'][zoom >= 14]::tourism {
+    text-name: "[name]";
+    text-size: 8;
+    text-fill: #734a08;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 30;
+    text-placement: interior;
+    [zoom >= 16] {
+      text-size: 10;
+    }
+    // variation de la texte du texte en fonction de la surface du polygone
+    [zoom>=15][way_area>50000],
+    [zoom>=16][way_area>25000],
+    [zoom>=17][way_area>10000],
+    [zoom>=18][way_area> 5000] {
+      text-size: 12;
+    }
+    [zoom>=15][way_area>250000],
+    [zoom>=16][way_area>100000],
+    [zoom>=17][way_area>25000],
+    [zoom>=18][way_area>10000] {
+      text-size: 14;
+    }
+  }
+
   [amenity = 'pharmacy'][zoom >= 17]::amenity {
     text-name: "[name]";
     text-size: 9;
@@ -1274,47 +1327,6 @@
 	  }
   }
 
-  [military = 'danger_area'][zoom >= 12]::military {
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: pink;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-placement: interior;
-  }
-
-  [aeroway = 'gate'][zoom >= 17]::aeroway {
-    text-name: "[ref]";
-    text-size: 9;
-    text-fill: #aa66cc;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-placement: interior;
-    [zoom >= 18] {  text-size: 12; }
-  }
-
-  [amenity = 'recycling'][zoom >= 17]::amenity {
-    text-name: "[name]";
-    text-size: 9;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-placement: interior;
-    text-dy: 8;
-  }
-
-  [power = 'plant'][zoom >= 12]::power,
-  [power != ''][zoom >= 15]::power {
-    text-name: "[name]";
-    text-size: 10;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 60;
-    text-placement: interior;
-    [power != 'generator'] { text-dy: 12; }
-  }
 }
 
 // ****************************************************** tunnels
