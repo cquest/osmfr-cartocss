@@ -717,6 +717,7 @@
     marker-fill: black;
     marker-width: 3;
     marker-line-width: 0;
+    marker-allow-overlap: true; // to avoid housenumbers not to be rendered
     [entrance='main'] { text-fill: black; marker-width: 3; }
     [entrance='emergency'] { marker-fill: #080; text-fill: #080; } // sorties de secours en vert foncé
   	[ref!=''][nom!=''] { text-name: [nom]+" / "+[ref]; }
