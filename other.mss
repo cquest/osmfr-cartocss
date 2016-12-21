@@ -269,7 +269,7 @@
     	text-face-name: @oblique-fonts;
     	text-fill: #444; // industrial, residential
     	[landuse='water'] {text-fill: #068;}
-      [landuse='forest'] {text-fill: #040;}
+      [landuse='forest'],[landuse='wood'] {text-fill: #050;}
       [landuse='retail'] {text-fill: @shop-icon;}
       [landuse='military'] {text-fill: #c00;}
     }
