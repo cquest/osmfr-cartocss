@@ -3717,6 +3717,7 @@
 	text-name: "[nom]";
 	text-size: 9;
 	text-fill: black;
+  [railway!=''] { text-fill: #444; }
 	text-placement: line;
 	text-face-name: @book-fonts;
 	text-halo-radius: 1.5;
