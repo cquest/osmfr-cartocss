@@ -12,4 +12,4 @@ CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
 
 CREATE OR REPLACE FUNCTION to_int(text) RETURNS bigint
     LANGUAGE sql IMMUTABLE PARALLEL SAFE
-    AS $_$ select left(regexp_replace(coalesce('0'||$1,'0'),'^([0-9]*).*','\1'),12)::bigint; $_$;
+    AS $_$ select coalesce(left(regexp_replace($1,'^(|\-)([0-9]*).*','\10\2'),12),'0')::bigint; $_$;
