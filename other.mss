@@ -325,7 +325,8 @@
   [amenity = 'pub']::amenity,
   [amenity = 'cafe']::amenity,
   [amenity = 'fast_food']::amenity,
-  [amenity = 'beirgarten']::amenity {
+  [amenity = 'beirgarten']::amenity,
+  [amenity = 'bar']::amenity {
     [zoom >= 17] {
       text-name: "[name]";
       text-fill: #734a08;
@@ -339,17 +340,8 @@
     		text-size: 10;
     		text-dy: 10;
   	  }
+      [amenity = 'bar'] {text-dy: 12;}
     }
-  }
-
-  [amenity = 'bar'][zoom >= 17]::amenity {
-    text-name: "[name]";
-    text-size: 10;
-    text-fill: #734a08;
-    text-dy: 11;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
   }
 
   [amenity = 'library']::amenity,
