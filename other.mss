@@ -1025,7 +1025,19 @@
 	  }
   }
 
-  [tourism = 'hotel']::tourism,
+  [tourism = 'hotel']::tourism {
+    [zoom >= 17] {
+      text-name: "[name]+'\n'+[stars]";
+      text-size: 10;
+      text-fill: #0066ff;
+      text-dy: 8;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-placement: interior;
+      text-wrap-width: 60;
+    }
+  }
+
   [tourism = 'hostel']::tourism,
   [tourism = 'chalet']::tourism {
     [zoom >= 17] {
