@@ -80,9 +80,9 @@
 @sport-surface-clay: #cc7e66;
 
 #sports [zoom>=14][angle_diff>85][angle_diff<95] {
-	[sport='tennis'][zoom>=17] {
-		[surface='clay']::surface { polygon-fill: @sport-surface-clay; }
-		[surface='grass']::surface { polygon-fill: @sport-surface-grass; }
+	[sport=~'.*tennis.*'][zoom>=17] {
+		[sport=~'^tennis.*'][surface='clay'] { polygon-fill: @sport-surface-clay; }
+		[sport=~'^tennis.*'][surface='grass'] { polygon-fill: @sport-surface-grass; }
 		[way_area<2500][d13>37][d13<80] {			/* area size / diagonal check */
 			[d12>38][d12<70][d23>20][d23<40] { 		/* 1>2 = length / 2>3 = width */
 				point-file: url('symbols/fr/sports-tennis.svg');
@@ -113,8 +113,8 @@
 		}
 	}
 
-	[sport='soccer'] {
-		[surface='grass']::surface { polygon-fill: @sport-surface-grass; }
+	[sport=~'.*soccer.*'] {
+		[sport=~'^soccer.*'][surface='grass'] { polygon-fill: @sport-surface-grass; }
 		[d12>130][d12<200][d23>68][d23<160][d13>150][d13<250] { /* 1>2 = length / 2>3 = width */
 			point-file: url('symbols/fr/sports-soccer.svg');
 			point-ignore-placement: true;
@@ -180,7 +180,7 @@
 		}
 	}
 
-	[sport='basketball'][zoom>=17] {
+	[sport=~'.*basketball.*'][zoom>=17] {
 		[way_area<1000][d13>30][d13<50] {
 			[d12>30][d12<40][d23>15][d23<25] { /* 12-longueur - 23-largeur */
 				point-file: url('symbols/fr/sports-basketball.svg');
@@ -201,10 +201,8 @@
 		}
 	}
 
-	[sport='rugby'],
-	[sport='rugby_union'],
-	[sport='rugby_league'] {
-		[surface='grass'] { polygon-fill: @sport-surface-grass; }
+	[sport=~'.*rugby.*'] {
+		[sport=~'^rugby.*'][surface='grass'] { polygon-fill: @sport-surface-grass; }
 		[way_area>15000][way_area<25000][d13>150][d13<250] {
 			[d23>75][d23<150][d12>150][d12<250] { /* 12-largeur - 23-longueur */
 				point-file: url('symbols/fr/sports-rugby.svg');
@@ -231,8 +229,8 @@
 		}
 	}
 
-	[sport='american_football'] {
-		[surface='grass'] { polygon-fill: @sport-surface-grass; }
+	[sport=~'.*american_football.*'] {
+		[sport=~'^american_football.*'][surface='grass'] { polygon-fill: @sport-surface-grass; }
 		[way_area>8000][way_area<20000][d13>120][d13<250] {
 			[d23>50][d23<100][d12>120][d12<200] { /* 12-largeur - 23-longueur */
 				point-file: url('symbols/fr/sports-foot-us.svg');
