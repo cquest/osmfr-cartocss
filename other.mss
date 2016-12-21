@@ -2876,36 +2876,36 @@
       line-width: 4;
       line-clip: false;
       line-smooth: 0.7;
-      [zoom >= 13] { line-width: 8.5; }
-      [zoom >= 15] { line-width: 12.5; }
-      [zoom >= 17] { line-width: 17; }
+      [zoom >= 13] { line-width: 8; }
+      [zoom >= 15] { line-width: 12; }
+      [zoom >= 17] { line-width: 16; }
       [zoom >= 19] { line-width: 33; }
     }
 
     [highway = 'trunk'][zoom >= 12],
     [highway = 'trunk_link'][zoom >= 12] {
       line-width: 4;
-      [zoom >= 13] { line-width: 8.5; }
-      [zoom >= 15] { line-width: 12.5; }
-      [zoom >= 17] { line-width: 17; line-clip: false; line-smooth: 0.7; }
+      [zoom >= 13] { line-width: 8; }
+      [zoom >= 15] { line-width: 12; }
+      [zoom >= 17] { line-width: 16; line-clip: false; line-smooth: 0.7; }
       [zoom >= 19] { line-width: 33; }
     }
 
     [highway = 'primary'][zoom >= 12],
     [highway = 'primary_link'][zoom >= 12] {
       line-width: 4;
-      [zoom >= 13] { line-width: 8.5; }
-      [zoom >= 15] { line-width: 12.5; }
-      [zoom >= 17] { line-width: 17; }
+      [zoom >= 13] { line-width: 8; }
+      [zoom >= 15] { line-width: 12; }
+      [zoom >= 17] { line-width: 16; }
       [zoom >= 19] { line-width: 33; }
     }
 
     [highway = 'secondary'][zoom >= 12],
     [highway = 'secondary_link'][zoom >= 12] {
       line-width: 3.5;
-      [zoom >= 13] { line-width: 8.5; }
-      [zoom >= 15] { line-width: 12.5; }
-      [zoom >= 17] { line-width: 17; }
+      [zoom >= 13] { line-width: 8; }
+      [zoom >= 15] { line-width: 12; }
+      [zoom >= 17] { line-width: 16; }
       [zoom >= 19] { line-width: 33; }
     }
 
@@ -2915,7 +2915,7 @@
       [zoom >= 13] { line-width: 6.5;  }
       [zoom >= 14] { line-width: 8;  }
       [zoom >= 15] { line-width: 11; }
-      [zoom >= 17] { line-width: 17; }
+      [zoom >= 17] { line-width: 16; }
       [zoom >= 19] { line-width: 33; }
     }
 
@@ -2926,7 +2926,7 @@
       [zoom >= 14] { line-width: 5.5; }
       [zoom >= 15] { line-width: 9; }
       [zoom >= 16] { line-width: 12; }
-      [zoom >= 17] { line-width: 17; }
+      [zoom >= 17] { line-width: 16; }
       [zoom >= 19] { line-width: 29; }
     }
 
