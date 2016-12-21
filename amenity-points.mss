@@ -320,7 +320,8 @@
 
     [amenity = 'charging_station'][zoom >= 17]   {
       marker-file: url('symbols/fr/IRVE_blue.svg');
-      marker-transform: "scale(0.04)";
+      marker-transform: "scale(0.03)";
+      [zoom >= 19]{ marker-transform: "scale(0.04)"; }
       marker-clip: false;
       marker-placement: interior;
     }
