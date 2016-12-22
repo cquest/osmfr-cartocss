@@ -804,6 +804,7 @@
     b/line-dasharray: 1,3;
     b/line-cap: round;
     b/line-join: round;
+    [level<0] { b/line-opacity: 0.5; }
   }
 
   [highway = 'steps'][zoom >= 15] {
