@@ -1,6 +1,7 @@
 #buildings-lz {
   [zoom >= 12] {
     [railway = 'station'],
+    [building = 'train_station'],
     [building = 'station'] {
       polygon-fill: #d4aaaa;
     }
