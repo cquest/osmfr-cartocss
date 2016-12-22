@@ -486,7 +486,7 @@
       marker-placement: interior;
       marker-clip: false;
      [organic='yes'],[organic='only'] { marker-file: url('symbols/supermarket-organic.svg');}
-     [indoor='yes'] { marker-opacity: 0.5; }
+     [level<0] { marker-opacity: 0.5; }
     }
 
     [shop = 'mall'],
@@ -495,189 +495,73 @@
       marker-clip: false;
       marker-placement: interior;
       marker-clip: false;
+      [level<0] { marker-opacity: 0.5; }
     }
   }
 
   ::shop [zoom >= 17]{
     [shop!=''],
     [amenity =~ '(ice_cream|car_wash|vehicle_inspection)'] {
-      [shop = 'bakery']   {
-        point-file: url('symbols/shop_bakery.16.svg');
-        point-placement: interior;
-      }
+      [shop = 'bakery'] { marker-file: url('symbols/shop_bakery.16.svg'); }
+      [shop = 'beauty'] { marker-file: url('symbols/2016/beauty-14.svg'); }
+      [shop =~ '(fishmonger|seafood)'] { marker-file: url('symbols/2016/seafood-14.svg'); }
+      [shop = 'beverages'] { marker-file: url('symbols/2016/beverages-14.svg'); }
+      [shop = 'alcohol'] { marker-file: url('symbols/alcohol.svg'); }
+      [shop = 'greengrocer'] { marker-file: url('symbols/greengrocer.svg'); }
+      [shop = 'confectionery'] { marker-file: url('symbols/confectionery.svg'); }
+      [shop =~ '(clothes|fashion)'] { marker-file: url('symbols/2016/shop_clothes.16.svg'); }
+      [shop = 'bag'] { marker-file: url('symbols/2016/bag-14.svg'); }
+      [shop = 'doityourself'] { marker-file: url('symbols/diy.svg'); }
+      [shop = 'florist'] { marker-file: url('symbols/2016/florist.16.svg'); }
+      [shop =~ '(photo|photo_studio)'] { marker-file: url('symbols/2016/photo-14.svg'); }
+      [shop = 'garden_centre'] { marker-file: url('symbols/2016/garden_centre-14.svg'); }
+      [shop = 'hairdresser'] { marker-file: url('symbols/2016/shop_hairdresser.16.svg'); }
+      [shop = 'optician'] {   marker-file: url('symbols/2016/shop_optician.16.svg'); }
+      [shop = 'toys'] { marker-file: url('symbols/2016/toys-14.svg'); }
+      [shop = 'computer'] { marker-file: url('symbols/2016/computer-14.svg'); }
+      [shop = 'car'] { marker-file: url('symbols/shop_car.svg'); }
+      [shop = 'car_repair'] { marker-file: url('symbols/car_repair.svg'); }
+      [shop = 'car_parts'] { marker-file: url('symbols/2016/car_parts-14.svg'); }
+      [shop = 'bicycle'] { marker-file: url('symbols/2016/shop_bicycle.16.svg'); }
+      [shop = 'copyshop'] { marker-file: url('symbols/2016/copyshop-14.svg'); }
+      [shop = 'hifi'] { marker-file: url('symbols/2016/hifi-14.svg'); }
+      [shop = 'travel_agency'] { marker-file: url('symbols/travel_agency.svg'); }
+      [shop = 'jewelry'] { marker-file: url('symbols/2016/shop_jewelry.16.svg'); }
+      [shop = 'shoes'] { marker-file: url('symbols/2016/shop_shoes.16.svg'); }
+      [shop =~ '(laundry|dry_cleaning)'] { marker-file: url('symbols/2016/laundry-14.svg'); }
+      [shop = 'mobile_phone'] { marker-file: url('symbols/2016/shop_mobile_phone.16.svg'); }
+      [shop = 'motorcycle'] { marker-file: url('symbols/motorcycle.svg'); }
+      [shop = 'musical_instrument'] { marker-file: url('symbols/2016/musical_instrument-14.svg'); }
+      [shop =~ '(furniture|interior_decoration)'] { marker-file: url('symbols/furniture.svg'); }
+      [shop = 'perfumery'] { marker-file: url('symbols/2016/perfumery-14.svg'); }
+      [shop = 'sports'] { marker-file: url('symbols/2016/sports-14.svg'); }
+      [shop = 'ice_cream'] { marker-file: url('symbols/2016/ice-cream-14.svg'); }
+      [shop = 'electronics'] { marker-file: url('symbols/2016/shop_electronics.16.svg'); }
+      [amenity = 'ice_cream'] { marker-file: url('symbols/2016/ice-cream-14.svg'); }
+      [amenity = 'car_wash'] { marker-file: url('symbols/2016/car_wash-14.svg');  }
 
-      [shop = 'beauty'][zoom >= 17]   {
-        marker-file: url('symbols/2016/beauty-14.svg');
-      }
-
-      [shop = 'butcher'][zoom >= 17]   {
+      // icone multicolores donc en point-file...
+      [shop = 'butcher'] {
         point-file: url('symbols/butcher2.svg');
-        point-placement: interior;
+        [level<0] { point-opacity: 0.5; }
       }
 
-      [shop =~ '(fishmonger|seafood)'][zoom >= 17]   {
-        marker-file: url('symbols/2016/seafood-14.svg');
-      }
-
-      [shop = 'beverages'][zoom >= 17]   {
-        marker-file: url('symbols/2016/beverages-14.svg');
-      }
-
-      [shop = 'alcohol'][zoom >= 17]   {
-        point-file: url('symbols/alcohol.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'greengrocer'][zoom >= 17]    {
-        point-file: url('symbols/greengrocer.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'confectionery'][zoom >= 17]    {
-        point-file: url('symbols/confectionery.svg');
-        point-placement: interior;
-      }
-
-      [shop =~ '(clothes|fashion)'][zoom >= 17]   {
-          marker-file: url('symbols/2016/shop_clothes.16.svg');
-      }
-
-      [shop = 'bag'][zoom >= 17]   {
-          marker-file: url('symbols/2016/bag-14.svg');
-      }
-
-      [shop = 'convenience'][zoom >= 17]   {
+      [shop = 'convenience'] {
         point-file: url('symbols/convenience.svg');
-        point-placement: interior;
         [organic='yes'],[organic='only'] { point-file: url('symbols/convenience-organic.svg');}
+        [level<0] { point-opacity: 0.5; }
       }
-
-      [shop = 'doityourself'][zoom >= 17]   {
-        point-file: url('symbols/diy.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'florist'][zoom >= 17]   {
-        marker-file: url('symbols/2016/florist.16.svg');
-      }
-
-      [shop =~ '(photo|photo_studio)'][zoom >= 17]   {
-        marker-file: url('symbols/2016/photo-14.svg');
-      }
-
-      [shop = 'garden_centre'][zoom >= 17]   {
-        marker-file: url('symbols/2016/garden_centre-14.svg');
-      }
-
-      [shop = 'hairdresser'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_hairdresser.16.svg');
-      }
-
-      [shop = 'optician'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_optician.16.svg');
-      }
-
-      [shop = 'toys'][zoom >= 17]   {
-        marker-file: url('symbols/2016/toys-14.svg');
-      }
-
-      [shop = 'computer'][zoom >= 17]   {
-        marker-file: url('symbols/2016/computer-14.svg');
-      }
-
-      [shop = 'car'][zoom >= 17]   {
-        point-file: url('symbols/shop_car.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'car_repair'][zoom >= 17]   {
-        point-file: url('symbols/car_repair.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'car_parts'][zoom >= 17]   {
-        marker-file: url('symbols/2016/car_parts-14.svg');
-      }
-
-      [shop = 'bicycle'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_bicycle.16.svg');
-      }
-
-      [shop = 'copyshop'][zoom >= 17]   {
-        marker-file: url('symbols/2016/copyshop-14.svg');
-      }
-
-      [shop = 'hifi'][zoom >= 17]   {
-        marker-file: url('symbols/2016/hifi-14.svg');
-      }
-
-      [shop = 'travel_agency'][zoom >= 17]   {
-        point-file: url('symbols/travel_agency.svg');
-        point-placement: interior;
-      }
-
-      [shop = 'jewelry'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_jewelry.16.svg');
-      }
-
-      [shop = 'shoes'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_shoes.16.svg');
-      }
-
-      [shop =~ '(laundry|dry_cleaning)'][zoom >= 17]   {
-        marker-file: url('symbols/2016/laundry-14.svg');
-      }
-
-      [shop = 'mobile_phone'][zoom >= 17]   {
-        marker-file: url('symbols/2016/shop_mobile_phone.16.svg');
-      }
-
-      [shop = 'motorcycle'][zoom >= 17] {
-        marker-file: url('symbols/motorcycle.svg');
-      }
-
-      [shop = 'musical_instrument'][zoom >= 17] {
-        marker-file: url('symbols/2016/musical_instrument-14.svg');
-      }
-
-      [shop =~ '(furniture|interior_decoration)'][zoom >= 17] {
-        marker-file: url('symbols/furniture.svg');
-      }
-
-      [shop = 'perfumery'][zoom >= 17] {
-        marker-file: url('symbols/2016/perfumery-14.svg');
-      }
-
-      [shop = 'sports'][zoom >= 17] {
-        marker-file: url('symbols/2016/sports-14.svg');
-      }
-
-      [shop = 'ice_cream'][zoom >= 17] {
-        marker-file: url('symbols/2016/ice-cream-14.svg');
-      }
-
-      [shop = 'electronics'][zoom >= 17] {
-        marker-file: url('symbols/2016/shop_electronics.16.svg');
-      }
-
-      [amenity = 'ice_cream'][zoom >= 17] {
-        marker-file: url('symbols/2016/ice-cream-14.svg');
-      }
-
-      [amenity = 'car_wash'][zoom >= 17]   {
-        marker-file: url('symbols/2016/car_wash-14.svg');
-      }
-
-      [amenity = 'vehicle_inspection'][zoom >= 17]   {
+      [amenity = 'vehicle_inspection'] {
         point-file: url('symbols/vehicle_inspection.svg');
-        point-placement: interior;
+        [level<0] { point-opacity: 0.5; }
       }
 
       marker-fill: @shop-icon;
-      marker-line-color: @shop-icon;
+      marker-line-width: 0;
       marker-clip: false;
       marker-placement: interior;
       marker-file: url('symbols/disque.svg');
+      [level<0] { marker-opacity: 0.5; }
     }
   }
 
@@ -730,6 +614,10 @@
     text-placement: interior;
     text-size: 9;
     text-dy: -4;
+    [indoor='yes'],[level<0] {
+      marker-opacity: 0.5;
+      text-opacity: 0.5;
+    }
   }
 
 }
