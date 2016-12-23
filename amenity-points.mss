@@ -854,7 +854,7 @@
     }
   }
 
-  [amenity = 'parking'][zoom >= 17]::amenity {
+  [amenity = 'parking'][zoom >= 17]::parking {
     text-name: "[name]";
     text-size: 9;
     text-fill: #0066ff;
@@ -941,7 +941,7 @@
     }
   }
 
-  [natural = 'wood'][zoom >= 15]::natural {
+  [natural = 'wood'][zoom >= 15]::natural_wood {
     text-name: "[name]";
     text-fill: #060;
     text-face-name: @oblique-fonts;
@@ -1073,9 +1073,9 @@
     }
   }
 
-  [natural = 'lake']::natural,
-  [landuse = 'reservoir']::landuse,
-  [landuse = 'basin']::landuse {
+  [natural = 'lake']::natural_water,
+  [landuse = 'reservoir']::natural_water,
+  [landuse = 'basin']::natural_water {
     [zoom >= 15] {
       text-name: "[name]";
       text-size: 10;
@@ -1102,7 +1102,7 @@
     }
   }
 
-  [natural = 'bay'][zoom >= 14]::natural {
+  [natural = 'bay'][zoom >= 14]::natural_bay {
     text-name: "[name]";
     text-size: 10;
     text-fill: #6699cc;
@@ -1173,7 +1173,7 @@
     ele/text-placement: interior;
   }
 
-  [leisure = 'golf_course'][zoom >= 14]::leisure {
+  [leisure = 'golf_course'][zoom >= 14]::golf_course {
     text-name: "[name]";
     text-size: 10;
     text-fill: #060;
@@ -1274,9 +1274,9 @@
     text-wrap-width: 40;
   }
 
-  [amenity = 'kindergarten']::amenity,
-  [amenity = 'school']::amenity,
-  [amenity = 'college']::amenity {
+  [amenity = 'kindergarten']::school,
+  [amenity = 'school']::school,
+  [amenity = 'college']::school {
     [zoom >= 15] {
       text-name: "[nom]";
       [name =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
@@ -1305,9 +1305,9 @@
   }
 
   /* affichage du nom court si il n'y avait pas la place pour le nom complet */
-  [amenity = 'kindergarten']::amenity2,
-  [amenity = 'school']::amenity2,
-  [amenity = 'college']::amenity2 {
+  [amenity = 'kindergarten']::school2,
+  [amenity = 'school']::school2,
+  [amenity = 'college']::school2 {
     [zoom >= 15][ecole != ''] {
 	  text-name: "[nom]";
     [ecole =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
@@ -1327,9 +1327,9 @@
   }
 
 	/* affichage du nom générique si il n'y avait pas la place pour le nom complet ou court */
-  [amenity = 'kindergarten']::amenity3,
-  [amenity = 'school']::amenity3,
-  [amenity = 'college']::amenity3 {
+  [amenity = 'kindergarten']::school3,
+  [amenity = 'school']::school3,
+  [amenity = 'college']::school3 {
     [zoom >= 15][ecole != ''] {
 	  text-name: "[ecole]";
     [ecole =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
@@ -1371,10 +1371,10 @@
     text-wrap-width: 40;
   }
 
-  [amenity = 'clinic'][zoom >= 15][way_area>50000]::amenity,
-  [amenity = 'clinic'][zoom >= 16]::amenity,
-  [amenity = 'hospital'][zoom >= 15][way_area>50000]::amenity,
-  [amenity = 'hospital'][zoom >= 16]::amenity {
+  [amenity = 'clinic'][zoom >= 15][way_area>50000]::hospital,
+  [amenity = 'clinic'][zoom >= 16]::hospital,
+  [amenity = 'hospital'][zoom >= 15][way_area>50000]::hospital,
+  [amenity = 'hospital'][zoom >= 16]::hospital {
     long/text-name: "[name]";
     long/text-fill: #3366cc;
     long/text-size: 9;
@@ -1488,7 +1488,7 @@
     }
   }
 
-  [amenity = 'cinema'][zoom >= 17]::amenity {
+  [amenity = 'cinema'][zoom >= 17]::cinema {
     text-name: "[name]";
     text-size: 10;
     text-fill: #734a08;
