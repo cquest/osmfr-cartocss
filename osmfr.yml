@@ -236,7 +236,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* sports */ (select *, abs(a12-a23) as angle_diff, (a12+a23+90)/2 as angle from (select *, st_npoints(way2) as nb,  ST_Distance(st_pointn(way2,1),st_pointn(way2,2)) as d12, ST_Distance(st_pointn(way2,3),st_pointn(way2,2)) as d23,ST_Distance(st_pointn(way2,1),st_pointn(way2,3)) as d13, degrees(st_azimuth(st_pointn(way2,1),st_pointn(way2,2))) as a12, degrees(st_azimuth(st_pointn(way2,2),st_pointn(way2,3))) as a23 from (select *, st_area(way) as way_area, ST_ExteriorRing(ST_SimplifyPreserveTopology(way,100)) as way2 from (select (st_dump(way)).geom as way, sport, surface, access from planet_osm_polygon where sport is not null AND way && !bbox! and way_area > !pixel_width!*!pixel_height!*10 ) as dump) as simplified) as simplified2) as sports"
+      table: " /* sports */ (SELECT *, abs(a12-a23) as angle_diff, (a12+a23+90)/2 as angle from (select *, st_npoints(way2) as nb,  ST_Distance(st_pointn(way2,1),st_pointn(way2,2)) as d12, ST_Distance(st_pointn(way2,3),st_pointn(way2,2)) as d23,ST_Distance(st_pointn(way2,1),st_pointn(way2,3)) as d13, degrees(st_azimuth(st_pointn(way2,1),st_pointn(way2,2))) as a12, degrees(st_azimuth(st_pointn(way2,2),st_pointn(way2,3))) as a23 FROM (select *, st_area(way) as way_area, ST_ExteriorRing(ST_SimplifyPreserveTopology(way,100)) as way2 from (SELECT (st_dump(way)).geom as way, sport, surface, access FROM planet_osm_polygon WHERE leisure='pitch' AND sport is not null AND way && !bbox! and way_area > !pixel_width!*!pixel_height!*10 ) as dump) as simplified) as simplified2) as sports"
     id: sports
 
   - name: golf
