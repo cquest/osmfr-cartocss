@@ -597,30 +597,29 @@
       marker-clip: false;
     }
   }
+}
 
-  [entrance != ''][zoom >= 17]::entrance {
-    marker-fill: black;
-    marker-width: 3;
-    marker-line-width: 0;
-    marker-allow-overlap: true; // to avoid housenumbers not to be rendered
-    [entrance='main'] { text-fill: black; marker-width: 3; }
-    [entrance='emergency'] { marker-fill: #080; text-fill: #080; } // sorties de secours en vert foncé
-  	[ref!=''][nom!=''] { text-name: [nom]+" / "+[ref]; }
-  	[nom!=''] { text-name: [nom]; }
-  	text-name: "[ref]";
-    text-fill: #666;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-placement: interior;
-    text-size: 9;
-    text-dy: -4;
-    text-wrap-width: 30;
-    [indoor='yes'],[level<0] {
-      marker-opacity: 0.5;
-      text-opacity: 0.5;
-    }
+#entrance [zoom >= 17] {
+  [building_entrance=0][room_entrance=1] { marker-width: 0; }
+  marker-fill: grey;
+  marker-width: 2;
+  marker-line-width: 0;
+  [entrance='main'] { text-fill: black; marker-width: 3; }
+  [entrance='emergency'] { marker-fill: #080; text-fill: #080; } // sorties de secours en vert foncé
+  [ref!=''][nom!=''] { text-name: [nom]+" / "+[ref]; }
+  [nom!=''] { text-name: [nom]; }
+  text-name: "[ref]";
+  text-fill: grey;
+  text-face-name: @book-fonts;
+  text-halo-radius: 1;
+  text-placement: interior;
+  text-size: 9;
+  text-dy: -4;
+  text-wrap-width: 30;
+  [indoor='yes'],[level<0] {
+    marker-opacity: 0.5;
+    text-opacity: 0.5;
   }
-
 }
 
 .symbols {
