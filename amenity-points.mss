@@ -614,6 +614,7 @@
     text-placement: interior;
     text-size: 9;
     text-dy: -4;
+    text-wrap-width: 30;
     [indoor='yes'],[level<0] {
       marker-opacity: 0.5;
       text-opacity: 0.5;
