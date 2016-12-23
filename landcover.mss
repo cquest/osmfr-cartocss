@@ -388,7 +388,8 @@
   }
 }
 
-#area-text [zoom >= 14] {
+#area-text [zoom >= 13] {
+  [way_area >= 450000][zoom >= 13],
   [way_area >= 150000][zoom >= 14],
   [way_area >= 50000][zoom >= 15],
   [way_area >= 25000][zoom >= 16],
