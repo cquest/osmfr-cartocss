@@ -152,7 +152,6 @@
   [place = 'city'] {
     [zoom < 15] {
 	    [is_capital='country'] { text-size: 11; text-face-name: @bold-fonts; }
-      text-min-distance: 25;
       text-face-name: @book-fonts;
       text-name: "[nom]";
       text-size: 10;
@@ -210,19 +209,29 @@
 
 #placenames-small-lz::village [zoom >= 6][zoom <= 11][place = 'village'] { // remplissage dans les faibles zooms (6-11)
 	text-name: "[nom]";
-  text-size: 8.5;
+  text-size: 9;
   text-fill: #333;
   text-face-name: @book-fonts;
 	text-halo-radius: 1.25;
 	text-halo-fill: fadeout(white, 30%);
-  text-min-distance: 25;
-  text-placement-type: simple;
-  text-placements: "E,NE,SE,W,NW,SW";
-  text-dx: 5;
-  text-dy: 5;
   text-min-padding: 10;
   text-wrap-width: 30;
   text-align: center;
+
+  // deuxième placement décalé au cas où le premier a échoué
+  b/text-name: "[nom]";
+  b/text-size: 9;
+  b/text-fill: #333;
+  b/text-face-name: @book-fonts;
+	b/text-halo-radius: 1.25;
+	b/text-halo-fill: fadeout(white, 30%);
+  b/text-placement-type: simple;
+  b/text-placements: "E,W,N,S,NE,SE,NW,SW";
+  b/text-dx: 5;
+  b/text-dy: 5;
+  b/text-margin: 10;
+  b/text-wrap-width: 30;
+  b/text-align: center;
 }
 
 #placenames-small::village [zoom >= 11] {
@@ -233,22 +242,36 @@
     text-face-name: @book-fonts;
   	text-halo-radius: 1.5;
   	text-halo-fill: fadeout(white, 30%);
-    text-placement-type: simple;
-    text-placements: "E,NE,SE,W,NW,SW";
-    text-dx: 5;
-    text-dy: 5;
     text-min-padding: 10;
     text-wrap-width: 30;
     text-align: center;
 
+    // deuxième placement décalé au cas où le premier a échoué
+    b/text-name: "[nom]";
+    b/text-size: 8.5;
+    b/text-fill: black;
+    b/text-face-name: @book-fonts;
+  	b/text-halo-radius: 1.5;
+  	b/text-halo-fill: fadeout(white, 30%);
+    b/text-placement-type: simple;
+    b/text-placements: "E,W,N,S,NE,SE,NW,SW";
+    b/text-dx: 5;
+    b/text-dy: 5;
+    b/text-margin: 10;
+    b/text-wrap-width: 30;
+    b/text-align: center;
+
     [pop>1000],
     [zoom>=12] {
       text-size: 9;
+      b/text-size: 9;
     }
     [zoom >= 15] {
       text-name: "[name]";
       text-size: 12;
       text-fill: #777;
+      b/text-size: 12;
+      b/text-fill: #777;
     }
   }
 }
@@ -263,9 +286,9 @@
 	  text-halo-radius: 1.25;
   	text-halo-fill: fadeout(white, 30%);
     text-placement-type: simple;
-    text-placements: "E,NE,SE,W,NW,SW";
-    text-dx: 5;
-    text-dy: 5;
+    text-placements: "X,E,W,N,S,NE,SE,NW,SW";
+    text-dx: 4;
+    text-dy: 4;
     [zoom >= 15] {
       text-name: "[name]";
       text-size: 12;
@@ -280,13 +303,23 @@
   text-face-name: @book-fonts;
 	text-halo-radius: 1;
 	text-halo-fill: fadeout(white, 30%);
-  text-min-distance: 25;
-  text-placement-type: simple;
-  text-placements: "E,NE,SE,W,NW,SW";
-  text-dx: 5;
-  text-dy: 5;
   text-wrap-width: 30;
   text-align: center;
+
+  // deuxième placement décalé au cas où le premier a échoué
+  b/text-name: "[nom]";
+  b/text-size: 8.5;
+  b/text-fill: #555;
+  b/text-face-name: @book-fonts;
+	b/text-halo-radius: 1;
+	b/text-halo-fill: fadeout(white, 30%);
+  b/text-placement-type: simple;
+  b/text-placements: "X,E,W,N,S,NE,SE,NW,SW";
+  b/text-dx: 4;
+  b/text-dy: 4;
+  b/text-margin: 10;
+  b/text-wrap-width: 30;
+  b/text-align: center;
 }
 
 #placenames-small::hamlet [zoom >= 14] {
@@ -302,19 +335,17 @@
       text-size: 11;
     }
   }
-
-  #placenames-small::locality [zoom >= 15] {
-    [place = 'locality'] {
-    	text-name: "[nom]";
-      text-fill: #777;
-      text-face-name: @oblique-fonts;
-    	text-halo-radius: 1;
-    	text-halo-fill: fadeout(white, 30%);
-      text-wrap-width: 30;
-      [zoom >= 16] {
-        text-name: "[name]";
-        text-size: 11;
-      }
+  [zoom >= 15][place = 'locality']::locality {
+  	text-name: "[nom]";
+    text-fill: #777;
+    text-face-name: @oblique-fonts;
+  	text-halo-radius: 1;
+  	text-halo-fill: fadeout(white, 30%);
+    text-wrap-width: 30;
+    text-character-spacing: 1;
+    [zoom >= 16] {
+      text-name: "[name]";
+      text-size: 11;
     }
   }
 }
