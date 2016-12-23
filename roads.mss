@@ -2532,6 +2532,7 @@
       shield-file: url("symbols/mot_shield[length].png");
       shield-repeat-distance: @shield_spacing;
       shield-face-name: @bold-fonts;
+      shield-margin: 20;
       [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
       [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
     }
@@ -2545,6 +2546,7 @@
     shield-file: url("symbols/tru_shield[length].png");
     shield-repeat-distance: @shield_spacing;
     shield-face-name: @bold-fonts;
+    shield-margin: 20;
   }
 
   [highway = 'primary'][zoom >= 13] {
@@ -2555,6 +2557,7 @@
     shield-file: url("symbols/pri_shield[length].png");
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
+    shield-margin: 20;
   }
 
   [highway = 'secondary'][zoom >= 13] {
@@ -2565,6 +2568,7 @@
     shield-file: url("symbols/sec_shield[length].png");
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
+    shield-margin: 20;
   }
 
   [highway = 'tertiary'][zoom >= 13] {
@@ -2575,6 +2579,7 @@
     shield-file: url("symbols/ter_shield[length].png");
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
+    shield-margin: 20;
   }
 
   [highway = 'unclassified'],
