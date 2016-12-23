@@ -910,7 +910,7 @@
     b/line-cap: round;
   }
 
-  [highway = 'track'][zoom >= 14] {
+  [highway = 'track'][zoom >= 13] {
     line-color: white;
     line-width: 1.5;
     line-join: round;
@@ -922,20 +922,28 @@
     b/line-join: round;
     b/line-opacity: 0.8;
     b/line-dasharray: 5,4,2,4; // unknown grade level
-    [tracktype = 'grade1'] {
-      b/line-dasharray: 100,0;
+    [zoom=13] {
+      line-width: 0;
+      b/line-width: 0.5;
+      b/line-opacity: 0.4;
+      b/line-dasharray: 100,0; // ligne continue
     }
-    [tracktype = 'grade2'] {
-      b/line-dasharray: 8.8,3.2;
-    }
-    [tracktype = 'grade3'] {
-      b/line-dasharray: 5.6,4.0;
-    }
-    [tracktype = 'grade4'] {
-      b/line-dasharray: 3.2,4.8;
-    }
-    [tracktype = 'grade5'] {
-      b/line-dasharray: 1.6,6.4;
+    [zoom>=14] {
+      [tracktype = 'grade1'] {
+        b/line-dasharray: 100,0;
+      }
+      [tracktype = 'grade2'] {
+        b/line-dasharray: 8.8,3.2;
+      }
+      [tracktype = 'grade3'] {
+        b/line-dasharray: 5.6,4.0;
+      }
+      [tracktype = 'grade4'] {
+        b/line-dasharray: 3.2,4.8;
+      }
+      [tracktype = 'grade5'] {
+        b/line-dasharray: 1.6,6.4;
+      }
     }
   }
 
