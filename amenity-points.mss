@@ -969,9 +969,14 @@
     }
   }
 
-  [natural = 'peak']::natural,
-  [natural = 'volcano']::natural {
+  [mountain_pass = 'yes']::natural,
+  [natural =~ '(saddle|peak|volcano)']::natural {
     [zoom >= 13] {
+      marker-width: 3;
+      marker-height: 3;
+      marker-fill: brown;
+      marker-line-width: 0;
+      marker-placement: interior;
       long/text-name: "[name]";
       long/text-size: 10;
       long/text-fill: brown;
@@ -986,42 +991,18 @@
       short/text-face-name: @book-fonts;
       short/text-halo-radius: 1;
       short/text-placement: interior;
-      ele/text-name: "[ele]";
-      ele/text-size: 9;
-      ele/text-fill: brown;
-      ele/text-dy: 6;
-      ele/text-face-name: @oblique-fonts;
-      ele/text-halo-radius: 1;
-      ele/text-placement: interior;
-      [name != ''] {
-        ele/text-dy: 18;
-      }
-    }
-  }
-
-  [mountain_pass = 'yes']::natural,
-  [natural = 'saddle']::natural {
-    [zoom >= 13] {
-      long/text-name: "[name]";
-      long/text-size: 10;
-      long/text-fill: brown;
-      long/text-face-name: @book-fonts;
-      long/text-halo-radius: 1;
-      long/text-placement: interior;
-      short/text-name: "[nom]";
-      short/text-size: 10;
-      short/text-fill: brown;
-      short/text-face-name: @book-fonts;
-      short/text-halo-radius: 1;
-      short/text-placement: interior;
-      ele/text-name: "[ele]";
-      ele/text-size: 9;
-      ele/text-fill: brown;
-      ele/text-face-name: @oblique-fonts;
-      ele/text-halo-radius: 1;
-      ele/text-placement: interior;
-      [name != ''] {
-        ele/text-dy: 9;
+      [ele!=''] {
+        ele/text-name: "[ele]";
+        [ele =~ ".*[0-9]$"] { ele/text-name: "[ele]+' m'";} // add 'm' if ending with a digit
+        ele/text-size: 9;
+        ele/text-fill: brown;
+        ele/text-dy: 4;
+        ele/text-face-name: @oblique-fonts;
+        ele/text-halo-radius: 1;
+        ele/text-placement: interior;
+        [name != ''] {
+          ele/text-dy: 18;
+        }
       }
     }
   }
