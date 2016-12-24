@@ -305,6 +305,7 @@
 	text-halo-fill: fadeout(white, 30%);
   text-wrap-width: 30;
   text-align: center;
+  text-margin: 10;
 
   // deuxième placement décalé au cas où le premier a échoué
   b/text-name: "[nom]";
@@ -325,11 +326,13 @@
 #placenames-small::hamlet [zoom >= 14] {
   [place =~ '(hamlet|isolated_dwelling|farm)'] {
   	text-name: "[nom]";
+    text-size: 8.5;
     text-fill: #555;
     text-face-name: @oblique-fonts;
   	text-halo-radius: 1;
   	text-halo-fill: fadeout(white, 30%);
     text-wrap-width: 30;
+    text-margin: 10;
     [zoom >= 16] {
       text-name: "[name]";
       text-size: 11;
@@ -337,12 +340,14 @@
   }
   [zoom >= 15][place = 'locality']::locality {
   	text-name: "[nom]";
+    text-size: 8.5;
     text-fill: #777;
     text-face-name: @oblique-fonts;
   	text-halo-radius: 1;
   	text-halo-fill: fadeout(white, 30%);
     text-wrap-width: 30;
     text-character-spacing: 1;
+    text-margin: 10;
     [zoom >= 16] {
       text-name: "[name]";
       text-size: 11;
