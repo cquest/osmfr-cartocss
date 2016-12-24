@@ -1552,19 +1552,13 @@
   * given the specitivity precedence.
   */
   [highway = 'path'][zoom >= 13] {
-    line-width: 5.5;
+    line-width: 4;
     line-color: grey;
     line-dasharray: 4,2;
-    b/line-width: 1;
+    b/line-width: 2;
     b/line-color: white;
-    b/line-opacity: 0.4;
     b/line-join: round;
     b/line-cap: round;
-    c/line-width: 0.5;
-    c/line-color: black;
-    c/line-dasharray: 6,3;
-    c/line-cap: round;
-    c/line-join: round;
   }
 }
 
