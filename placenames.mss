@@ -263,8 +263,8 @@
 
     [pop>1000],
     [zoom>=12] {
-      text-size: 9;
-      b/text-size: 9;
+      text-size: 10;
+      b/text-size: 10;
     }
     [zoom >= 15] {
       text-name: "[name]";

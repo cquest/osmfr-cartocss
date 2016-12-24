@@ -388,8 +388,10 @@
   }
 }
 
-#area-text [zoom >= 13] {
-  [way_area >= 450000][zoom >= 13],
+#area-text [zoom >= 11] {
+  [way_area >= 8000000][zoom >= 11],
+  [way_area >= 2000000][zoom >= 12],
+  [way_area >= 500000][zoom >= 13],
   [way_area >= 150000][zoom >= 14],
   [way_area >= 50000][zoom >= 15],
   [way_area >= 25000][zoom >= 16],
@@ -401,6 +403,7 @@
     text-face-name: @book-fonts;
     text-placement-type: simple;
     text-placements: 'X,10,9';
+    text-clip: false;
     // variation de la texte du texte en fonction de la surface du polygone
     text-size: 10;
     [zoom>=14][way_area>100000],
@@ -430,13 +433,14 @@
     }
 
     [boundary!=''] {
-    	text-face-name: @oblique-fonts;
+      text-size: 10;
     	[zoom >= 15]
     	{
+        text-face-name: @oblique-fonts;
     		text-fill: grey;
     		text-size: 12;
 	    }
-	    text-halo-radius: 2;
+	    text-halo-radius: 1.5;
     	text-halo-fill: fadeout(white, 30%);
     }
 
