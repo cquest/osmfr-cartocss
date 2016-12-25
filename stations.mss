@@ -32,6 +32,10 @@
       point-transform: 'scale(0.10)';
       [zoom>=14] { point-transform: 'scale(0.15)'; }
       [disused = 'yes'] { point-file: url('symbols/station_disused.png'); point-transform: 'scale(1)';}
+      // default marker (lack of space)
+      marker-width: 4;
+      marker-height: 4;
+      marker-fill: grey;
     }
 
     [zoom >= 13] {
