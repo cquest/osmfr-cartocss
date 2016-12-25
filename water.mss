@@ -48,14 +48,6 @@
   }
 }
 
-#water-areas-overlay {
-  [natural =~ '(marsh|wetland)'] {
-    [zoom >= 13] {
-      polygon-pattern-file: url('symbols/marsh.png');
-    }
-  }
-}
-
 #glaciers-text [zoom >= 8] {
   [way_area >= 10000000][zoom >= 10],
   [way_area >= 5000000][way_area < 10000000][zoom >= 11],
@@ -143,7 +135,7 @@
   [waterway = 'stream'],
   [waterway = 'ditch'],
   [waterway = 'drain'] {
-    [zoom >= 13][zoom < 15] {
+    [zoom >= 13][zoom <= 14] {
       line-width: 1;
       line-color: @water-color;
     }

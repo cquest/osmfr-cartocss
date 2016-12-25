@@ -1,5 +1,5 @@
 #landcover [zoom>=8] {
- [feature = 'leisure_swimming_pool'][zoom >= 14] {
+  [feature = 'leisure_swimming_pool'][zoom >= 14] {
     polygon-fill: #9ff2fa;
     line-color: blue;
     line-width: 0.2;
@@ -99,11 +99,8 @@
     }
   }
 
-  [feature = 'landuse_meadow'],
-  [feature = 'landuse_grass'] {
-    [zoom >= 8] {
-      polygon-fill: #cfeca8;
-    }
+  [feature =~ '(landuse_meadow|landuse_grass|natural_marsh|wetland_marsh|wetland_bog|wetland_reedbed|wetland_wet_meadow)'] {
+    polygon-fill: #cfeca8;
   }
 
   [feature = 'leisure_park'],
@@ -141,7 +138,8 @@
 
   [feature = 'natural_wood'],
   [feature = 'landuse_wood'],
-  [feature = 'landuse_forest'] {
+  [feature = 'landuse_forest'],
+  [feature = 'wetland_swamp'] {
     [zoom >= 8][zoom < 14] {
       polygon-fill: #8dc56c;
       [wood='coniferous'] { polygon-fill: #74b551; }
@@ -386,6 +384,10 @@
     d/line-opacity: 0.1;
     d/line-offset: -5;
   }
+  [natural =~ '(wetland|marsh)'][zoom >= 10]::wetland {
+    polygon-pattern-file: url('symbols/wetland.png');
+  }
+
 }
 
 #area-text [zoom >= 11] {

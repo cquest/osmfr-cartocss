@@ -56,6 +56,7 @@
     text-face-name: @oblique-fonts;
     text-halo-radius: 1;
     text-wrap-width: 0;
+    text-margin: 10;
   }
 }
 
