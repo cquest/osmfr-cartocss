@@ -189,10 +189,7 @@
       text-halo-radius: 2;
       text-halo-fill: fadeout(white, 30%);
       text-wrap-width: 20;
-      text-min-distance: 20;
-      [zoom>=7] {
-        text-min-distance: 10;
-      }
+      text-margin: 5;
     }
     [zoom >= 11] {
       text-name: "[nom]";
@@ -215,7 +212,7 @@
   text-face-name: @book-fonts;
 	text-halo-radius: 1.25;
 	text-halo-fill: fadeout(white, 30%);
-  text-min-padding: 10;
+  text-margin: 15;
   text-wrap-width: 30;
   text-align: center;
 
@@ -223,6 +220,7 @@
   b/text-name: "[nom]";
   b/text-size: 9;
   b/text-fill: #333;
+  b/text-fill: green;
   b/text-face-name: @book-fonts;
 	b/text-halo-radius: 1.25;
 	b/text-halo-fill: fadeout(white, 30%);
@@ -230,7 +228,7 @@
   b/text-placements: "E,W,N,S,NE,SE,NW,SW";
   b/text-dx: 5;
   b/text-dy: 5;
-  b/text-margin: 10;
+  b/text-margin: 15;
   b/text-wrap-width: 30;
   b/text-align: center;
 }
@@ -243,7 +241,7 @@
     text-face-name: @book-fonts;
   	text-halo-radius: 1.5;
   	text-halo-fill: fadeout(white, 30%);
-    text-min-padding: 10;
+    text-margin: 10;
     text-wrap-width: 30;
     text-align: center;
 
@@ -306,7 +304,7 @@
 	text-halo-fill: fadeout(white, 30%);
   text-wrap-width: 30;
   text-align: center;
-  text-margin: 10;
+  text-margin: 15;
 
   // deuxième placement décalé au cas où le premier a échoué
   b/text-name: "[nom]";
@@ -319,7 +317,7 @@
   b/text-placements: "X,E,W,N,S,NE,SE,NW,SW";
   b/text-dx: 4;
   b/text-dy: 4;
-  b/text-margin: 10;
+  b/text-margin: 15;
   b/text-wrap-width: 30;
   b/text-align: center;
 }
