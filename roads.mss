@@ -2606,31 +2606,24 @@
 }
 
 #roads-text-name {
-
   [zoom >= 15] {
-	text-name: "[nom]";
-	text-size: 9;
-	text-fill: black;
-  [railway!=''] { text-fill: #444; }
-	text-placement: line;
-	text-face-name: @book-fonts;
-	text-halo-radius: 1.5;
-	text-halo-fill: fadeout(white, 30%);
-	[highway != '']  { text-spacing: 300; }
-	[tunnel='yes'] { text-opacity: 0.5; }
+  	text-name: "[nom]";
+  	text-size: 9;
+  	text-fill: black;
+    [railway!=''] { text-fill: #444; }
+  	text-placement: line;
+  	text-face-name: @book-fonts;
+  	text-halo-radius: 1.5;
+  	text-halo-fill: fadeout(white, 30%);
+  	[highway != '']  { text-spacing: 300; }
+  	[tunnel='yes'] { text-opacity: 0.5; }
 
-	[zoom >= 15][zoom<17][railway!=''][way_len != ''][way_len < 1000] { text-name: ""; } /* pas d'affichage des nom des petites voies ferrées comme les quais avant le zoom 17 */
+  	[zoom >= 15][zoom<17][railway!=''][way_len != ''][way_len < 1000] { text-name: ""; } /* pas d'affichage des nom des petites voies ferrées comme les quais avant le zoom 17 */
 
-	[zoom>=17] {
-		text-name: "[name]";
-		text-size: 10;
-	}
-
-  	[way_type = ''],					/* masquage du "nom" des objets sans highway,railway,aeroway,route,boundary (cf SQL) */
-  	[way_type = 'administrative'] {  /* masquage du "nom" des limites administratives */
-		text-name: "";
+  	[zoom>=17] {
+  		text-name: "[name]";
+  		text-size: 10;
   	}
-
   }
 
 
