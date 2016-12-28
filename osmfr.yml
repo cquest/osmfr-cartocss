@@ -176,7 +176,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* water-lines */ (select st_intersection(ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin(!bbox!)+!pixel_width!*((select num from params where key='buffer')+(select num from params where key='x_bleed')),ST_Ymin(!bbox!)+!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer'))), ST_Point(ST_XMax(!bbox!)-!pixel_width!*((select num from params where key='x_bleed')+(select num from params where key='buffer')),ST_Ymax(!bbox!)-!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer')))),3857),way) as way,waterway,disused,lock,coalesce(tags->'name:fr',tags->'int_name',name) as name, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else coalesce(tunnel,covered) end as tunnel, tags->'CEMT' as cemt, case when tags->'motorboat'='yes' then 'motorboat' when tags->'boat'='yes' then 'boat' else 'no' end as boat from planet_osm_line where way && !bbox! AND osm_id>0 AND waterway in ('weir','river','canal','derelict_canal','stream','drain','ditch','wadi') and (bridge is null or bridge not in ('yes','true','1','aqueduct')) order by z_order ) as water_lines"
+      table: " /* water-lines */ (select st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,0),way) as way,waterway,disused,lock,coalesce(tags->'name:fr',tags->'int_name',name) as name, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else coalesce(tunnel,covered) end as tunnel, tags->'CEMT' as cemt, case when tags->'motorboat'='yes' then 'motorboat' when tags->'boat'='yes' then 'boat' else 'no' end as boat from planet_osm_line where way && !bbox! AND osm_id>0 AND waterway in ('weir','river','canal','derelict_canal','stream','drain','ditch','wadi') and (bridge is null or bridge not in ('yes','true','1','aqueduct')) order by z_order ) as water_lines"
       simplify_geometries: 'true'
     id: water-lines
 
@@ -771,14 +771,14 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* roads-text-name */ (select st_intersection(ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin(!bbox!)+!pixel_width!*((select num from params where key='x_bleed')+(select num from params where key='buffer')+12),ST_Ymin(!bbox!)+!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer')+10)), ST_Point(ST_XMax(!bbox!)-!pixel_width!*((select num from params where key='x_bleed')+(select num from params where key='buffer')+12),ST_Ymax(!bbox!)-!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer')+10))),3857),st_linemerge(st_collect(way))) as way, highway, name, short_name, admin_level, boundary, insee, way_type, railway, tunnel, junction, nom, sum(way_len) as way_len from (select way,highway,coalesce(tags->'name:fr',tags->'int_name',name) as name, coalesce(tags->'short_name:fr',tags->'short_name') as short_name, st_length(way) as way_len, admin_level,boundary, tags->'ref:INSEE' as insee, coalesce(highway, railway, aeroway,route,boundary,'') as way_type, railway,tunnel, junction, oneway, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom    from planet_osm_line p     where way && !bbox! AND route IS NULL AND waterway IS NULL  and leisure IS NULL  and landuse IS NULL  and name is not null and NOT tags ? 'land_area' and (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1) and (boundary is null or boundary in ('administrative','maritime'))) as ways group by highway, name, short_name, admin_level, boundary, insee, way_type, railway, tunnel, junction, nom, oneway order by way_len) as roads"
+      table: " /* roads-text-name */ (SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,12),st_linemerge(st_collect(way))) as way, highway, name, short_name, railway, tunnel, junction, nom, sum(way_len) as way_len from (select way,highway,coalesce(tags->'name:fr',tags->'int_name',name) as name, coalesce(tags->'short_name:fr',tags->'short_name') as short_name, st_length(way) as way_len, railway,tunnel, junction, oneway, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom  FROM  planet_osm_line p  WHERE  way && !bbox! AND route IS NULL AND waterway IS NULL  and leisure IS NULL  and landuse IS NULL  and name is not null and NOT tags ? 'land_area' and (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1) and coalesce(highway, railway, aeroway) IS NOT NULL) as ways group by highway, name, short_name, railway, tunnel, junction, nom, oneway order by way_len) as roads"
     id: roads-text-name
 
   - name: roads-text-ref
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* roads-text-ref */ (SELECT st_intersection(ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin(!bbox!)+!pixel_width!*((select num from params where key='x_bleed')+(select num from params where key='buffer')+40),ST_Ymin(!bbox!)+!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer')+20)), ST_Point(ST_XMax(!bbox!)-!pixel_width!*((select num from params where key='x_bleed')+(select num from params where key='buffer')+40),ST_Ymax(!bbox!)-!pixel_height!*((select num from params where key='y_bleed')+(select num from params where key='buffer')+20))),3857),st_linemerge(st_collect(way))) as way,junction,coalesce(highway,aeroway) as highway,ref,char_length(ref) as length  FROM  planet_osm_line where way && !bbox! AND (highway is not null or aeroway is not null) AND ref is not null and (position('GR' in ref)!=1 AND position('G.R' in ref) !=1 AND position('G R ' in ref) !=1) AND char_length(ref) between 1 and 8 and (tunnel is null and covered is null or coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))  GROUP BY  ref,highway,aeroway,junction ) as roads_text_ref"
+      table: " /* roads-text-ref */ (SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,30),st_linemerge(st_collect(way))) as way,junction,coalesce(highway,aeroway) as highway,ref,char_length(ref) as length  FROM  planet_osm_line where way && !bbox! AND (highway is not null or aeroway is not null) AND ref is not null and (position('GR' in ref)!=1 AND position('G.R' in ref) !=1 AND position('G R ' in ref) !=1) AND char_length(ref) between 1 and 8 and (tunnel is null and covered is null or coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))  GROUP BY  ref,highway,aeroway,junction ) as roads_text_ref"
       simplify_geometries: 'true'
     id: roads-text-ref
 
@@ -802,15 +802,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         ( /* admin-boundaries-text */ SELECT
-        st_intersection(ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin(!bbox!)+!pixel_width!*(10+(select
-        num from params where key='buffer')+(select num from params where
-        key='x_bleed')),ST_Ymin(!bbox!)+!pixel_height!*(10+(select num from
-        params where key='y_bleed')+(select num from params where
-        key='buffer'))), ST_Point(ST_XMax(!bbox!)-!pixel_width!*(10+(select num
-        from params where key='x_bleed')+(select num from params where
-        key='buffer')),ST_Ymax(!bbox!)-!pixel_height!*(10+(select num from
-        params where key='y_bleed')+(select num from params where
-        key='buffer')))),3857),ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2))
+        st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,10),ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2))
         as way, to_int(admin_level) as admin_level ,
         coalesce(tags->'name:fr',tags->'int_name',name) as name,
         tags->'ref:INSEE' as insee,
