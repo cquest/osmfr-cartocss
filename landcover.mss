@@ -408,6 +408,7 @@
     text-placement-type: simple;
     text-placements: 'X,10,9';
     text-clip: false;
+    text-placement: interior;
     // variation de la texte du texte en fonction de la surface du polygone
     text-size: 10;
     [zoom>=14][way_area>100000],
@@ -468,6 +469,7 @@
       text-face-name: @oblique-fonts;
       text-fill: #060; // nature_reserve, playground, pitch, golf_course, garden, horse_riding, stadium...
       [leisure='marina'] {text-fill: #068;}
+      [leisure='golf_course'][zoom>=14]{ text-name: ""; } // icone en double sinon...
     }
     [heritage!=''] {
       text-face-name: @bold-fonts;

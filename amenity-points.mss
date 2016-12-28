@@ -406,7 +406,7 @@
       [indoor='yes'] { point-opacity: 0.5; }
     }
 
-    [tourism = 'zoo'][zoom >= 15]::tourism {
+    [tourism = 'zoo'][zoom >= 14]::tourism {
       point-file: url('symbols/zoo.svg');
       point-placement: interior;
     }
@@ -1201,7 +1201,7 @@
     [amenity = 'townhall'],[amenity = 'courthouse'] { text-dy: 12; }
   }
 
-  [tourism = 'zoo'][zoom >= 15]::tourism,
+  [tourism = 'zoo'][zoom >= 14]::tourism,
   [tourism = 'museum'][zoom >= 16]::tourism {
     text-name: "[name]";
     text-size: 10;
