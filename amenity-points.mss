@@ -650,6 +650,7 @@
         text-halo-radius: 1;
   			text-placement: interior;
   			text-face-name: @bold-fonts;
+        text-wrap-width: 40;
   			[military = 'airfield'],
         [aerodrome =~ '(military|airfield)'] {
           text-fill: black;
@@ -672,14 +673,8 @@
   	  [aeroway = 'aerodrome'] {
     		point-file: url('symbols/aerodrome.svg');
     		[zoom>=12] {
-    			text-dy: -12;
-    			text-name: "[nom]";
-    			[zoom>=15] { text-name: "[name]"; }
     			text-size: 9;
-    			text-fill: #6692da;
     			text-face-name: @oblique-fonts;
-    			text-halo-radius: 1;
-    			text-placement: interior;
           [military = 'airfield'],
           [aerodrome =~ '(military|airfield)'] {
             text-fill: black;
