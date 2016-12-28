@@ -393,6 +393,217 @@
 }
 
 #area-text [zoom >= 11] {
+  [boundary!='']::boundary {
+    [way_area >= 8000000][zoom >= 11],
+    [way_area >= 2000000][zoom >= 12],
+    [way_area >= 500000][zoom >= 13],
+    [way_area >= 150000][zoom >= 14],
+    [way_area >= 50000][zoom >= 15],
+    [way_area >= 25000][zoom >= 16],
+    [zoom >= 17] {
+      text-name: "[nom]";
+      [zoom >= 17] { text-name: "[name]"; }
+      text-halo-radius: 1;
+      text-wrap-width: 30;
+      text-face-name: @book-fonts;
+      text-placement-type: simple;
+      text-placements: 'X,10,9';
+      text-clip: false;
+      text-placement: interior;
+      // variation de la texte du texte en fonction de la surface du polygone
+      text-size: 10;
+      [zoom>=14][way_area>100000],
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 11;
+        text-wrap-width: 40;
+        text-placements: 'X,12,10,9';
+      }
+      [zoom>=14][way_area>400000],
+      [zoom>=15][way_area>200000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 12;
+        text-wrap-width: 50;
+        text-placements: 'X,14,12,10,9';
+      }
+      [zoom>=14][way_area>4000000],
+      [zoom>=15][way_area>2000000],
+      [zoom>=16][way_area>1000000] {
+        text-size: 14;
+        text-wrap-width: 60;
+        text-placements: 'X,16,14,12,10,9';
+      }
+      text-size: 10;
+      text-fill: grey;
+    	[zoom >= 15]
+    	{
+        text-face-name: @oblique-fonts;
+    		text-size: 12;
+      }
+      text-halo-radius: 1.5;
+    	text-halo-fill: fadeout(white, 30%);
+    }
+  }
+
+  [landuse!='']::landuse {
+    [way_area >= 8000000][zoom >= 11],
+    [way_area >= 2000000][zoom >= 12],
+    [way_area >= 500000][zoom >= 13],
+    [way_area >= 150000][zoom >= 14],
+    [way_area >= 50000][zoom >= 15],
+    [way_area >= 25000][zoom >= 16],
+    [zoom >= 17] {
+      text-name: "[nom]";
+      [zoom >= 17] { text-name: "[name]"; }
+      text-halo-radius: 1;
+      text-wrap-width: 30;
+      text-placement-type: simple;
+      text-placements: 'X,10,9';
+      text-clip: false;
+      text-placement: interior;
+      // variation de la texte du texte en fonction de la surface du polygone
+      text-size: 10;
+      [zoom>=14][way_area>100000],
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 11;
+        text-wrap-width: 40;
+        text-placements: 'X,12,10,9';
+      }
+      [zoom>=14][way_area>400000],
+      [zoom>=15][way_area>200000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 12;
+        text-wrap-width: 50;
+        text-placements: 'X,14,12,10,9';
+      }
+      [zoom>=14][way_area>4000000],
+      [zoom>=15][way_area>2000000],
+      [zoom>=16][way_area>1000000] {
+        text-size: 14;
+        text-wrap-width: 60;
+        text-placements: 'X,16,14,12,10,9';
+      }
+    	text-face-name: @oblique-fonts;
+    	text-fill: #444; // industrial, residential, brownfield, cemetery, construction, farm/farmland/farmyard, garages,landfill, quarry, railway
+    	[landuse=~'(water|reservoir|basin|salt_pond)'] {text-fill: #068;}
+      [landuse=~'(forest|wood|allotments|meadow|vineyard|orchard|grass|greenhouse_horticulture|recreation_ground)']
+      {
+        text-fill: #050;
+      }
+      [landuse='retail'] {text-fill: darken(@shop-icon,25%);}
+      [landuse='commercial'] {text-fill:  darken(pink,50%);}
+      [landuse='military'] {text-fill: #c00;}
+    }
+  }
+
+  [leisure!='']::leisure {
+    [way_area >= 8000000][zoom >= 11],
+    [way_area >= 2000000][zoom >= 12],
+    [way_area >= 500000][zoom >= 13],
+    [way_area >= 150000][zoom >= 14],
+    [way_area >= 50000][zoom >= 15],
+    [way_area >= 25000][zoom >= 16],
+    [zoom >= 17] {
+      text-name: "[nom]";
+      [zoom >= 17] { text-name: "[name]"; }
+      text-halo-radius: 1;
+      text-wrap-width: 30;
+      text-placement-type: simple;
+      text-placements: 'X,10,9';
+      text-clip: false;
+      text-placement: interior;
+      // variation de la texte du texte en fonction de la surface du polygone
+      text-size: 10;
+      [zoom>=14][way_area>100000],
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 11;
+        text-wrap-width: 40;
+        text-placements: 'X,12,10,9';
+      }
+      [zoom>=14][way_area>400000],
+      [zoom>=15][way_area>200000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 12;
+        text-wrap-width: 50;
+        text-placements: 'X,14,12,10,9';
+      }
+      [zoom>=14][way_area>4000000],
+      [zoom>=15][way_area>2000000],
+      [zoom>=16][way_area>1000000] {
+        text-size: 14;
+        text-wrap-width: 60;
+        text-placements: 'X,16,14,12,10,9';
+      }
+      text-face-name: @oblique-fonts;
+      text-fill: #060; // nature_reserve, playground, pitch, golf_course, garden, horse_riding, stadium...
+      [leisure='marina'] {text-fill: #068;}
+      [leisure='golf_course'][zoom>=14]{ text-name: ""; } // icone en double sinon...
+    }
+  }
+
+  [heritage!='']::heritage {
+    [way_area >= 8000000][zoom >= 11],
+    [way_area >= 2000000][zoom >= 12],
+    [way_area >= 500000][zoom >= 13],
+    [way_area >= 150000][zoom >= 14],
+    [way_area >= 50000][zoom >= 15],
+    [way_area >= 25000][zoom >= 16],
+    [zoom >= 17] {
+      text-name: "[nom]";
+      [zoom >= 17] { text-name: "[name]"; }
+      text-halo-radius: 1;
+      text-wrap-width: 30;
+      text-placement-type: simple;
+      text-placements: 'X,10,9';
+      text-clip: false;
+      text-placement: interior;
+      // variation de la texte du texte en fonction de la surface du polygone
+      text-size: 10;
+      [zoom>=14][way_area>100000],
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 11;
+        text-wrap-width: 40;
+        text-placements: 'X,12,10,9';
+      }
+      [zoom>=14][way_area>400000],
+      [zoom>=15][way_area>200000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 12;
+        text-wrap-width: 50;
+        text-placements: 'X,14,12,10,9';
+      }
+      [zoom>=14][way_area>4000000],
+      [zoom>=15][way_area>2000000],
+      [zoom>=16][way_area>1000000] {
+        text-size: 14;
+        text-wrap-width: 60;
+        text-placements: 'X,16,14,12,10,9';
+      }
+      text-face-name: @bold-fonts;
+  	 	text-fill: #734a08;
+  	}
+  }
+
+  // par défaut
   [way_area >= 8000000][zoom >= 11],
   [way_area >= 2000000][zoom >= 12],
   [way_area >= 500000][zoom >= 13],
@@ -400,6 +611,7 @@
   [way_area >= 50000][zoom >= 15],
   [way_area >= 25000][zoom >= 16],
   [zoom >= 17] {
+    text-fill: #333;
     text-name: "[nom]";
     [zoom >= 17] { text-name: "[name]"; }
     text-halo-radius: 1;
@@ -436,44 +648,5 @@
       text-wrap-width: 60;
       text-placements: 'X,16,14,12,10,9';
     }
-
-    [boundary!=''] {
-      text-size: 10;
-      text-fill: grey;
-    	[zoom >= 15]
-    	{
-        text-face-name: @oblique-fonts;
-    		text-size: 12;
-	    }
-	    text-halo-radius: 1.5;
-    	text-halo-fill: fadeout(white, 30%);
-    }
-
-    // variation de la couleur en fonction du type
-    text-fill: #333; // léger gris par défaut
-    [landuse!=''] {
-    	text-face-name: @oblique-fonts;
-    	text-fill: #444; // industrial, residential, brownfield, cemetery, construction, farm/farmland/farmyard, garages,landfill, quarry, railway
-    	[landuse='water'],[landuse='reservoir'],[landuse='basin'],[landuse='salt_pond'] {text-fill: #068;}
-      [landuse='forest'],[landuse='wood'],[landuse='allotments'],[landuse='meadow'],
-      [landuse='vineyard'],[landuse='orchard'],[landuse='grass'],[landuse='greenhouse_horticulture'],
-      [landuse='recreation_ground']
-      {
-        text-fill: #050;
-      }
-      [landuse='retail'] {text-fill: darken(@shop-icon,25%);}
-      [landuse='commercial'] {text-fill:  darken(pink,50%);}
-      [landuse='military'] {text-fill: #c00;}
-    }
-    [leisure!=''] {
-      text-face-name: @oblique-fonts;
-      text-fill: #060; // nature_reserve, playground, pitch, golf_course, garden, horse_riding, stadium...
-      [leisure='marina'] {text-fill: #068;}
-      [leisure='golf_course'][zoom>=14]{ text-name: ""; } // icone en double sinon...
-    }
-    [heritage!=''] {
-      text-face-name: @bold-fonts;
-  	 	text-fill: #734a08;
-  	}
   }
 }
