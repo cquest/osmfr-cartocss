@@ -400,8 +400,8 @@
   [way_area >= 50000][zoom >= 15],
   [way_area >= 25000][zoom >= 16],
   [zoom >= 17] {
-    [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
+    [zoom >= 17] { text-name: "[name]"; }
     text-halo-radius: 1;
     text-wrap-width: 30;
     text-face-name: @book-fonts;
@@ -416,7 +416,7 @@
     [zoom>=16][way_area>25000],
     [zoom>=17][way_area>10000],
     [zoom>=18][way_area> 5000] {
-      text-size: 12;
+      text-size: 11;
       text-wrap-width: 40;
       text-placements: 'X,12,10,9';
     }
@@ -425,24 +425,24 @@
     [zoom>=16][way_area>100000],
     [zoom>=17][way_area>25000],
     [zoom>=18][way_area>10000] {
-      text-size: 14;
+      text-size: 12;
       text-wrap-width: 50;
       text-placements: 'X,14,12,10,9';
     }
     [zoom>=14][way_area>4000000],
     [zoom>=15][way_area>2000000],
     [zoom>=16][way_area>1000000] {
-      text-size: 16;
+      text-size: 14;
       text-wrap-width: 60;
       text-placements: 'X,16,14,12,10,9';
     }
 
     [boundary!=''] {
       text-size: 10;
+      text-fill: grey;
     	[zoom >= 15]
     	{
         text-face-name: @oblique-fonts;
-    		text-fill: grey;
     		text-size: 12;
 	    }
 	    text-halo-radius: 1.5;
