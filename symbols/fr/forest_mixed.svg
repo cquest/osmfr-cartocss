@@ -1,0 +1,1396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Svg"
+   width="256"
+   height="256"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="forest_mixed.svg">
+  <metadata
+     id="metadata545">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1513"
+     inkscape:window-height="985"
+     id="namedview543"
+     showgrid="false"
+     inkscape:zoom="0.921875"
+     inkscape:cx="-110.10169"
+     inkscape:cy="128"
+     inkscape:window-x="380"
+     inkscape:window-y="278"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Svg" />
+  <defs
+     id="defs3">
+    <clipPath
+       id="clipPath">
+      <rect
+         x="0"
+         y="0"
+         width="256"
+         height="256"
+         id="rect6" />
+    </clipPath>
+    <g
+       transform="matrix(1.25,0,0,1.25,-6.25,-6.25)"
+       id="gSix7th8n341f"
+       style="fill:#66aa44">
+      <g
+         id="g9">
+        <path
+           d="M 2,0 0,6 0,7 2,7 2,10 3,10 3,7 5,7 5,6 3,0 Z M 2.5,1 4,6 1,6 Z"
+           id="path11"
+           inkscape:connector-curvature="0" />
+        <path
+           d="m 7,5 1,0 0,5 -1,0 z"
+           id="path13"
+           inkscape:connector-curvature="0" />
+        <path
+           d="m 7.5,0 a 2.5,3 0 0 1 0,6 l 0,-1 a 1.5,2 0 0 0 0,-4 1.5,2 0 1 0 0,4 l 0,1 a 2.5,3 0 1 1 0,-6 z"
+           id="path15"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
+       transform="matrix(1.25,0,0,1.25,-6.25,-6.25)"
+       id="gSix7th8n341g"
+       style="fill:#66aa44">
+      <g
+         id="g18">
+        <path
+           d="m 2,5 1,0 0,5 -1,0 z"
+           id="path20"
+           inkscape:connector-curvature="0" />
+        <path
+           d="m 2.5,0 a 2.5,3 0 0 1 0,6 l 0,-1 a 1.5,2 0 0 0 0,-4 1.5,2 0 1 0 0,4 l 0,1 a 2.5,3 0 1 1 0,-6 z"
+           id="path22"
+           inkscape:connector-curvature="0" />
+        <path
+           d="M 7,0 5,6 5,7 7,7 7,10 8,10 8,7 10,7 10,6 8,0 Z M 7.5,1 9,6 6,6 Z"
+           id="path24"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+  </defs>
+  <rect
+     style="fill:#8dc56c;stroke-opacity:0"
+     id="rect4673"
+     width="256"
+     height="256"
+     x="0"
+     y="0"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <g
+     id="Pattern"
+     style="clip-path: url(#clipPath);"
+     clip-path="url(#clipPath)">
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="10.33253180707279"
+       y="211.91130408461595"
+       id="use27" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="266.33253180707277"
+       y="211.91130408461595"
+       id="use29" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="266.33253180707277"
+       y="-44.08869591538405"
+       id="use31" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="10.33253180707279"
+       y="-44.08869591538405"
+       id="use33" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="266.33253180707277"
+       y="-44.08869591538405"
+       id="use35" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="166.55074616909633"
+       y="88.53695404422625"
+       id="use37" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="239.92858568891313"
+       y="55.11198825641975"
+       id="use39" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-16.07141431108687"
+       y="55.11198825641975"
+       id="use41" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-16.07141431108687"
+       y="311.11198825641975"
+       id="use43" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="239.92858568891313"
+       y="311.11198825641975"
+       id="use45" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-16.07141431108687"
+       y="311.11198825641975"
+       id="use47" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="58.86525985100998"
+       y="117.35984180887252"
+       id="use49" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="314.86525985100997"
+       y="117.35984180887252"
+       id="use51" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="219.60614216648997"
+       y="36.03944593036128"
+       id="use53" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-36.393857833510026"
+       y="36.03944593036128"
+       id="use55" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-36.393857833510026"
+       y="292.0394459303613"
+       id="use57" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="219.60614216648997"
+       y="292.0394459303613"
+       id="use59" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-36.393857833510026"
+       y="292.0394459303613"
+       id="use61" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="112.92296201186896"
+       y="52.49263842690681"
+       id="use63" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="112.92296201186896"
+       y="308.4926384269068"
+       id="use65" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="202.10036461637935"
+       y="120.1858501282412"
+       id="use67" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-53.89963538362065"
+       y="120.1858501282412"
+       id="use69" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="80.5417759728747"
+       y="192.5715596355498"
+       id="use71" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="80.5417759728747"
+       y="-63.42844036445021"
+       id="use73" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="187.23104344444883"
+       y="251.975166401098"
+       id="use75" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="187.23104344444883"
+       y="-4.024833598902006"
+       id="use77" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="108.81091961706416"
+       y="13.994854930952636"
+       id="use79" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="108.81091961706416"
+       y="269.9948549309526"
+       id="use81" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="44.421859265765846"
+       y="104.14376789751728"
+       id="use83" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="300.4218592657659"
+       y="104.14376789751728"
+       id="use85" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="221.85901418131016"
+       y="214.8709346426144"
+       id="use87" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-34.14098581868984"
+       y="214.8709346426144"
+       id="use89" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-34.14098581868984"
+       y="-41.1290653573856"
+       id="use91" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="221.85901418131016"
+       y="-41.1290653573856"
+       id="use93" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-34.14098581868984"
+       y="-41.1290653573856"
+       id="use95" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="95.82848096666419"
+       y="235.36185816137137"
+       id="use97" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="95.82848096666419"
+       y="-20.638141838628627"
+       id="use99" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="235.4331117731928"
+       y="200.1554631061243"
+       id="use101" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-20.566888226807208"
+       y="200.1554631061243"
+       id="use103" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-20.566888226807208"
+       y="-55.8445368938757"
+       id="use105" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="235.4331117731928"
+       y="-55.8445368938757"
+       id="use107" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-20.566888226807208"
+       y="-55.8445368938757"
+       id="use109" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="54.729461899004065"
+       y="202.13470308241182"
+       id="use111" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.72946189900404"
+       y="202.13470308241182"
+       id="use113" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.72946189900404"
+       y="-53.86529691758818"
+       id="use115" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="54.729461899004065"
+       y="-53.86529691758818"
+       id="use117" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.72946189900404"
+       y="-53.86529691758818"
+       id="use119" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="95.49295397992613"
+       y="211.99312051076924"
+       id="use121" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="95.49295397992613"
+       y="-44.006879489230755"
+       id="use123" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="216.52764216322487"
+       y="141.41623086411866"
+       id="use125" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-39.47235783677513"
+       y="141.41623086411866"
+       id="use127" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="86.31824597798577"
+       y="79.72909313676178"
+       id="use129" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="147.9987570678798"
+       y="17.550015924791524"
+       id="use131" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="147.9987570678798"
+       y="273.5500159247915"
+       id="use133" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="148.40319936047126"
+       y="124.12585611296663"
+       id="use135" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="9.232821543819433"
+       y="197.12918717978405"
+       id="use137" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="265.23282154381945"
+       y="197.12918717978405"
+       id="use139" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="265.23282154381945"
+       y="-58.870812820215946"
+       id="use141" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="9.232821543819433"
+       y="-58.870812820215946"
+       id="use143" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="265.23282154381945"
+       y="-58.870812820215946"
+       id="use145" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="189.86755135719218"
+       y="81.9610716922814"
+       id="use147" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="207.64184007199884"
+       y="2.3395748559132956"
+       id="use149" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-48.35815992800116"
+       y="2.3395748559132956"
+       id="use151" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-48.35815992800116"
+       y="258.33957485591327"
+       id="use153" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="207.64184007199884"
+       y="258.33957485591327"
+       id="use155" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-48.35815992800116"
+       y="258.33957485591327"
+       id="use157" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="100.66772911550255"
+       y="61.08535253398819"
+       id="use159" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="100.66772911550255"
+       y="317.0853525339882"
+       id="use161" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="36.83274647296637"
+       y="40.515468609048895"
+       id="use163" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="292.8327464729664"
+       y="40.515468609048895"
+       id="use165" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="292.8327464729664"
+       y="296.51546860904887"
+       id="use167" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="36.83274647296637"
+       y="296.51546860904887"
+       id="use169" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="292.8327464729664"
+       y="296.51546860904887"
+       id="use171" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="60.955443464240254"
+       y="150.82961579192127"
+       id="use173" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="316.95544346424026"
+       y="150.82961579192127"
+       id="use175" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="143.11734853338655"
+       y="222.92338265951753"
+       id="use177" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="143.11734853338655"
+       y="-33.07661734048247"
+       id="use179" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="213.17344290927065"
+       y="191.08257797750412"
+       id="use181" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-42.82655709072935"
+       y="191.08257797750412"
+       id="use183" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="33.64429167986817"
+       y="252.37319624329405"
+       id="use185" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="289.64429167986816"
+       y="252.37319624329405"
+       id="use187" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="289.64429167986816"
+       y="-3.6268037567059537"
+       id="use189" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="33.64429167986817"
+       y="-3.6268037567059537"
+       id="use191" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="289.64429167986816"
+       y="-3.6268037567059537"
+       id="use193" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="172.31008010497447"
+       y="254.55351231060868"
+       id="use195" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="172.31008010497447"
+       y="-1.4464876893913186"
+       id="use197" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="21.159529547226285"
+       y="5.7407989848338765"
+       id="use199" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="277.15952954722627"
+       y="5.7407989848338765"
+       id="use201" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="277.15952954722627"
+       y="261.7407989848339"
+       id="use203" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="21.159529547226285"
+       y="261.7407989848339"
+       id="use205" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="277.15952954722627"
+       y="261.7407989848339"
+       id="use207" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="244.1439447731837"
+       y="22.076824412347893"
+       id="use209" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-11.856055226816295"
+       y="22.076824412347893"
+       id="use211" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-11.856055226816295"
+       y="278.0768244123479"
+       id="use213" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="244.1439447731837"
+       y="278.0768244123479"
+       id="use215" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-11.856055226816295"
+       y="278.0768244123479"
+       id="use217" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="191.10343291259983"
+       y="142.93242621495656"
+       id="use219" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="199.94358344641532"
+       y="188.43276464690413"
+       id="use221" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-56.05641655358468"
+       y="188.43276464690413"
+       id="use223" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="245.228461806892"
+       y="38.06941294509259"
+       id="use225" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-10.771538193108"
+       y="38.06941294509259"
+       id="use227" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-10.771538193108"
+       y="294.0694129450926"
+       id="use229" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="245.228461806892"
+       y="294.0694129450926"
+       id="use231" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-10.771538193108"
+       y="294.0694129450926"
+       id="use233" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="61.42197754261456"
+       y="58.524974286317196"
+       id="use235" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="317.42197754261457"
+       y="58.524974286317196"
+       id="use237" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="317.42197754261457"
+       y="314.5249742863172"
+       id="use239" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="61.42197754261456"
+       y="314.5249742863172"
+       id="use241" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="317.42197754261457"
+       y="314.5249742863172"
+       id="use243" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="251.701177933797"
+       y="237.62155767789773"
+       id="use245" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-4.298822066203002"
+       y="237.62155767789773"
+       id="use247" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-4.298822066203002"
+       y="-18.378442322102273"
+       id="use249" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="251.701177933797"
+       y="-18.378442322102273"
+       id="use251" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-4.298822066203002"
+       y="-18.378442322102273"
+       id="use253" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="158.4410910590155"
+       y="176.9153295119257"
+       id="use255" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="137.25336497385098"
+       y="176.95669952358685"
+       id="use257" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="181.40789143182178"
+       y="214.9424252586734"
+       id="use259" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="181.40789143182178"
+       y="-41.05757474132659"
+       id="use261" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="85.57968356578476"
+       y="103.91147245522912"
+       id="use263" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="90.83615994787226"
+       y="8.507706727596652"
+       id="use265" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="90.83615994787226"
+       y="264.50770672759666"
+       id="use267" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="250.05943265200114"
+       y="212.05814289631394"
+       id="use269" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-5.940567347998865"
+       y="212.05814289631394"
+       id="use271" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-5.940567347998865"
+       y="-43.94185710368606"
+       id="use273" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="250.05943265200114"
+       y="-43.94185710368606"
+       id="use275" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-5.940567347998865"
+       y="-43.94185710368606"
+       id="use277" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="104.10880242586069"
+       y="150.58679504054092"
+       id="use279" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="224.76683246990103"
+       y="55.54817737927514"
+       id="use281" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-31.233167530098967"
+       y="55.54817737927514"
+       id="use283" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-31.233167530098967"
+       y="311.54817737927516"
+       id="use285" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="224.76683246990103"
+       y="311.54817737927516"
+       id="use287" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-31.233167530098967"
+       y="311.54817737927516"
+       id="use289" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="16.9904417659314"
+       y="84.56905774136945"
+       id="use291" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="272.9904417659314"
+       y="84.56905774136945"
+       id="use293" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="225.13790635901864"
+       y="108.397296611282"
+       id="use295" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-30.862093640981357"
+       y="108.397296611282"
+       id="use297" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="162.56204664297084"
+       y="106.66191838678888"
+       id="use299" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="41.006842655839336"
+       y="169.3750443384247"
+       id="use301" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="297.00684265583936"
+       y="169.3750443384247"
+       id="use303" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="139.31965701239437"
+       y="63.401094248721556"
+       id="use305" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="139.31965701239437"
+       y="319.40109424872156"
+       id="use307" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="88.27535165843592"
+       y="165.79194640997892"
+       id="use309" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="6.429196531749357"
+       y="70.87498421204158"
+       id="use311" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="262.42919653174937"
+       y="70.87498421204158"
+       id="use313" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="168.7020073500589"
+       y="195.43554066444028"
+       id="use315" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="168.7020073500589"
+       y="-60.56445933555972"
+       id="use317" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="200.97789501522686"
+       y="61.15635141071311"
+       id="use319" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-55.02210498477314"
+       y="61.15635141071311"
+       id="use321" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-55.02210498477314"
+       y="317.1563514107131"
+       id="use323" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="200.97789501522686"
+       y="317.1563514107131"
+       id="use325" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-55.02210498477314"
+       y="317.1563514107131"
+       id="use327" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="142.74552546075495"
+       y="32.680561620438695"
+       id="use329" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="142.74552546075495"
+       y="288.6805616204387"
+       id="use331" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="248.94172475065716"
+       y="168.5999403548841"
+       id="use333" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-7.058275249342842"
+       y="168.5999403548841"
+       id="use335" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="78.15251695887679"
+       y="134.52349957014883"
+       id="use337" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="168.71933608536796"
+       y="73.29688744326168"
+       id="use339" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="1.3822258770721798"
+       y="26.898399455663707"
+       id="use341" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="257.3822258770722"
+       y="26.898399455663707"
+       id="use343" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="257.3822258770722"
+       y="282.8983994556637"
+       id="use345" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="1.3822258770721798"
+       y="282.8983994556637"
+       id="use347" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="257.3822258770722"
+       y="282.8983994556637"
+       id="use349" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="220.43878568524138"
+       y="254.05927750596794"
+       id="use351" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-35.561214314758615"
+       y="254.05927750596794"
+       id="use353" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-35.561214314758615"
+       y="-1.9407224940320589"
+       id="use355" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="220.43878568524138"
+       y="-1.9407224940320589"
+       id="use357" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-35.561214314758615"
+       y="-1.9407224940320589"
+       id="use359" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="169.18198648443467"
+       y="43.325673874813084"
+       id="use361" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="169.18198648443467"
+       y="299.3256738748131"
+       id="use363" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="217.94901048658699"
+       y="89.49904119681153"
+       id="use365" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-38.050989513413015"
+       y="89.49904119681153"
+       id="use367" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="103.87805724599146"
+       y="175.82566318504092"
+       id="use369" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="5.483133403271895"
+       y="248.11484962755037"
+       id="use371" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="261.4831334032719"
+       y="248.11484962755037"
+       id="use373" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="261.4831334032719"
+       y="-7.88515037244963"
+       id="use375" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="5.483133403271895"
+       y="-7.88515037244963"
+       id="use377" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="261.4831334032719"
+       y="-7.88515037244963"
+       id="use379" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="112.2148162456582"
+       y="250.69456382377876"
+       id="use381" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="112.2148162456582"
+       y="-5.305436176221235"
+       id="use383" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="6.998597048825745"
+       y="158.89108348205107"
+       id="use385" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="262.99859704882573"
+       y="158.89108348205107"
+       id="use387" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="125.88119717258242"
+       y="228.00450214059708"
+       id="use389" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="125.88119717258242"
+       y="-27.995497859402917"
+       id="use391" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="145.76225333506952"
+       y="96.92463874607891"
+       id="use393" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="146.08278104304756"
+       y="146.49772345852762"
+       id="use395" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="106.94399621195478"
+       y="201.19309673698197"
+       id="use397" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="106.94399621195478"
+       y="-54.80690326301803"
+       id="use399" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="46.96346657002323"
+       y="5.816659900218025"
+       id="use401" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="302.96346657002323"
+       y="5.816659900218025"
+       id="use403" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="302.96346657002323"
+       y="261.81665990021804"
+       id="use405" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="46.96346657002323"
+       y="261.81665990021804"
+       id="use407" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="302.96346657002323"
+       y="261.81665990021804"
+       id="use409" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="203.10749262880017"
+       y="41.875042128250335"
+       id="use411" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-52.89250737119983"
+       y="41.875042128250335"
+       id="use413" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-52.89250737119983"
+       y="297.87504212825036"
+       id="use415" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-52.89250737119983"
+       y="297.87504212825036"
+       id="use419" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="104.94700733285275"
+       y="36.839832510705776"
+       id="use421" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="104.94700733285275"
+       y="292.8398325107058"
+       id="use423" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="208.88720259120706"
+       y="174.2631069190408"
+       id="use425" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-47.11279740879294"
+       y="174.2631069190408"
+       id="use427" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="48.75757973829993"
+       y="186.42618549462736"
+       id="use429" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="304.7575797382999"
+       y="186.42618549462736"
+       id="use431" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="254.45734753524818"
+       y="92.9310008753434"
+       id="use433" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="-1.542652464751825"
+       y="92.9310008753434"
+       id="use435" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="40.59380146006983"
+       y="227.9079994009985"
+       id="use437" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="296.5938014600698"
+       y="227.9079994009985"
+       id="use439" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="296.5938014600698"
+       y="-28.092000599001494"
+       id="use441" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="40.59380146006983"
+       y="-28.092000599001494"
+       id="use443" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="296.5938014600698"
+       y="-28.092000599001494"
+       id="use445" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="119.92278980422918"
+       y="104.89779092639158"
+       id="use447" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="109.96206862105657"
+       y="89.36949340958535"
+       id="use449" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="15.477895854341677"
+       y="143.4684912493768"
+       id="use451" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="271.4778958543417"
+       y="143.4684912493768"
+       id="use453" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="174.7171827240744"
+       y="147.22988671568598"
+       id="use455" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="164.30170335285425"
+       y="5.521524732011994"
+       id="use457" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="164.30170335285425"
+       y="261.521524732012"
+       id="use459" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="37.609257857360674"
+       y="86.56254230741875"
+       id="use461" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="293.60925785736066"
+       y="86.56254230741875"
+       id="use463" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="74.40794925824203"
+       y="86.77825477135352"
+       id="use465" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="73.44671191853296"
+       y="23.653390973698823"
+       id="use467" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="73.44671191853296"
+       y="279.65339097369883"
+       id="use469" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="239.89114645859829"
+       y="109.92484216401093"
+       id="use471" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-16.108853541401714"
+       y="109.92484216401093"
+       id="use473" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="142.86803758008185"
+       y="187.96464992942379"
+       id="use475" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="35.15810798399008"
+       y="151.42829999394732"
+       id="use477" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="291.1581079839901"
+       y="151.42829999394732"
+       id="use479" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="9.328038999015929"
+       y="121.59047168325776"
+       id="use481" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="265.3280389990159"
+       y="121.59047168325776"
+       id="use483" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="190.9133384939117"
+       y="4.88173691744673"
+       id="use485" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="190.9133384939117"
+       y="260.88173691744674"
+       id="use487" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="177.76214301227162"
+       y="206.49668708394475"
+       id="use489" />
+    <use
+       xlink:href="#gSix7th8n341f"
+       x="177.76214301227162"
+       y="-49.50331291605525"
+       id="use491" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="54.51444972864588"
+       y="226.1734074912342"
+       id="use493" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.5144497286459"
+       y="226.1734074912342"
+       id="use495" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.5144497286459"
+       y="-29.8265925087658"
+       id="use497" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="54.51444972864588"
+       y="-29.8265925087658"
+       id="use499" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="310.5144497286459"
+       y="-29.8265925087658"
+       id="use501" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="144.95989517575728"
+       y="232.0136001602997"
+       id="use503" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="144.95989517575728"
+       y="-23.98639983970031"
+       id="use505" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="29.455479654637777"
+       y="64.82229191096773"
+       id="use507" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="285.45547965463777"
+       y="64.82229191096773"
+       id="use509" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="68.7124780826319"
+       y="238.3901154037552"
+       id="use511" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="68.7124780826319"
+       y="-17.609884596244797"
+       id="use513" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="197.34164595233852"
+       y="173.28303648510303"
+       id="use515" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-58.658354047661476"
+       y="173.28303648510303"
+       id="use517" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="63.41108498028091"
+       y="36.090663829329564"
+       id="use519" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="319.4110849802809"
+       y="36.090663829329564"
+       id="use521" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="319.4110849802809"
+       y="292.09066382932957"
+       id="use523" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="63.41108498028091"
+       y="292.09066382932957"
+       id="use525" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="319.4110849802809"
+       y="292.09066382932957"
+       id="use527" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="233.80652567101362"
+       y="149.1991277852797"
+       id="use529" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="-22.193474328986383"
+       y="149.1991277852797"
+       id="use531" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="57.07582238288771"
+       y="170.85019831263617"
+       id="use533" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="313.07582238288774"
+       y="170.85019831263617"
+       id="use535" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="90.76424941831131"
+       y="38.60260133474018"
+       id="use537" />
+    <use
+       xlink:href="#gSix7th8n341g"
+       x="90.76424941831131"
+       y="294.6026013347402"
+       id="use539" />
+  </g>
+  <desc
+     id="desc541">Created with Snap</desc>
+</svg>
