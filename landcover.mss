@@ -142,11 +142,13 @@
   [feature = 'wetland_swamp'] {
     [zoom >= 8][zoom < 14] {
       polygon-fill: #8dc56c;
-      [wood='coniferous'] { polygon-fill: #74b551; }
+      [wood='coniferous'],[wood='needleleaved'] { polygon-fill: #74b551; }
     }
     [zoom >= 14] {
-      polygon-pattern-file: url('symbols/forest.png');
-      [wood='coniferous'] { polygon-pattern-file: url('symbols/fr/forest-dark.png'); }
+      polygon-pattern-file: url('symbols/fr/forest.png');
+      [wood='mixed'] { polygon-pattern-file: url('symbols/fr/forest_mixed.png'); }
+      [wood='coniferous'],[wood='needleleaved'] { polygon-pattern-file: url('symbols/fr/forest_coniferous.png'); }
+      [wood='deciduous'],[wood='broadleaved'] { polygon-pattern-file: url('symbols/fr/forest_deciduous.png'); }
     }
   }
 
