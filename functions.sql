@@ -13,3 +13,12 @@ CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
 CREATE OR REPLACE FUNCTION to_int(text) RETURNS bigint
     LANGUAGE sql IMMUTABLE PARALLEL SAFE
     AS $_$ select coalesce(left(regexp_replace($1,'^(|\-)([0-9]*).*','\10\2'),12),'0')::bigint; $_$;
+
+--
+-- Name: bbbox, computes the "bleed" bbox, with margins
+-- example: st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,0),way)
+
+CREATE OR REPLACE FUNCTION bbbox(box2d,float,float,integer) RETURNS geometry
+  LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $_$
+select ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin($1)+$2*((select num from params where key='x_bleed')+(select num from params where key='buffer')+$4),ST_Ymin($1)+$3*((select num from params where key='y_bleed')+(select num from params where key='buffer')+$4)), ST_Point(ST_XMax($1)-$2*((select num from params where key='x_bleed')+(select num from params where key='buffer')+$4),ST_Ymax($1)-$3*((select num from params where key='y_bleed')+(select num from params where key='buffer')+10))),3857);
+$_$;
