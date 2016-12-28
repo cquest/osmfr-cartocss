@@ -43,9 +43,26 @@
     }
   }
 
-  [natural = 'mud'][zoom >= 13]::natural {
+  [natural = 'mud'][zoom >= 13]::surface,
+  [surface = 'mud'][zoom >= 13]::surface
+  {
     polygon-pattern-file: url('symbols/mud.png');
+    polygon-pattern-opacity: 0.5;
   }
+
+  [surface = 'sand'][zoom >= 13]::surface,
+  [surface = 'gravel'][zoom >= 13]::surface
+  {
+    polygon-pattern-file: url('symbols/beach.png');
+    polygon-pattern-opacity: 0.5;
+  }
+
+  [surface = 'rocky'][zoom >= 13]::surface
+  {
+    polygon-pattern-file: url('symbols/fr/rocky_overlay.png');
+    polygon-pattern-opacity: 0.5;
+  }
+
 }
 
 #glaciers-text [zoom >= 8] {

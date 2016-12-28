@@ -161,7 +161,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* water-areas */ (SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,\"natural\",waterway,landuse,amenity,coalesce(tags->'name:fr',tags->'int_name',name) as name, tags->'basin' as basin, water FROM planet_osm_polygon WHERE (waterway in ('dock','mill_pond','riverbank','canal') or landuse in ('reservoir','water','basin','salt_pond') or \"natural\" in ('lake','water','land','glacier','mud','bayx') or amenity='fountain') and building is null and way_area > !pixel_width!*!pixel_height!*10 and way && !bbox!  ORDER BY z_order,way_area desc) as water_areas"
+      table: " /* water-areas */ (SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,\"natural\",waterway,landuse,amenity,coalesce(tags->'name:fr',tags->'int_name',name) as name, tags->'basin' as basin, water, surface FROM planet_osm_polygon WHERE (waterway in ('dock','mill_pond','riverbank','canal') or landuse in ('reservoir','water','basin','salt_pond') or \"natural\" in ('lake','water','land','glacier','mud','bayx') or amenity='fountain' or water='tidal') and building is null and way_area > !pixel_width!*!pixel_height!*10 and way && !bbox!  ORDER BY z_order,way_area desc) as water_areas"
     id: water-areas
 
   - name: glaciers-text
