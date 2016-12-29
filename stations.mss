@@ -1,3 +1,8 @@
+#stations-lz [zoom=16] {
+  point-file: url('symbols/fr/square8.svg');
+  [count>1] { point-transform: "scale(1.25)"; }
+}
+
 .stations {
   [railway = 'subway_entrance'][zoom >= 18] {
     point-file: url('symbols/walking.n.12.png');
@@ -164,10 +169,6 @@
 
   [amenity = 'bus_stop']::amenity,
   [highway = 'bus_stop']::highway {
-    [zoom >= 16] {
-      point-file: url('symbols/bus_stop_small.png');
-      point-placement: interior;
-    }
     [zoom >= 17] {
     	[type_ratp = 'bus'],[operator='RATP'],[l_operator='RATP'] {
    	 		point-file: url('symbols/fr/logo-ratp-bus.svg');

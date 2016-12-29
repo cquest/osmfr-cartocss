@@ -25,10 +25,13 @@ _parts:
     srs-name: "3857"
     srs: "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over"
     class: ''
+    status: 'on'
+
   extents84: &extents84
     extent: *world
     srs-name: "WGS84"
     srs: "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+
   osm2pgsql: &osm2pgsql
     type: "postgis"
     dbname: "osm"
@@ -137,7 +140,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* direction-tunnels */ (select '-1' as oneway ,case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order<0) as directions"
+      table: " /* direction-tunnels */ (select '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order<0) as directions"
       simplify_geometries: 'true'
     id: direction-tunnels
     class: directions
@@ -402,7 +405,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* direction-pre-bridges */ (select '-1' as oneway ,case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order>=0) as directions"
+      table: " /* direction-pre-bridges */ (select '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order>=0) as directions"
     id: direction-pre-bridges
     class: directions
 
@@ -653,11 +656,19 @@ Layer:
     id: stations-poly
     class: stations
 
+  - name: stations-lz
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: " /* stations-lz */ (select st_centroid(cluster) as way, ST_NumGeometries(cluster) as count from (select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster from (select way from planet_osm_point where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes')) UNION select way from planet_osm_polygon where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes'))) as bus) as clusters) as stations_lz"
+    id: stations-lz
+    class: stations-lz
+
   - name: stations
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* stations */ (select s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.railway as railway,s.aerialway as aerialway,s.disused as disused ,s.highway as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator , l.route as l_type, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network, coalesce(s.tags->'type:RATP', case when s.railway='station' then '5'  when s.railway='halt' then '4' when s.railway='tram_stop' then '3' when s.amenity='bus_station' then '2' when s.amenity='bus_stop' then '1' else '0' end) as prio, coalesce(s.tags->'usage','') as usage, coalesce(s.ele,s.tags->'ele:local','') as ele  from planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  where s.way && !bbox! and (s.railway in ('station','halt','tram_stop','subway_entrance') or s.aerialway='station'  or s.highway = 'bus_stop' or s.amenity='bus_station') order by prio desc, l_operator desc ) as stations"
+      table: " /* stations */ (select s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.railway as railway,s.aerialway as aerialway,s.disused as disused ,case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator , l.route as l_type, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network, coalesce(s.tags->'type:RATP', case when s.railway='station' then '5'  when s.railway='halt' then '4' when s.railway='tram_stop' then '3' when s.amenity='bus_station' then '2' when s.amenity='bus_stop' then '1' else '0' end) as prio, coalesce(s.tags->'usage','') as usage, coalesce(s.ele,s.tags->'ele:local','') as ele  from planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  where s.way && !bbox! and (s.railway in ('station','halt','tram_stop','subway_entrance') or s.aerialway='station'  or s.highway = 'bus_stop' or s.amenity='bus_station') order by prio desc, l_operator desc ) as stations"
     id: stations
     class: stations
 
