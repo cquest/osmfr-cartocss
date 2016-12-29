@@ -1191,6 +1191,7 @@
   [amenity = 'townhall'][zoom >= 15]::amenity,
   [amenity = 'public_building'][zoom >= 16]::amenity,
   [amenity = 'community_centre'][zoom >= 16]::amenity,
+  [amenity = 'social_facility'][zoom >= 16]::amenity,
   [amenity = 'courthouse'][zoom >= 16] {
     text-name: "[name]";
     text-size: 10;

@@ -261,6 +261,7 @@
   [feature = 'landuse_school'],
   [feature = 'amenity_hospital'],
   [feature = 'amenity_clinic'],
+  [feature = 'amenity_social_facility'],
   [feature = 'amenity_kindergarten'] {
     [zoom >= 10] {
       polygon-fill: #f0f0d8;
