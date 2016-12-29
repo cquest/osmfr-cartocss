@@ -317,6 +317,7 @@
   	[feature = 'amenity_police'],
   	[feature = 'amenity_post_office'],
   	[feature = 'amenity_theatre'],
+    [feature = 'amenity_community_centre'],
     [feature = 'building_civic'],
     [feature = 'building_public']
   	{

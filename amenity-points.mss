@@ -835,10 +835,10 @@
     [zoom >= 16] {
       [zoom >= 16][zoom<17] { text-name: "[nom]"; }
       text-name: "[name]";
-      text-size: 10;
+      text-size: 11;
       text-fill: #734a08;
       text-dy: 12;
-      text-face-name: @bold-fonts;
+      text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-placement: interior;
       text-wrap-width: 40;
@@ -1190,6 +1190,7 @@
 
   [amenity = 'townhall'][zoom >= 15]::amenity,
   [amenity = 'public_building'][zoom >= 16]::amenity,
+  [amenity = 'community_centre'][zoom >= 16]::amenity,
   [amenity = 'courthouse'][zoom >= 16] {
     text-name: "[name]";
     text-size: 10;
