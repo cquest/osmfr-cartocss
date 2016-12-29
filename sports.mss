@@ -92,7 +92,7 @@
     line-cap: round;
   }
 
-	::tennis [sport=~'.*tennis.*'][zoom>=17] {
+	::tennis [sport=~'.*tennis.*'][zoom>=16] {
 		[way_area<2500][d13>37][d13<80] {			/* area size / diagonal check */
 			[d12>38][d12<70][d23>20][d23<40] { 		/* 1>2 = length / 2>3 = width */
 				point-file: url('symbols/fr/sports-tennis.svg');
