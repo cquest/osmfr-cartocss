@@ -1271,6 +1271,7 @@
         }
       }
   	  text-size: 9;
+      text-wrap-width: 30;
       [zoom>=15][way_area>75000],
       [zoom>=16][way_area>25000],
       [zoom>=17][way_area>10000],
@@ -1282,7 +1283,6 @@
   	  text-fill: #440;
   	  text-face-name: @book-fonts;
   	  text-halo-radius: 1.5;
-  	  text-wrap-width: 25;
   	  text-placement: interior;
     }
   }
