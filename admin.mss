@@ -29,7 +29,6 @@
 
 
 #admin-boundaries [zoom>=11] {
-
   background/line-color: white;
   background/line-width: 0;
   comp-op: darken;
@@ -71,7 +70,6 @@
   [admin_level = '5'],
   [admin_level = '6'] {
     [nb>=2]{
-      line-color: @admin-boundary-line;
       line-width: 2;
       background/line-width: 2;
       line-dasharray: 6,4,0.1,4;
@@ -88,7 +86,6 @@
   [admin_level = '7'],
   [admin_level = '8'] {
     [zoom >= 12] {
-      line-color: @admin-boundary-line;
       line-width: 1.5;
       background/line-width: 1.5;
       line-dasharray: 5,4;
@@ -104,7 +101,6 @@
 
   [admin_level = '9'] {
     [zoom >= 12] {
-      line-color: @admin-boundary-line;
       line-width: 1.5;
       background/line-width: 1.5;
       line-dasharray: 3,6;
@@ -113,7 +109,6 @@
 
   [admin_level = '10'] {
     [zoom >= 15] {
-      line-color: @admin-boundary-line;
       line-width: 1.5;
       background/line-width: 1.5;
       line-dasharray: 1,6;
