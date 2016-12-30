@@ -592,18 +592,16 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* admin-lz */ (select way, admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') order by 2 desc, maritime) as admin"
-      simplify_geometries: 'true'
-
+      table: " /* admin-lz */ (select ST_Simplify(way,!pixel_width!/4) as way, admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') order by 2 desc, maritime) as admin"
     id: admin-lz
+
   - name: admin-boundaries
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* admin-boundaries */ (select way, admin_level, coalesce(b.tags->'maritime','no') as maritime, count(r.*) as nb, string_agg(id::text,',') as rels from planet_osm_roads b LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[osm_id] AND r.members @> ARRAY['w' || osm_id] AND regexp_replace(r.tags::text,'[{}]','') ~ format('(,admin_level,%s.*,boundary,administrative|,boundary,administrative.*,admin_level,%s,)',admin_level,admin_level)) where boundary='administrative' and admin_level is not null GROUP BY 1,2,3 order by to_int(admin_level) desc, 4 ) as admin_boundaries"
-      simplify_geometries: 'true'
-
+      table: " /* admin-boundaries */ (SELECT ST_Simplify(way,!pixel_width!/4) as way, admin_level, coalesce(b.tags->'maritime','no') as maritime, count(r.*) as nb  FROM  planet_osm_roads b LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[osm_id] AND r.members @> ARRAY['w' || osm_id] AND regexp_replace(r.tags::text,'[{}]',',') ~ format(',admin_level,%s,',admin_level) AND regexp_replace(r.tags::text,'[{}]',',') ~ ',boundary,administrative,')  WHERE  way && !bbox! AND boundary='administrative' and admin_level is not null GROUP BY 1,2,3 ORDER BY to_int(admin_level) desc, 4 ) as admin_boundaries"
     id: admin-boundaries
+
   - name: placenames-capital
     <<: *extents
     Datasource:
