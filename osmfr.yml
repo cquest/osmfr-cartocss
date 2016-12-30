@@ -817,9 +817,8 @@ Layer:
         tags->'ref:INSEE' as insee,
         fr_abbrev(coalesce(tags->'name:fr',tags->'int_name',name)) as nom  FROM
         planet_osm_polygon p where ST_Intersects(p.way, !bbox!) AND not
-        ST_Covers(p.way,!bbox!) AND boundary='administrative' order by 2 desc)
+        ST_Covers(p.way,!bbox!) AND boundary='administrative' AND admin_level is not NULL order by 2 desc)
         as admin_boundaries_text
-      simplify_geometries: 'true'
     id: admin-boundaries-text
 
   - name: area-text
