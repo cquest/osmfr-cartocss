@@ -115,11 +115,11 @@
       text-clip: false;
     }
     [zoom >= 9] {
-      text-size: 9.5;
+      text-size: 10;
       b/text-min-distance: 10;
       b/text-face-name: @book-fonts;
       b/text-name: "[nom]";
-      b/text-size: 9.5;
+      b/text-size: 10;
       b/text-fill: black;
       b/text-halo-radius: 1.5;
       b/text-halo-fill: fadeout(white, 30%);
@@ -236,7 +236,7 @@
 #placenames-small::village [zoom >= 11] {
   [place = 'village'] {
   	text-name: "[nom]";
-    text-size: 8.5;
+    text-size: 9;
     text-fill: black;
     text-face-name: @book-fonts;
   	text-halo-radius: 1.5;
@@ -247,7 +247,7 @@
 
     // deuxième placement décalé au cas où le premier a échoué
     b/text-name: "[nom]";
-    b/text-size: 8.5;
+    b/text-size: 9;
     b/text-fill: black;
     b/text-face-name: @book-fonts;
   	b/text-halo-radius: 1.5;
