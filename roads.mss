@@ -1029,7 +1029,7 @@
     }
 
     [railway = 'abandoned'],
-    [railway = 'construction)'],
+    [railway = 'construction'],
     [railway = 'disused'] {
       [zoom >= 13] {
         line-clip: false;
