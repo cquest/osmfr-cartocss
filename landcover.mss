@@ -472,7 +472,7 @@
   	text-fill: #444; // industrial, residential, brownfield, cemetery, construction, farm/farmland/farmyard, garages,landfill, quarry, railway...
 
     // couleur en fonction du type de polygone
-  	[kind=~'(water|reservoir|basin|salt_pond|marina)']
+  	[kind=~'(water|reservoir|basin|salt_pond|marina|bay)']
     {
       text-fill: #068;
     }
