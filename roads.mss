@@ -2598,7 +2598,6 @@
   	}
   }
 
-
   [highway = 'motorway'],
   [highway = 'motorway_link'],
   [highway = 'trunk'],
@@ -2698,26 +2697,26 @@
 
   [highway = 'residential'],
   [highway = 'unclassified'] {
-	[zoom >= 15] {
-	  [zoom>=17] { text-name: "[name]"; }
-	  text-name: "[nom]";
-	  text-size: 8;
-	  text-spacing: 200;
-	  text-placement: line;
-	  text-halo-radius: 1;
-	  text-face-name: @book-fonts;
-	}
-	[zoom >= 16] {
-	  text-size: 9;
-	}
-	[zoom >= 17] {
-	  text-size: 10;
-	}
-	[zoom >= 19] {
-	  text-size: 12;
-	  text-min-path-length: 100;
-	  text-fill: #444;
-	}
+  	[zoom >= 15] {
+  	  [zoom>=17] { text-name: "[name]"; }
+  	  text-name: "[nom]";
+  	  text-size: 8;
+  	  text-spacing: 200;
+  	  text-placement: line;
+  	  text-halo-radius: 1;
+  	  text-face-name: @book-fonts;
+  	}
+  	[zoom >= 16] {
+  	  text-size: 9;
+  	}
+  	[zoom >= 17] {
+  	  text-size: 10;
+  	}
+  	[zoom >= 19] {
+  	  text-size: 12;
+  	  text-min-path-length: 100;
+  	  text-fill: #444;
+  	}
   }
 
   [zoom >= 15][zoom < 17][railway='platform'],
