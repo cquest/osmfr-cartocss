@@ -245,6 +245,13 @@
     polygon-fill: #c6e4b4;
   }
 
+  [feature = 'natural_bare_rock'][zoom >= 10] {
+    polygon-fill: @land-color;
+    polygon-pattern-file: url('symbols/fr/rocky_overlay.png');
+    polygon-pattern-opacity: 0.5;
+    polygon-pattern-transform: "scale(0.25)";
+  }
+
   [feature='man_made_clearcut'],
   [feature = 'natural_scrub'] {
     [zoom >= 8][zoom < 14] {

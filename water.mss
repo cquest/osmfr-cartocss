@@ -50,6 +50,7 @@
     polygon-pattern-opacity: 0.5;
   }
 
+  [natural = 'sand'][zoom >= 13]::surface,
   [surface = 'sand'][zoom >= 13]::surface,
   [surface = 'gravel'][zoom >= 13]::surface
   {
@@ -57,6 +58,7 @@
     polygon-pattern-opacity: 0.5;
   }
 
+  [natural = 'bare_rock'][zoom >= 13]::surface,
   [surface = 'rocky'][zoom >= 13]::surface
   {
     polygon-pattern-file: url('symbols/fr/rocky_overlay.png');
