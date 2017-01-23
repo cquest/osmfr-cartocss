@@ -651,21 +651,25 @@ Layer:
     id: stations-poly
     class: stations
 
-  - name: stations-lz
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* stations-lz */ (select st_centroid(cluster) as way, ST_NumGeometries(cluster) as count from (select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster from (select way from planet_osm_point where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes')) UNION select way from planet_osm_polygon where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes'))) as bus) as clusters) as stations_lz"
-    id: stations-lz
-    class: stations-lz
-
   - name: stations
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* stations */ (select s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.railway as railway,s.aerialway as aerialway,s.disused as disused ,case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator , l.route as l_type, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network, coalesce(s.tags->'type:RATP', case when s.railway='station' then '5'  when s.railway='halt' then '4' when s.railway='tram_stop' then '3' when s.amenity='bus_station' then '2' when s.amenity='bus_stop' then '1' else '0' end) as prio, coalesce(s.tags->'usage','') as usage, coalesce(s.ele,s.tags->'ele:local','') as ele  from planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  where s.way && !bbox! and (s.railway in ('station','halt','tram_stop','subway_entrance') or s.aerialway='station'  or s.highway = 'bus_stop' or s.amenity='bus_station') order by prio desc, l_operator desc ) as stations"
+      table: " /* stations */ (select s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.railway as railway,s.aerialway as aerialway,s.disused as disused ,case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator , l.route as l_type, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network, coalesce(s.tags->'type:RATP', case when s.railway='station' then '5'  when s.railway='halt' then '4' when s.railway='tram_stop' then '3' when s.amenity='bus_station' then '2' when s.amenity='bus_stop' then '1' else '0' end) as prio, coalesce(s.tags->'usage','') as usage, coalesce(s.ele,s.tags->'ele:local','') as ele  from planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  where s.way && !bbox! and (s.railway in ('station','halt','tram_stop','subway_entrance') or s.aerialway='station'  or s.amenity='bus_station') order by prio desc, l_operator desc ) as stations"
     id: stations
     class: stations
+
+  - id: bus-stops-lz
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: " /* bus-stops-lz */ (select st_centroid(cluster) as way, ST_NumGeometries(cluster) as count from (select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster from (select way from planet_osm_point where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes')) UNION select way from planet_osm_polygon where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes'))) as bus) as clusters) as bus_stops_lz"
+
+  - id: bus-stops
+    <<: *extents
+    Datasource:
+      <<: *osm2pgsql
+      table: " /* stations */ (SELECT s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.disused as disused, case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network  FROM  planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  WHERE s.way && !bbox! and s.highway = 'bus_stop' ORDER BY l_operator desc ) as bus_stops"
 
   - name: amenity-symbols
     <<: *extents
