@@ -619,7 +619,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-large */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, (tags->'short_name:fr',tags->'name:fr',tags->'short_name',tags->'int_name',name) as name, osm_id, to_int(population) as pop, ref,0 as way_area  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place  in ('country','state','continent') and NOT tags ? 'disused:admin_level' order by place, pop desc ) as placenames"
+      table: " /* placenames-large */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'short_name:fr',tags->'name:fr',tags->'short_name',tags->'int_name',name) as name, osm_id, to_int(population) as pop, ref,0 as way_area  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place  in ('country','state','continent') and NOT tags ? 'disused:admin_level' order by place, pop desc ) as placenames"
     id: placenames-large
     class: country state
 
