@@ -597,6 +597,19 @@
       marker-clip: false;
     }
   }
+
+  // office points
+  ::office [office != null][zoom >= 17] {
+    marker-width: 4;
+    [zoom >= 18] {
+      marker-width: 6;
+    }
+    marker-line-width: 0;
+    marker-placement: interior;
+    marker-clip: false;
+    marker-fill: @office;
+  }
+
 }
 
 #entrance [zoom >= 17] {
@@ -1820,6 +1833,87 @@
   		  text-placement: interior;
   		}
 	  }
+  }
+
+  // potentially larger offices
+    [zoom >= 17] {
+      [office = 'administrative'],
+      [office = 'adoption_agency'],
+      [office = 'educational_institution'],
+      [office = 'employment_agency'],
+      [office = 'energy_supplier'],
+      [office = 'financial'],
+      [office = 'government'],
+      [office = 'newspaper'],
+      [office = 'ngo'],
+      [office = 'political_party'],
+      [office = 'quango'],
+      [office = 'religion'],
+      [office = 'research'],
+      [office = 'tax'],
+      [office = 'telecommunication'],
+      [office = 'water_utility'],
+      {
+        text-name: "[name]";
+        text-size: 10;
+        text-dy: 8;
+        text-face-name: @book-fonts;
+        text-halo-radius: 1;
+        text-wrap-width: 40;
+        text-placement: interior;
+        text-fill: @office;
+        text-placement: interior;
+      }
+    }
+
+    // other documented office types
+    [zoom >= 18] {
+      [office = 'accountant'],
+      [office = 'advertising_agency'],
+      [office = 'architect'],
+      [office = 'association'],
+      [office = 'charity'],
+      [office = 'company'],
+      [office = 'estate_agent'],
+      [office = 'forestry'],
+      [office = 'foundation'],
+      [office = 'guide'],
+      [office = 'insurance'],
+      [office = 'it'],
+      [office = 'lawyer'],
+      [office = 'logistics'],
+      [office = 'moving_company'],
+      [office = 'notary'],
+      [office = 'physician'],
+      [office = 'private_investigator'],
+      [office = 'property_management'],
+      [office = 'surveyor'],
+      [office = 'tax_advisor'],
+      [office = 'therapist'],
+      [office = 'travel_agent'] {
+        text-name: "[name]";
+        text-size: 10;
+        text-face-name: @book-fonts;
+        text-halo-radius: 1;
+        text-wrap-width: 40;
+        text-placement: interior;
+        text-dy: 8;
+        text-fill: @office;
+        text-placement: interior;
+      }
+    }
+
+    // all other offices
+    [office != null][zoom >= 19] {
+      text-name: "[name]";
+      text-size: 10;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-placement: interior;
+      text-dy: 8;
+      text-fill: @office;
+      text-placement: interior;
   }
 
 }
