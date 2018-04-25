@@ -1,6 +1,6 @@
 name: OpenStreetMap France
 description: ''
-attribution: 'CC-by-SA OSM-FR/cquest'
+attribution: 'CC-BY-SA OSM-FR/cquest'
 scale: 1
 metatile: 8
 bounds: &world
@@ -42,7 +42,7 @@ _parts:
     user: fr
     password: m4d31nfr4nc3
     asynchronous_request: 'true'
-    max_async_connection: '6'
+    max_async_connection: '4'
 
 Stylesheet:
   - "style.mss"
