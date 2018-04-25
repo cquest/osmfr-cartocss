@@ -562,6 +562,10 @@
       marker-placement: interior;
       marker-file: url('symbols/disque.svg');
       [level<0] { marker-opacity: 0.5; }
+      [shop = 'vacant'] {
+        marker-opacity: 0.33;
+        marker-line-width: 0.5;
+      }
     }
   }
 
@@ -600,14 +604,28 @@
 
   // office points
   ::office [office != null][zoom >= 17] {
-    marker-width: 4;
-    [zoom >= 18] {
-      marker-width: 6;
-    }
-    marker-line-width: 0;
-    marker-placement: interior;
-    marker-clip: false;
     marker-fill: @office;
+    marker-line-width: 0;
+    marker-clip: false;
+    marker-placement: interior;
+    marker-file: url('symbols/disque.svg');
+    [office = 'vacant'] {
+      marker-opacity: 0.33;
+      marker-line-width: 0.5;
+    }
+  }
+
+  // craft points
+  ::craft [craft != null][zoom >= 17] {
+    marker-fill: @office;
+    marker-line-width: 0;
+    marker-clip: false;
+    marker-placement: interior;
+    marker-file: url('symbols/disque.svg');
+    [craft = 'vacant'] {
+      marker-opacity: 0.33;
+      marker-line-width: 0.5;
+    }
   }
 
 }
@@ -1684,7 +1702,7 @@
   }
 
   [amenity = 'vehicle_inspection'][zoom >= 16]::shop,
-  [shop != ''][zoom >= 16]::shop {
+  [shop != ''][shop != 'vacant'][zoom >= 16]::shop {
 		[zoom >= 17] {
 			text-name: "[name]";
 			text-size: 8;
@@ -1836,7 +1854,7 @@
   }
 
   // potentially larger offices
-    [zoom >= 17] {
+    [office != ''][office != 'vacant'][zoom >= 17] {
       [office = 'administrative'],
       [office = 'adoption_agency'],
       [office = 'educational_institution'],
@@ -1856,7 +1874,7 @@
       {
         text-name: "[name]";
         text-size: 10;
-        text-dy: 8;
+        text-dy: 4;
         text-face-name: @book-fonts;
         text-halo-radius: 1;
         text-wrap-width: 40;
@@ -1897,23 +1915,38 @@
         text-halo-radius: 1;
         text-wrap-width: 40;
         text-placement: interior;
-        text-dy: 8;
+        text-dy: 4;
         text-fill: @office;
         text-placement: interior;
       }
     }
 
     // all other offices
-    [office != null][zoom >= 19] {
+    [office != null][office != 'vacant'][zoom >= 19] {
       text-name: "[name]";
       text-size: 10;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
       text-placement: interior;
-      text-dy: 8;
+      text-dy: 4;
       text-fill: @office;
       text-placement: interior;
   }
+
+
+
+      // crafts
+      [craft != null][craft != 'vacant'][zoom >= 17] {
+        text-name: "[name]";
+        text-size: 10;
+        text-face-name: @book-fonts;
+        text-halo-radius: 1;
+        text-wrap-width: 40;
+        text-placement: interior;
+        text-dy: 4;
+        text-fill: @office;
+        text-placement: interior;
+    }
 
 }
