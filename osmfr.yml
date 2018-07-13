@@ -267,7 +267,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* turning-circle-fill/casing */ (select distinct on (p.way) p.way as way,l.highway as int_tc_type from planet_osm_point p join planet_osm_line l on ST_DWithin(p.way,l.way,0.1) join (values ('tertiary',1), ('unclassified',2), ('residential',3), ('living_street',4), ('service',5) ) as v (highway,prio) on v.highway=l.highway where p.highway in ('turning_circle','turning_loop') and l.way && !bbox! order by p.way,v.prio ) as turning_circle"
+      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on st_dwithin(l.way, p.way,0.1) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circles_casing"
     id: turning-circle-casing
 
   - name: cliffs
@@ -357,7 +357,7 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* turning-circle-fill/casing */ (select distinct on (p.way) p.way as way,l.highway as int_tc_type from planet_osm_point p join planet_osm_line l on ST_DWithin(p.way,l.way,0.1) join (values ('tertiary',1), ('unclassified',2), ('residential',3), ('living_street',4), ('service',5) ) as v (highway,prio) on v.highway=l.highway where p.highway in ('turning_circle','turning_loop') and l.way && !bbox! order by p.way,v.prio ) as turning_circle"
+      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on st_dwithin(l.way, p.way,0.1) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circle"
     id: turning-circle-fill
 
   - name: ferry-routes
