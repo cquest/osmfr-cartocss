@@ -846,7 +846,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         ( /* admin-boundaries-text */ SELECT
-        st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,10),ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2))
+        ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2)
         as way, to_int(admin_level) as admin_level ,
         coalesce(tags->'name:fr',tags->'int_name',name) as name,
         tags->'ref:INSEE' as insee,
