@@ -494,7 +494,7 @@
     [zoom >= 19] { line-width: 32; }
   }
 
-  [highway = 'primary'] {
+  [highway =~ '^primary.*'] {
     line-width: 3;
     line-color: #8d4346;
     line-join: round;
@@ -504,7 +504,7 @@
     [zoom >= 19] { line-width: 32; }
   }
 
-  [highway = 'secondary'] {
+  [highway =~ '^secondary.*'] {
     line-width: 2.5;
     line-color: #a37b48;
     line-join: round;
@@ -514,7 +514,7 @@
     [zoom >= 19] { line-width: 32; }
   }
 
-  [highway = 'tertiary'] {
+  [highway =~ '^tertiary.*'] {
     line-width: 2.5;
     line-color: #888;
     line-join: round;
@@ -690,7 +690,7 @@
     [zoom >= 19] { line-width: 30;}
   }
 
-  [highway = 'primary'] {
+  [highway =~ '^primary.*'] {
     line-width: 2.5;
     line-color: #ec989a;
     line-join: round;
@@ -701,7 +701,7 @@
     [zoom >= 19] { line-width: 30; }
   }
 
-  [highway = 'secondary'] {
+  [highway =~ '^secondary.*'] {
     line-width: 1.5;
     line-color: darken(#fed7a5,30%);
     line-cap: round;
@@ -713,7 +713,7 @@
     [zoom >= 19] { line-width: 30; }
   }
 
-  [highway = 'tertiary'] {
+  [highway =~ '^tertiary.*'] {
     line-width: 1;
     line-color: #bbb;
     line-join: round;
@@ -1643,10 +1643,9 @@
   }
 }
 
-#roads [zoom >= 8] {
+#roads [zoom >= 8][zoom<12] {
   [zoom >= 5] {
-	  [highway = 'motorway'],
-	  [highway = 'motorway_link'] {
+	  [highway =~ '^motorway.*'] {
   		[zoom >= 5][zoom < 12] {
   		  line-width: 0.5;
   		  line-color: @motorway_color;
@@ -1658,8 +1657,7 @@
   		}
 	  }
 
-	  [highway = 'trunk'],
-	  [highway = 'trunk_link'] {
+	  [highway =~ '^trunk.*'] {
   		[zoom >= 5][zoom < 12] {
   		  line-width: 0.4;
   		  line-color: @trunk_color;
@@ -1672,8 +1670,7 @@
   		}
 	  }
 
-	  [highway = 'primary'],
-	  [highway = 'primary_link'] {
+	  [highway =~ '^primary.*'] {
   		[zoom >= 7][zoom < 12] {
   		  line-width: 0.5;
   		  line-color: #ec989a;
@@ -1683,8 +1680,7 @@
   		}
 	  }
 
-	  [highway = 'secondary'],
-	  [highway = 'secondary_link'] {
+	  [highway =~ '^secondary.*'] {
   		[zoom >= 9][zoom < 12] {
   		  line-width: 1;
   		  line-color: #fecc8b;
