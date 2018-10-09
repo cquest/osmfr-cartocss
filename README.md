@@ -16,7 +16,7 @@ Open issues here on github !
 
 Le nom de la base est 'osm', utilisateur 'fr'.
 Les requêtes SQL utilisent les hstore pour récupérer certaines données, pensez à les inclure dans votre import osm2pgsql.
-C'est Mapnik 3.x qui est utilisé avec postgresql 9.6 et postgis 2.3.
+C'est Mapnik 3.x qui est utilisé avec postgresql 10 et postgis 2.4.
 
 Le reste du readme ci-dessous est inchangé par rapport au projet https://github.com/gravitystorm/openstreetmap-carto
 
@@ -55,8 +55,8 @@ sh get-layers.sh
 ---
 
 * [osm2pgsql 0.92](http://wiki.openstreetmap.org/wiki/Osm2pgsql) to import you data into a PostGIS database
-* [PostgreSQL 9.6](http://www.postgresql.org/)
-* [PostGIS 2.3](http://postgis.refractions.net/)
+* [PostgreSQL 10](http://www.postgresql.org/)
+* [PostGIS 2.4](http://postgis.refractions.net/)
 * [ogr2ogr 2.1](http://www.gdal.org/) command line GDAL utility for processing vector data. here we use it to work around a encoding bug in the Nautral Earth data.
 
 # Notes on conversion
