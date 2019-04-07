@@ -1,3 +1,12 @@
+CREATE TABLE public.params (
+    key text,
+    txt text,
+    num numeric
+);
+INSERT INTO public.params VALUES ('y_bleed', '0', 0);
+INSERT INTO public.params VALUES ('x_bleed', '0', 0);
+INSERT INTO public.params VALUES ('buffer', '0', 0);
+
 --
 -- Name: fr_abbrev(text); Type: FUNCTION; Schema: public; Owner: postgres
 --
