@@ -657,7 +657,7 @@
   ::aeroway [zoom>=10] {
     [aeroway = 'helipad'][zoom >= 16] {
       point-file: url('symbols/helipad.svg');
-      text-name: "[name]";
+      text-name: "[nom]";
       text-size: 8;
       text-fill: #6692da;
       text-dy: -12;
@@ -693,7 +693,7 @@
   			text-dy: 0;
   			[zoom>=16] { text-size: 20; }
   			text-size: 16;
-  			text-name: "[name]";
+  			text-name: "[nom]";
   			text-fill: grey;
   			text-halo-radius: 1;
   			text-placement: interior;
