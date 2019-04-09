@@ -498,6 +498,7 @@ Layer:
         or waterway is not null)
                       ORDER BY z_order) as layer0
 
+    class: bridges
 
   - id: bridges-l1
     <<: *extents
@@ -522,6 +523,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer1
 
+    class: bridges
 
   - id: bridges-l2
     <<: *extents
@@ -546,6 +548,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer2
 
+    class: bridges
 
   - id: bridges-l3
     <<: *extents
@@ -570,6 +573,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer3
 
+    class: bridges
 
   - id: bridges-l4
     <<: *extents
@@ -594,6 +598,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer4
 
+    class: bridges
 
   - id: bridges-l5
     <<: *extents
@@ -618,6 +623,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer5
 
+    class: bridges
 
   - id: highway_crossings
     <<: *extents
