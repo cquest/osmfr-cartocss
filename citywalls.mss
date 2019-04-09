@@ -1,5 +1,5 @@
-#citywalls {
-  [historic='citywalls'][zoom >= 14] {
+#citywalls [zoom >= 14] {
+  [historic='citywalls'] {
     line-color: grey;
     line-width: 4;
     line-opacity: 0.8;
@@ -11,7 +11,7 @@
     }
   }
 
-  [historic='castle_walls'][zoom >= 14] {
+  [historic='castle_walls']{
     line-color: #999;
     line-width: 1;
     [zoom >= 16] {

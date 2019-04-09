@@ -1,10 +1,8 @@
-#dam {
-  [zoom >= 13] {
-    line-width: 2;
-    line-color: #444;
-    line-join: round;
-    line-cap: round;
-  }
+#dam [zoom >= 13] {
+  line-width: 2;
+  line-color: #444;
+  line-join: round;
+  line-cap: round;
   [zoom >= 15] {
     text-name: "[name]";
     text-halo-radius: 1;
@@ -14,32 +12,26 @@
   }
 }
 
-#marinas-area {
-  [zoom >= 14] {
-    a/line-width: 1;
-    a/line-color: blue;
-    a/line-opacity: 0.5;
-    a/line-cap: butt;
-    a/line-dasharray: 1, 3;
+#marinas-area [zoom >= 14] {
+    line-width: 1;
+    line-color: blue;
+    line-opacity: 0.5;
+    line-cap: butt;
+    line-dasharray: 1, 3;
     [zoom >= 17] {
-      a/line-width: 2;
-      a/line-offset: -1;
+      line-width: 2;
+      line-offset: -1;
     }
-  }
 }
 
-#piers-area {
-  [zoom >= 12] {
-    polygon-fill: @land-color;
-  }
+#piers-area [zoom >= 12] {
+  polygon-fill: @land-color;
 }
 
-#piers {
+#piers [zoom >= 11] {
   [man_made =~ '(breakwater|groyne)'] {
-    [zoom >= 11] {
-      line-width: 1;
-      line-color: #aaa;
-    }
+    line-width: 1;
+    line-color: #aaa;
     [zoom >= 13] {
       line-width: 2;
     }
@@ -47,7 +39,7 @@
       line-width: 4;
     }
   }
-  [man_made = 'pier'][zoom >= 11] {
+  [man_made = 'pier'] {
     line-width: 1.5;
     line-color: @land-color;
     [zoom >= 13] { line-width: 3; }
@@ -55,8 +47,8 @@
   }
 }
 
-#locks {
-  [waterway = 'lock_gate'][zoom >= 17] {
+#locks [zoom >= 17] {
+  [waterway = 'lock_gate'] {
     point-file: url('symbols/lock_gate.png');
   }
 }

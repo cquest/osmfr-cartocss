@@ -11,11 +11,9 @@
     }
   }
 
-  [waterway =~ '(dock|mill_pond|canal)'] {
-    [zoom >= 9]::waterway {
-      polygon-gamma: 0.75;
-      polygon-fill: @water-color;
-    }
+  [waterway =~ '(dock|mill_pond|canal)'][zoom >= 9]::waterway {
+    polygon-gamma: 0.75;
+    polygon-fill: @water-color;
   }
 
   [landuse = 'basin'][zoom >= 7][zoom<13]::landuse {
@@ -37,10 +35,8 @@
   [waterway = 'riverbank']::waterway,
   [landuse = 'water']::water,
   [natural = 'bay']::natural {
-    [zoom >= 6] {
-      polygon-fill: @water-color;
-      polygon-gamma: 0.75;
-    }
+    polygon-fill: @water-color;
+    polygon-gamma: 0.75;
   }
 
   [natural = 'mud'][zoom >= 13]::surface,
@@ -80,20 +76,18 @@
   }
 }
 
-#water-lines-casing {
+#water-lines-casing [zoom >= 13] {
   [waterway =~ '(stream|ditch|drain)'] {
-    [zoom >= 13] {
-      line-width: 1.5;
-      line-color: white;
-      [waterway='stream'][zoom >= 15] {
-        line-width: 2.5;
-      }
+    line-width: 1.5;
+    line-color: white;
+    [waterway='stream'][zoom >= 15] {
+      line-width: 2.5;
     }
   }
 }
 
-#water-lines-low-zoom {
-  [waterway = 'river'][zoom >= 8][zoom < 12] {
+#water-lines-low-zoom [zoom >= 8][zoom < 12] {
+  [waterway = 'river'] {
     line-color: @water-color;
     line-width: 0.7;
     [zoom >= 9] { line-width: 1.2; }
@@ -101,23 +95,7 @@
   }
 }
 
-#water-lines {
-  [waterway = 'weir'][zoom >= 15] {
-    line-color: #aaa;
-    line-width: 2;
-    line-join: round;
-    line-cap: round;
-  }
-
-  [waterway = 'wadi'][zoom >= 13] {
-    line-color: @water-color;
-    line-width: 1;
-    line-dasharray: 4,4;
-    line-cap: round;
-    line-join: round;
-    [zoom >= 16] { line-width: 2; }
-  }
-
+#water-lines [zoom >= 12] {
   [waterway = 'river'][zoom >= 12] {
     line-color: @water-color;
     line-width: 2;
@@ -143,12 +121,56 @@
     }
   }
 
-  [waterway = 'canal'][zoom >= 12][zoom < 14] {
+  [waterway = 'canal'][zoom >= 12] {
     line-color: @water-color;
     line-width: 3;
     line-cap: round;
     line-join: round;
     [zoom >= 13] { line-width: 4; }
+    [zoom >= 17] { line-width: 11; }
+    [zoom >= 14][tunnel = 'yes'] {
+	    line-cap: butt;
+	    line-dasharray: 4,2;
+      b/line-width: 3;
+      b/line-color: white;
+      [zoom >= 17] { b/line-width: 7; }
+    }
+  }
+
+  [waterway = 'derelict_canal'],
+  [waterway = 'canal'][disused = 'yes'] {
+    [zoom >= 12] {
+      line-width: 1.5;
+      line-color: #b5e4d0;
+      line-dasharray: 4,4;
+      line-opacity: 0.5;
+      line-join: round;
+      line-cap: round;
+    }
+    [zoom >= 13] {
+      line-width: 2.5;
+      line-dasharray: 4,6;
+    }
+    [zoom >= 14] {
+      line-width: 4.5;
+      line-dasharray: 4,8;
+    }
+  }
+
+  [waterway = 'wadi'][zoom >= 13] {
+    line-color: @water-color;
+    line-width: 1;
+    line-dasharray: 4,4;
+    line-cap: round;
+    line-join: round;
+    [zoom >= 16] { line-width: 2; }
+  }
+
+  [waterway = 'weir'][zoom >= 15] {
+    line-color: #aaa;
+    line-width: 2;
+    line-join: round;
+    line-cap: round;
   }
 
   [waterway = 'stream'],
@@ -185,40 +207,6 @@
     }
   }
 
-  [waterway = 'canal'][zoom >= 14] {
-    line-width: 7;
-    [zoom >= 17] { line-width: 11; }
-    line-color: @water-color;
-    line-join: round;
-    line-cap: round;
-    [tunnel = 'yes'] {
-	    line-cap: butt;
-	    line-dasharray: 4,2;
-      b/line-width: 3;
-      b/line-color: white;
-      [zoom >= 17] { b/line-width: 7; }
-    }
-  }
-
-  [waterway = 'derelict_canal'],
-  [waterway = 'canal'][disused = 'yes'] {
-    [zoom >= 12] {
-      line-width: 1.5;
-      line-color: #b5e4d0;
-      line-dasharray: 4,4;
-      line-opacity: 0.5;
-      line-join: round;
-      line-cap: round;
-    }
-    [zoom >= 13] {
-      line-width: 2.5;
-      line-dasharray: 4,6;
-    }
-    [zoom >= 14] {
-      line-width: 4.5;
-      line-dasharray: 4,8;
-    }
-  }
 
   ::rivernames {
     [waterway = 'river'][zoom >= 13] {
@@ -261,20 +249,6 @@
       }
     }
 
-    [waterway = 'stream'],
-    [waterway = 'drain'],
-    [waterway = 'ditch'] {
-      [zoom >= 15] {
-        text-name: "[name]";
-        text-face-name: @book-fonts;
-        text-size: 8;
-        text-fill: #6699cc;
-        text-spacing: 600;
-        text-placement: line;
-        text-halo-radius: 1;
-      }
-    }
-
     [waterway = 'derelict_canal'],
     [waterway = 'canal'][disused = 'yes'] {
       [zoom >= 13] {
@@ -288,27 +262,39 @@
       }
       [zoom >= 14] { text-size: 10; }
     }
+
+    [waterway = 'stream'],
+    [waterway = 'drain'],
+    [waterway = 'ditch'] {
+      [zoom >= 15] {
+        text-name: "[name]";
+        text-face-name: @book-fonts;
+        text-size: 8;
+        text-fill: #6699cc;
+        text-spacing: 600;
+        text-placement: line;
+        text-halo-radius: 1;
+      }
+    }
   }
 }
 
-#waterway-bridges {
-  [zoom >= 14] {
-    line-width: 7;
-    line-color: #000;
-    line-join: round;
-    b/line-width: 6;
-    b/line-color: @water-color;
-    b/line-cap: round;
-    b/line-join: round;
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: #6699cc;
-    text-face-name: @book-fonts;
-    text-placement: line;
-    text-halo-radius: 1;
-    [zoom >= 17] {
-      line-width: 11;
-      b/line-width: 10;
-    }
+#waterway-bridges [zoom >= 14] {
+  line-width: 7;
+  line-color: #000;
+  line-join: round;
+  b/line-width: 6;
+  b/line-color: @water-color;
+  b/line-cap: round;
+  b/line-join: round;
+  text-name: "[name]";
+  text-size: 9;
+  text-fill: #6699cc;
+  text-face-name: @book-fonts;
+  text-placement: line;
+  text-halo-radius: 1;
+  [zoom >= 17] {
+    line-width: 11;
+    b/line-width: 10;
   }
 }

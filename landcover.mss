@@ -335,49 +335,45 @@
 }
 
 /* man_made=cutline */
-#landcover-line {
-  [zoom >= 14] {
-    line-width: 3;
-    line-join: round;
-    line-cap: square;
-    line-color: @land-color;
-    [zoom >= 16] {
-      line-width: 6;
-    }
+#landcover-line [zoom >= 14] {
+  line-width: 3;
+  line-join: round;
+  line-cap: square;
+  line-color: @land-color;
+  [zoom >= 16] {
+    line-width: 6;
   }
 }
 
-#sports-grounds {
+#sports-grounds [zoom >= 10] {
   [leisure = 'sports_centre'],
   [leisure = 'stadium'] {
-    [zoom >= 10] {
-      polygon-fill: #33cc99;
-      polygon-opacity: 0.25;
-    }
+    polygon-fill: #33cc99;
+    polygon-opacity: 0.25;
   }
 
-  [leisure = 'track'][zoom >= 10] {
+  [leisure = 'track'] {
     polygon-fill: #74dcba;
     line-width: 0.5;
     line-color: #888;
   }
 
-  [leisure = 'pitch'][zoom >= 10] {
+  [leisure = 'pitch'] {
     polygon-fill: #8ad3af;
     line-width: 0.5;
     line-color: #888;
   }
 }
 
-#landuse-overlay {
-  [amenity = 'prison'][zoom >= 10]::landuse,
-  [landuse = 'military'][zoom >= 10]::landuse {
+#landuse-overlay [zoom >= 10] {
+  [amenity = 'prison']::landuse,
+  [landuse = 'military']::landuse {
     polygon-pattern-file: url('symbols/military_red_hz2.png');
     line-color: #f55;
     line-width: 3;
     line-opacity: 0.329;
   }
-  [leisure = 'nature_reserve'][zoom >= 10] {
+  [leisure = 'nature_reserve'] {
     polygon-pattern-file: url('symbols/fr/nature_reserve6.png');
     a/line-color: green;
     a/line-width: 1;
@@ -395,7 +391,7 @@
     d/line-opacity: 0.1;
     d/line-offset: -5;
   }
-  [natural =~ '(wetland|marsh)'][zoom >= 10]::wetland {
+  [natural =~ '(wetland|marsh)']::wetland {
     polygon-pattern-file: url('symbols/wetland.png');
   }
 

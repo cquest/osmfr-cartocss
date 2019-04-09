@@ -1,5 +1,5 @@
-#continent {
-  [place = 'continent'][zoom >= 1][zoom <= 2] {
+#continent [zoom >= 1] {
+  [place = 'continent'][zoom <= 2] {
     text-name: "[name]";
     text-size: 10;
     text-fill: #9d6c9d;
@@ -8,15 +8,15 @@
   }
 }
 
-.country {
-  [place = 'continent'][zoom >= 2][zoom < 4] {
+.country [zoom >= 2] {
+  [place = 'continent'][zoom < 4] {
     text-name: "[name]";
     text-size: 12;
     text-fill: grey;
     text-face-name: @oblique-fonts;
     text-halo-radius: 1;
   }
-  [place = 'country'][zoom >= 2][zoom < 6] {
+  [place = 'country'][zoom < 6] {
     text-name: "[name]";
     text-size: 8;
     text-fill: #6c216c;
@@ -29,8 +29,8 @@
   }
 }
 
-.state {
-  [place = 'state'][zoom >= 5][zoom <= 8] {
+.state [zoom >= 5] {
+  [place = 'state'][zoom <= 8] {
     text-size: 8;
     text-fill: #6c216c;
     text-face-name: @book-fonts;
@@ -46,7 +46,7 @@
   }
 }
 
-#placenames-islands {
+#placenames-islands [zoom >= 4] {
   [zoom >= 4][zoom < 9][way_area>1000000000],
   [zoom >= 5][zoom < 9][way_area>500000000],
   [zoom >= 6][zoom < 9][way_area>100000000],
@@ -60,7 +60,7 @@
   }
 }
 
-.placenames {
+.placenames [zoom >= 4] {
   [place = 'city'] {
     [zoom=4][is_capital='country'] {
       marker-height: 2;

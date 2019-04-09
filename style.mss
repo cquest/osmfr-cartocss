@@ -78,7 +78,7 @@ Map {
 
 
 // raster pour landcover en lowzoom
-#lowzoom [zoom<=7]{
+#lowzoom [zoom <= 7] {
   raster-opacity:0.7;
   raster-scaling: lanczos;
 }
@@ -89,7 +89,7 @@ Map {
 @couleur-autorise: #08f; // bleu clair
 @route: #f4f;            // rose
 
-#cycleway [zoom>=13] {
+#cycleway [zoom >= 13] {
   // double-sens cyclable (orange)
   [cycleway='opposite'] { line-width: 2; line-color:@couleur-voie;  line-opacity: 0.7; }
   // voies cyclables (orange)
@@ -149,18 +149,18 @@ Map {
 }
 
 
-#relief [zoom>=8][zoom<=17]{
+#relief [zoom >= 8][zoom <= 17]{
   raster-opacity: 0.80;
   raster-scaling: bicubic;
   [zoom>=17] { raster-opacity: 0.15;}
 }
 
-#relief2 [zoom>=8][zoom<=16]{
+#relief2 [zoom >= 8][zoom <= 16]{
   raster-opacity: 0.15;
   raster-scaling: bicubic;
 }
 
-#contours_text [zoom>=13] {
+#contours_text [zoom >= 13] {
   [ele=~'.*[05]0'] { // 50m
     text-face-name: @book-fonts;
     text-name: [ele];
@@ -176,7 +176,7 @@ Map {
   }
 }
 
-#contours [zoom>=11] {
+#contours [zoom >= 11] {
   line-width: 0.2;
   line-color: grey;
   [zoom>=15] { line-smooth: 0.5; }

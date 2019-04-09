@@ -1,4 +1,4 @@
-.stations {
+.stations [zoom >= 11] {
   [railway = 'subway_entrance'][zoom >= 18] {
     point-file: url('symbols/walking.n.12.png');
     point-placement: interior;

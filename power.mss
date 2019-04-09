@@ -15,10 +15,8 @@
     }
 }
 
-#power-towers {
-  [zoom >= 14] {
-    point-file: url('symbols/power_tower_3x3.png');
-  }
+#power-towers [zoom >= 14] {
+  point-file: url('symbols/power_tower_3x3.png');
   [zoom >= 15] {
     point-file: url('symbols/power_tower_5x5.png');
   }
@@ -27,8 +25,6 @@
   }
 }
 
-#power-poles {
-  [zoom >= 16] {
-    point-file: url('symbols/power_pole.png');
-  }
+#power-poles [zoom >= 16] {
+  point-file: url('symbols/power_pole.png');
 }
