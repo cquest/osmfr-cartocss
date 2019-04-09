@@ -1,13 +1,11 @@
-
 @admin-boundaries: #ac46ac;
 @admin-boundary-line: #6c216c;
 
-#admin-boundaries-text {
-  [zoom>=11][admin_level<=6],
+#admin-boundaries-text [zoom>=11] {
+  [admin_level<=6],
   [zoom>=13][admin_level<=8],
   [zoom>=15] /* limites administratives locales (élément de relation) */
   {
-    //[zoom>=15][zoom<18][nom!=''] { text-name: "[nom]"; }
     [admin_level=7][insee!=''] { text-name: [name]+' (arr.)'; }
     [admin_level=6][insee!=''] { text-name: [name]+' (dép.)'; }
     [admin_level=4][insee!=''] { text-name: [name]+' (rég.)'; }
