@@ -36,7 +36,7 @@
   [building = 'terminal'] {
     polygon-fill: #cc99ff;
     line-color: #330066;
-    line-width: 0.2;
+    line-width: 0.3;
   }
   
   [zoom >= 18][wall='no'],

@@ -39,6 +39,7 @@ _parts:
     geometry_field: "way"
     extent: "-20037508,-20037508,20037508,20037508"
     host: localhost
+    port: 5454
     user: fr
     password: m4d31nfr4nc3
     asynchronous_request: 'true'
@@ -919,7 +920,21 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: ' /* housenumbers */ (select way,"addr:housenumber", null as entrance from planet_osm_polygon where "addr:housenumber" is not null and building is not null union select way,"addr:housenumber", tags->''entrance'' as entrance from planet_osm_point where "addr:housenumber" is not null ) as housenumbers'
+      table: ' /* housenumbers */ (
+      SELECT
+        way,"addr:housenumber", null as entrance
+      FROM
+        planet_osm_polygon
+      WHERE
+        "addr:housenumber" is not null and building is not null
+      UNION
+      SELECT
+        way,"addr:housenumber", tags->''entrance'' as entrance
+      FROM
+        planet_osm_point
+      WHERE
+        "addr:housenumber" is not null
+      ) as housenumbers'
 
   - id: housenames
     <<: *extents
