@@ -1,4 +1,4 @@
-.points {
+.points [zoom >= 13] {
   ::amenity {
     [amenity = 'hospital'][zoom >= 15],
     [amenity = 'clinic'][zoom >= 15] {
@@ -720,7 +720,7 @@
 	  }
   }
 
-  ::man_made {
+  ::man_made [zoom >= 15] {
     [man_made = 'lighthouse'][zoom >= 15]::man_made {
       point-file: url('symbols/lighthouse.p.20.png');
       point-placement: interior;
@@ -737,7 +737,7 @@
     }
   }
 
-  ::railway {
+  ::railway [zoom >= 15] {
     [railway =~ '(level_crossing|crossing)'][zoom >= 15] {
       point-file: url('symbols/level_crossing2.svg');
       point-transform: "scale(0.5)";
@@ -750,7 +750,7 @@
     }
   }
 
-  ::natural {
+  ::natural [zoom >= 11] {
     [natural = 'peak'][zoom >= 11] {
       point-file: url('symbols/peak.svg');
       point-placement: interior;
@@ -778,7 +778,7 @@
     }
   }
 
-  ::power {
+  ::power [zoom >= 12] {
     [zoom >= 12][power = 'plant'],
     [zoom >= 15][power = 'generator']['generator:source' = 'wind'],
     [zoom >= 15][power = 'generator'][power_source = 'wind']
@@ -793,7 +793,7 @@
     }
   }
 
-  ::highway {
+  ::highway [zoom >= 15] {
     [highway = 'mini_roundabout'][zoom >= 16] {
       point-file: url('symbols/mini_round.png');
       point-placement: interior;
@@ -864,7 +864,7 @@
   [amenity = 'library']::amenity,
   [amenity = 'theatre']::amenity {
     [zoom >= 16] {
-      [zoom >= 16][zoom<17] { text-name: "[nom]"; }
+      [zoom<17] { text-name: "[nom]"; }
       text-name: "[name]";
       text-size: 11;
       text-fill: #734a08;
@@ -1469,8 +1469,7 @@
   // éléments avec un nom "commercial" à supprimer si besoin
 
 
-  [amenity = 'restaurant']::amenity {
-    [zoom >= 17] {
+  [amenity = 'restaurant'][zoom >= 17]::amenity {
       text-name: "[name]";
       text-fill: #734a08;
       text-size: 10;
@@ -1479,7 +1478,6 @@
       text-halo-radius: 1;
       text-wrap-width: 40;
       text-placement: interior;
-    }
   }
 
   [amenity = 'pub']::amenity,
@@ -1539,8 +1537,7 @@
 	  }
   }
 
-  [tourism = 'hotel']::tourism {
-    [zoom >= 17] {
+  [tourism = 'hotel'][zoom >= 17]::tourism {
       text-name: "[name]+'\n'+[stars]";
       text-size: 10;
       text-fill: #0066ff;
@@ -1549,7 +1546,6 @@
       text-halo-radius: 1;
       text-placement: interior;
       text-wrap-width: 60;
-    }
   }
 
   [tourism = 'hostel']::tourism,
@@ -1596,8 +1592,7 @@
   	  }
   }
 
-  [amenity = 'fuel']::amenity {
-    [zoom >= 17] {
+  [amenity = 'fuel'][zoom >= 17]::amenity {
       text-name: "[name]";
       text-size: 9;
       text-fill: #0066ff;
@@ -1609,7 +1604,6 @@
     		text-size: 10;
     		text-dy: 10;
     	  }
-    }
   }
 
   [tourism = 'camp_site'][zoom >= 17]::tourism {
@@ -1854,75 +1848,90 @@
   }
 
   // potentially larger offices
-    [office != ''][office != 'vacant'][zoom >= 17] {
-      [office = 'administrative'],
-      [office = 'adoption_agency'],
-      [office = 'educational_institution'],
-      [office = 'employment_agency'],
-      [office = 'energy_supplier'],
-      [office = 'financial'],
-      [office = 'government'],
-      [office = 'newspaper'],
-      [office = 'ngo'],
-      [office = 'political_party'],
-      [office = 'quango'],
-      [office = 'religion'],
-      [office = 'research'],
-      [office = 'tax'],
-      [office = 'telecommunication'],
-      [office = 'water_utility'],
-      {
-        text-name: "[name]";
-        text-size: 10;
-        text-dy: 4;
-        text-face-name: @book-fonts;
-        text-halo-radius: 1;
-        text-wrap-width: 40;
-        text-placement: interior;
-        text-fill: @office;
-        text-placement: interior;
-      }
+  [office != ''][office != 'vacant'][zoom >= 17] {
+    [office = 'administrative'],
+    [office = 'adoption_agency'],
+    [office = 'educational_institution'],
+    [office = 'employment_agency'],
+    [office = 'energy_supplier'],
+    [office = 'financial'],
+    [office = 'government'],
+    [office = 'newspaper'],
+    [office = 'ngo'],
+    [office = 'political_party'],
+    [office = 'quango'],
+    [office = 'religion'],
+    [office = 'research'],
+    [office = 'tax'],
+    [office = 'telecommunication'],
+    [office = 'water_utility'],
+    {
+      text-name: "[name]";
+      text-size: 10;
+      text-dy: 4;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-placement: interior;
+      text-fill: @office;
+      text-placement: interior;
     }
+  }
 
-    // other documented office types
-    [zoom >= 18] {
-      [office = 'accountant'],
-      [office = 'advertising_agency'],
-      [office = 'architect'],
-      [office = 'association'],
-      [office = 'charity'],
-      [office = 'company'],
-      [office = 'estate_agent'],
-      [office = 'forestry'],
-      [office = 'foundation'],
-      [office = 'guide'],
-      [office = 'insurance'],
-      [office = 'it'],
-      [office = 'lawyer'],
-      [office = 'logistics'],
-      [office = 'moving_company'],
-      [office = 'notary'],
-      [office = 'physician'],
-      [office = 'private_investigator'],
-      [office = 'property_management'],
-      [office = 'surveyor'],
-      [office = 'tax_advisor'],
-      [office = 'therapist'],
-      [office = 'travel_agent'] {
-        text-name: "[name]";
-        text-size: 10;
-        text-face-name: @book-fonts;
-        text-halo-radius: 1;
-        text-wrap-width: 40;
-        text-placement: interior;
-        text-dy: 4;
-        text-fill: @office;
-        text-placement: interior;
-      }
+  // other documented office types
+  [zoom >= 18] {
+    [office = 'accountant'],
+    [office = 'advertising_agency'],
+    [office = 'architect'],
+    [office = 'association'],
+    [office = 'charity'],
+    [office = 'company'],
+    [office = 'estate_agent'],
+    [office = 'forestry'],
+    [office = 'foundation'],
+    [office = 'guide'],
+    [office = 'insurance'],
+    [office = 'it'],
+    [office = 'lawyer'],
+    [office = 'logistics'],
+    [office = 'moving_company'],
+    [office = 'notary'],
+    [office = 'physician'],
+    [office = 'private_investigator'],
+    [office = 'property_management'],
+    [office = 'surveyor'],
+    [office = 'tax_advisor'],
+    [office = 'therapist'],
+    [office = 'travel_agent'] {
+      text-name: "[name]";
+      text-size: 10;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-placement: interior;
+      text-dy: 4;
+      text-fill: @office;
+      text-placement: interior;
     }
+  }
 
-    // all other offices
-    [office != null][office != 'vacant'][zoom >= 19] {
+  // all other offices
+  [office != null][office != 'vacant'][zoom >= 19] {
+    text-name: "[name]";
+    text-size: 10;
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 40;
+    text-placement: interior;
+    text-dy: 4;
+    text-fill: @office;
+    text-placement: interior;
+  }
+
+
+
+    // crafts
+    [craft != null][craft != 'vacant'][zoom >= 17] {
       text-name: "[name]";
       text-size: 10;
       text-face-name: @book-fonts;
@@ -1933,20 +1942,5 @@
       text-fill: @office;
       text-placement: interior;
   }
-
-
-
-      // crafts
-      [craft != null][craft != 'vacant'][zoom >= 17] {
-        text-name: "[name]";
-        text-size: 10;
-        text-face-name: @book-fonts;
-        text-halo-radius: 1;
-        text-wrap-width: 40;
-        text-placement: interior;
-        text-dy: 4;
-        text-fill: @office;
-        text-placement: interior;
-    }
 
 }
