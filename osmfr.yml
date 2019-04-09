@@ -807,20 +807,44 @@ Layer:
       <<: *osm2pgsql
       table: " /* stations */ (SELECT s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.disused as disused, case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network  FROM  planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  WHERE s.way && !bbox! and s.highway = 'bus_stop' ORDER BY l_operator desc ) as bus_stops"
 
-      
+
   - id: amenity-symbols
     <<: *extents
+    zoom_min: 10
     Datasource:
       <<: *osm2pgsql
-      table: " /* amenity-symbols */ (select *, fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome  FROM planet_osm_point p  WHERE aeroway in ('airport','aerodrome','helipad','military')  OR p.military='airfield' or barrier in ('bollard','gate','lift_gate','block','toll_booth')  OR highway in ('mini_roundabout','gate')  OR man_made in ('lighthouse','power_wind','windmill','mast')  OR power in ('sub_station','substation','plant')  OR (power='generator' and (\"generator:source\"='wind' or power_source='wind'))  OR \"natural\" in ('peak','volcano','spring','tree','cave_entrance')  OR railway in ('level_crossing','buffer_stop')) as amenity_symbols"
-
-    class: symbols
-
-  - id: amenity-symbols-poly
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* amenity-symbols-poly */ (select *, fr_abbrev(replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'Base aérienne ','B.A. ')) as nom, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome  from planet_osm_polygon p  where (aeroway in ('airport','aerodrome','helipad','military') or p.military='airfield' or barrier in ('bollard','gate','lift_gate','block','toll_booth')  or highway in ('mini_roundabout','gate') or man_made in ('lighthouse','power_wind','windmill','mast') or power in ('sub_station','substation','plant') or (power='generator' and (\"generator:source\"='wind' or power_source='wind')) or \"natural\" in ('peak','volcano','spring','tree','cave_entrance') or railway in ('level_crossing','buffer_stop')) and way_area > !pixel_width!*!pixel_height!*10 ) as symbols"
+      table: " /* amenity-symbols */ (
+        SELECT
+          way, aeroway, military, man_made, railway, \"natural\", power, coalesce(power_source, \"generator:source\") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
+        FROM planet_osm_point p
+        WHERE aeroway in ('airport','aerodrome','helipad','military')
+          OR p.military='airfield'
+          OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
+          OR highway in ('mini_roundabout','gate')
+          OR man_made in ('lighthouse','power_wind','windmill','mast')
+          OR power in ('sub_station','substation','plant')
+          OR (power='generator' and (\"generator:source\"='wind' or power_source='wind'))
+          OR \"natural\" in ('peak','volcano','spring','cave_entrance')
+          OR tags ? 'mountain_pass'
+          OR railway in ('level_crossing','buffer_stop')
+        UNION
+        SELECT
+          way, aeroway, military, man_made, railway, \"natural\", power, coalesce(power_source, \"generator:source\") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
+        FROM planet_osm_polygon p
+        WHERE (aeroway in ('airport','aerodrome','helipad','military')
+          OR p.military='airfield'
+          OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
+          OR highway in ('mini_roundabout','gate')
+          OR man_made in ('lighthouse','power_wind','windmill','mast')
+          OR power in ('sub_station','substation','plant')
+          OR (power='generator' and (\"generator:source\"='wind' or power_source='wind'))
+          OR \"natural\" in ('peak','volcano','spring','cave_entrance')
+          OR tags ? 'mountain_pass'
+          OR railway in ('level_crossing','buffer_stop'))
+          AND way_area > !pixel_width!*!pixel_height!*10
+        ) as amenity_symbols"
 
     class: symbols
 
