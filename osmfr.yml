@@ -122,7 +122,7 @@ Layer:
                                         or man_made in ('wastewater_plant','clearcut','gasometer','reservoir_covered','water_works','works')
                                         or building in ('civic','public'))
                                       and (coalesce(landuse, wetland, leisure, aeroway, amenity, military, power, "natural", tourism, highway, man_made) is not null
-                                      or building in ('civic','public') /* index */)
+                                      or building in ('civic','public'))
                                       and way && !bbox!
                                 ORDER BY z_order,way_area desc ) as landcover ) as features
 
