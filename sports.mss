@@ -92,7 +92,7 @@
     line-cap: round;
   }
 
-	::tennis [sport=~'.*tennis.*'][zoom>=16] {
+	::tennis [sport='tennis'][zoom>=16] {
 		[way_area<2500][d13>37][d13<80] {			/* area size / diagonal check */
 			[d12>38][d12<70][d23>20][d23<40] { 		/* 1>2 = length / 2>3 = width */
 				point-file: url('symbols/fr/sports-tennis.svg');
@@ -115,7 +115,7 @@
 		}
 	}
 
-	::soccer [sport=~'.*soccer.*'] {
+	::soccer [sport='soccer'] {
 		[d12>130][d12<200][d23>68][d23<160][d13>150][d13<250] { /* 1>2 = length / 2>3 = width */
 			point-file: url('symbols/fr/sports-soccer.svg');
 			point-ignore-placement: true;
@@ -181,7 +181,7 @@
 		}
 	}
 
-	::basket [sport=~'.*basketball.*'][zoom>=17] {
+	::basket [sport='basketball'][zoom>=17] {
 		[way_area<1000][d13>30][d13<50] {
 			[d12>30][d12<40][d23>15][d23<25] { /* 12-longueur - 23-largeur */
 				point-file: url('symbols/fr/sports-basketball.svg');
@@ -202,7 +202,7 @@
 		}
 	}
 
-	::rugby [sport=~'.*rugby.*'] {
+	::rugby [sport='rugby'] {
 		[way_area>15000][way_area<25000][d13>150][d13<250] {
 			[d23>75][d23<150][d12>150][d12<250] { /* 12-largeur - 23-longueur */
 				point-file: url('symbols/fr/sports-rugby.svg');
@@ -229,7 +229,7 @@
 		}
 	}
 
-	::football [sport=~'.*american_football.*'] {
+	::football [sport='american_football'] {
 		[way_area>8000][way_area<20000][d13>120][d13<250] {
 			[d23>50][d23<100][d12>120][d12<200] { /* 12-largeur - 23-longueur */
 				point-file: url('symbols/fr/sports-foot-us.svg');
