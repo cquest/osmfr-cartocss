@@ -219,16 +219,16 @@
       text-character-spacing: 2;
       text-size: 9;
       text-halo-radius: 1;
-      [cemt=~'V'] {text-size: 12;} // larger river name for CEMT class IV and above...
+      [cemt_large='true'] {text-size: 12;} // larger river name for CEMT class IV and above...
       [zoom >= 14] {
         text-size: 10;
         [cemt='I'],[cemt='II'],[cemt='III'] {text-size: 12;}
-        [cemt=~'V'] {text-size: 14;}
+        [cemt_large='true'] {text-size: 14;}
       }
       [zoom >= 17] {
         text-size: 12;
         [cemt='I'],[cemt='II'],[cemt='III'] {text-size: 14;}
-        [cemt=~'V'] {text-size: 16;}
+        [cemt_large='true'] {text-size: 16;}
       }
     }
 
