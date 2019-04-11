@@ -482,10 +482,15 @@ Layer:
 
   - id: trees
     <<: *extents
-    zoom_min: 16
+    properties:
+      minzoom: 17
     Datasource:
       <<: *osm2pgsql
-      table: " /* trees */ (select st_buffer(st_collect(way),3) as way, 'poly' as type from planet_osm_point where \"natural\"='tree' AND way && !bbox! UNION select way, 'point' as type from planet_osm_point where \"natural\"='tree' AND way && !bbox! union select st_buffer(st_collect(way),3) as way, 'poly' as type from planet_osm_line where \"natural\"='tree_row' and way && !bbox! ) as trees"
+      table: " /* trees */ (
+        SELECT way, 'tree' as type from planet_osm_point where \"natural\"='tree' AND way && !bbox! AND !scale_denominator!<5000
+        UNION
+        SELECT way, 'tree_row' as type from planet_osm_line where \"natural\"='tree_row' and way && !bbox!
+      ) as trees"
 
 
   - id: access-pre-bridges
