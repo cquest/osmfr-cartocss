@@ -343,6 +343,7 @@ Layer:
     class: barriers
 
   - id: highway-area-casing
+    status: off
     <<: *extents
     zoom_min: 14
     Datasource:
@@ -361,6 +362,7 @@ Layer:
 
 
   - id: highway-area-fill
+    status: off
     <<: *extents
     zoom_min: 14
     Datasource:
