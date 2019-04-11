@@ -1,4 +1,4 @@
-#world [zoom >= 0] [zoom <= 9] {
+#world [zoom <= 9] {
   polygon-fill: @land-color;
 }
 
