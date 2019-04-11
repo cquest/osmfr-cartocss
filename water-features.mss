@@ -29,7 +29,8 @@
 }
 
 #piers [zoom >= 11] {
-  [man_made =~ '(breakwater|groyne)'] {
+  [man_made = 'breakwater'],
+  [man_made = 'groyne'] {
     line-width: 1;
     line-color: #aaa;
     [zoom >= 13] {
