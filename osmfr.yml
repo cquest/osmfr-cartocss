@@ -38,8 +38,8 @@ _parts:
     key_field: ""
     geometry_field: "way"
     extent: "-20037508,-20037508,20037508,20037508"
-    host: localhost
-    port: 5454
+    host: osmdb
+    port: 5432
     user: fr
     password: m4d31nfr4nc3
     asynchronous_request: 'true'
