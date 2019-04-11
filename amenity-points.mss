@@ -332,14 +332,19 @@
       [indoor='yes'] { point-opacity: 0.5; }
     }
 
-    [emergency = 'aed'][zoom >= 17],
-    [emergency = 'defibrillator'][zoom >= 17] {
+
+
+  } // ::amenity
+
+
+  ::defibrillator [zoom >= 17] {
+    [emergency =~ '(aed|defibrillator)'] {
       point-file: url('symbols/fr/aed2.svg');
       point-placement: interior;
       [indoor='yes'] { point-opacity: 0.5; }
     }
+  }
 
-  } // ::amenity
 
   ::highway {
     [highway = 'traffic_signals'][zoom >= 17] {
