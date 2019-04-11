@@ -42,8 +42,8 @@ _parts:
     port: 5432
     user: fr
     password: m4d31nfr4nc3
-    asynchronous_request: 'true'
-    max_async_connection: '4'
+    asynchronous_request: 'false'
+    max_async_connection: '1'
 
 Stylesheet:
   - "style.mss"
