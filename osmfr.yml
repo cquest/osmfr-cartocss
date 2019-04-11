@@ -222,7 +222,7 @@ Layer:
     zoom_min: 12
     Datasource:
       <<: *osm2pgsql
-      table: " /* water-lines */ (select st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,0),way) as way,waterway,disused,lock,coalesce(tags->'name:fr',tags->'int_name',name) as name, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else coalesce(tunnel,covered) end as tunnel, tags->'CEMT' as cemt, case when tags->'motorboat'='yes' then 'motorboat' when tags->'boat'='yes' then 'boat' else 'no' end as boat from planet_osm_line where way && !bbox! AND osm_id>0 AND waterway in ('weir','river','canal','derelict_canal','stream','drain','ditch','wadi') and (bridge is null or bridge not in ('yes','true','1','aqueduct')) order by z_order ) as water_lines"
+      table: " /* water-lines */ (select st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,0),way) as way,waterway,disused,lock,coalesce(tags->'name:fr',tags->'int_name',name) as name, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else coalesce(tunnel,covered) end as tunnel, tags->'CEMT' as cemt, case when tags->'CEMT'~'V' then 'true' else '' end as cemt_large, case when tags->'motorboat'='yes' then 'motorboat' when tags->'boat'='yes' then 'boat' else 'no' end as boat from planet_osm_line where way && !bbox! AND osm_id>0 AND waterway in ('weir','river','canal','derelict_canal','stream','drain','ditch','wadi') and (bridge is null or bridge not in ('yes','true','1','aqueduct')) order by z_order ) as water_lines"
       simplify_geometries: 'true'
 
 
