@@ -275,9 +275,9 @@
   }
 }
 
-#placenames-small::suburb [zoom >= 12] {
-	[place =~ '(neighbourhood|quarter)'][zoom>=14],
-	[place = 'suburb'] {
+#placenames-small [zoom >= 12] {
+	[place =~ '(neighbourhood|quarter)'][zoom>=14]::subsuburb,
+	[place = 'suburb']::suburb {
     text-name: "[nom]";
     text-size: 8.5;
     text-fill: #555;
@@ -322,8 +322,8 @@
   b/text-align: center;
 }
 
-#placenames-small::hamlet [zoom >= 14] {
-  [place =~ '(hamlet|isolated_dwelling|farm)'] {
+#placenames-small [zoom >= 14] {
+  [place =~ '(hamlet|isolated_dwelling|farm)']::hamlet {
   	text-name: "[nom]";
     text-size: 8.5;
     text-fill: #555;
