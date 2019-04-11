@@ -47,17 +47,64 @@
   }
 }
 
-#trees [zoom>=16] {
-	image-filters: agg-stack-blur(1,1);
-	[type='poly'] {
-		polygon-fill: green;
-		polygon-opacity: 0.3;
-	}
-	[zoom>=19][type='point'] {
-		marker-fill: #b27f36;
-		marker-width: 3;
-		marker-height: 3;
-	}
+#trees [zoom >= 16] {
+  ::canopy {
+    image-filters: agg-stack-blur(1,1);
+    opacity: 0.3;
+    [type = 'tree_row'] {
+      line-color: green;
+      line-cap: round;
+      line-width: 2.5;
+      [zoom >= 17] {
+        line-width: 5;
+      }
+      [zoom >= 18] {
+        line-width: 10;
+      }
+      [zoom >= 19] {
+        line-width: 15;
+      }
+      [zoom >= 20] {
+        line-width: 30;
+      }
+    }
+    [type = 'tree'] {
+      [zoom >= 18] {
+        marker-fill: green;
+        marker-allow-overlap: true;
+        marker-line-width: 0;
+        marker-ignore-placement: true;
+        marker-width: 10;
+        marker-height: 10;
+      }
+      [zoom >= 19] {
+        marker-width: 15;
+        marker-height: 15;
+      }
+      [zoom >= 20] {
+        marker-width: 30;
+        marker-height: 30;
+      }
+    }
+  }
+  [type = 'tree']::trunk {
+    [zoom >= 18] {
+      trunk/marker-fill: #b27f36;
+      trunk/marker-allow-overlap: true;
+      trunk/marker-line-width: 0;
+      trunk/marker-width: 2;
+      trunk/marker-height: 2;
+      trunk/marker-ignore-placement: true;
+    }
+    [zoom >= 19] {
+      trunk/marker-width: 3;
+      trunk/marker-height: 3;
+    }
+    [zoom >= 20] {
+      trunk/marker-width: 6;
+      trunk/marker-height: 6;
+    }
+  }
 }
 
 #parking-handi [zoom>=17] {
