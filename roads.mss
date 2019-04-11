@@ -103,6 +103,7 @@
 @track-grade1-width-z15:          0.75;
 @track-grade2-width-z15:          0.75;
 
+/*
 #highway-area-casing [zoom >= 14] { // highway =~
   [highway =~ '(residential|unclassified)'] {
     line-color: #999;
@@ -163,6 +164,7 @@
     polygon-fill: #bbc;
   }
 }
+*/
 
 #highway-junctions [zoom >= 11] {
   [type='motorway_junction']   {
