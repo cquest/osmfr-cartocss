@@ -22,7 +22,6 @@ INSERT INTO params VALUES ('x_bleed','128',128);
 
 
 create index planet_osm_polygon_place on planet_osm_polygon using gist(way) where place is not null;
-create index planet_osm_polygon_place on planet_osm_polygon using gist(way) where place is not null;
 create index planet_osm_polygon_refinsee on planet_osm_polygon using gist(way) where tags ? 'ref:INSEE';
 create index planet_osm_polygon_adminlevel on planet_osm_polygon using gist(way) where admin_level is not null;
 create index planet_osm_polygon_boundary on planet_osm_polygon using gist(way) where boundary is not null;
