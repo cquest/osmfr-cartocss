@@ -5,23 +5,6 @@ CREATE TABLE contours (
 	ele integer
 	);
 
-
--- table params
-CREATE TABLE params (
-	key varchar(20),
-	txt varchar(20),
-	num integer,
-	CONSTRAINT pk_key PRIMARY KEY (key)
-	);
-
-GRANT SELECT on table params to public;
-
-INSERT INTO params VALUES ('buffer','256',256);
-INSERT INTO params VALUES ('y_bleed','128',128);
-INSERT INTO params VALUES ('x_bleed','128',128);
-
-
-create index planet_osm_polygon_place on planet_osm_polygon using gist(way) where place is not null;
 create index planet_osm_polygon_place on planet_osm_polygon using gist(way) where place is not null;
 create index planet_osm_polygon_refinsee on planet_osm_polygon using gist(way) where tags ? 'ref:INSEE';
 create index planet_osm_polygon_adminlevel on planet_osm_polygon using gist(way) where admin_level is not null;
