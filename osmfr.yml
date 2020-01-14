@@ -1019,13 +1019,14 @@ Layer:
       <<: *osm2pgsql
       table: " /* text-poly */ (SELECT way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,  fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom, aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars,coalesce(tags->'ele',tags->'ele:local','') as ele,tags->'mountain_pass' as mountain_pass, ref,military,waterway,historic,'no'::text as point, way_area, NULL as way_len, replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole, power, office, tags->'craft' as craft  FROM planet_osm_polygon  WHERE  coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', tags->'ele', tags->'ele:local', ref,tags->'school:FR') is not null and (amenity is not null and amenity not in ('townhall','school') or shop is not null  or leisure is not null or landuse is not null or tourism is not null or office is not null or tags ? 'craft' or (\"natural\" is not null AND tags->'water' != 'river')  or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or power in ('generator','substation','sub_station','plant')) and way_area > !pixel_width!*!pixel_height!*10  UNION  SELECT way,osm_id, tags->'heritage' as heritage, coalesce(tags->'name:fr',tags->'int_name',name) as name, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,  fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,aeroway,shop,access,amenity,leisure,landuse,man_made,\"natural\",place,tourism,substring('******',1,to_int(tags->'stars')::integer) as stars, coalesce(ele,tags->'ele:local','') as ele, tags->'mountain_pass' as mountain_pass, ref, military, waterway, historic,'yes'::text as point, 0 as way_area, NULL as way_len, replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole, power, office, tags->'craft' as craft FROM  planet_osm_point  WHERE  coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', ele, tags->'ele:local', ref,tags->'school:FR') is not null and ((amenity is not null and amenity not in ('townhall')) or shop is not null  or leisure is not null or landuse is not null or tourism is not null or \"natural\" is not null or office is not null or tags ? 'craft' or man_made in ('lighthouse','windmill') or place='island' or military='danger_area' or historic in ('memorial','archaeological_site','castle')  or aeroway='gate' or tags->'mountain_pass'='yes'  or power in ('generator','substation','sub_station','plant')) order by prio desc,way_area desc ) as text"
 
+
   - id: admin-boundaries-text
     <<: *extents
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
       table: >-
-        ( /* admin-boundaries-text */ SELECT
+        /* admin-boundaries-text */ (SELECT
         ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2)
         as way, to_int(admin_level) as admin_level ,
         coalesce(tags->'name:fr',tags->'int_name',name) as name,
@@ -1035,11 +1036,13 @@ Layer:
         ST_Covers(p.way,!bbox!) AND boundary='administrative' AND admin_level is not NULL order by 2 desc)
         as admin_boundaries_text
 
+
   - id: placenames-large-lz
     <<: *extents
     Datasource:
       <<: *osm2pgsql
       table: " /* placenames-large-lz */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom, to_int(population) as pop, coalesce(tags->'is_capital', (case when coalesce(admin_level, capital)='2' then 'country' when tags->'importance'='international' then 'state' when coalesce(admin_level, capital)='4' then 'state' when tags->'importance'='national' then 'state' else null end) ) as is_capital, array_length(hstore_to_array(tags),1)/2 as nbtags  FROM planet_osm_point p  WHERE  way && !bbox! and place is not null and place in ('city','town') and (tags->'is_capital' in ('country','state') or capital in ('2','4') or (capital='yes' and admin_level in ('2','4')) or tags->'importance' in ('international','national') or array_length(hstore_to_array(tags),1)/2>20) order by is_capital, coalesce(admin_level, capital,'9'), place, pop desc ) as placenames"
+
 
   - id: placenames-small-lz
     <<: *extents
@@ -1048,12 +1051,14 @@ Layer:
       <<: *osm2pgsql
       table: " /* placenames-small-lz */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom, to_int(population) as pop  FROM  planet_osm_point p  WHERE  way && !bbox! and place is not null and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm') order by pop desc, osm_id     ) as placenames"
 
+
   - id: interpolation
     <<: *extents
     zoom_min: 17
     Datasource:
       <<: *osm2pgsql
       table: ' /* interpolation */ (select way from planet_osm_line where "addr:interpolation" is not null) as interpolation'
+
 
   - id: housenumbers
     <<: *extents
@@ -1076,12 +1081,14 @@ Layer:
         "addr:housenumber" is not null
       ) as housenumbers'
 
+
   - id: housenames
     <<: *extents
     zoom_min: 17
     Datasource:
       <<: *osm2pgsql
       table: " /* housenames */ (select way,\"addr:housename\" from planet_osm_polygon where \"addr:housename\" is not null and building is not null union select way,\"addr:housename\" from planet_osm_point where \"addr:housename\" is not null ) as housenames"
+
 
   - id: misc-boundaries
     <<: *extents
@@ -1091,6 +1098,7 @@ Layer:
       table: " /* misc-boundaries */ (select way,way_area,coalesce(tags->'name:fr',tags->'int_name',name) as name,boundary from planet_osm_polygon where boundary='national_park' and building is null) as boundary"
       simplify_geometries: 'true'
 
+
   - id: theme-park
     <<: *extents
     zoom_min: 13
@@ -1098,12 +1106,14 @@ Layer:
       <<: *osm2pgsql
       table: " /* theme-park */ (select way,coalesce(tags->'name:fr',tags->'int_name',name) as name,tourism from planet_osm_polygon where tourism='theme_park') as theme_park"
 
+
   - id: parking-handi
     <<: *extents
     zoom_min: 17
     Datasource:
       <<: *osm2pgsql
       table: " /* parking-handi */ (SELECT way,0 as way_area, to_int(tags->'capacity:disabled') as capacity FROM planet_osm_point WHERE amenity='parking_space' AND (tags->'wheelchair'='yes' or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no'))) UNION SELECT way, way_area, to_int(tags->'capacity:disabled') as capacity FROM planet_osm_polygon WHERE amenity='parking_space' AND (tags->'wheelchair'='yes' or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no')))) as park"
+
 
   - id: pmr
     <<: *extents
