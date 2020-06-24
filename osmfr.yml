@@ -35,15 +35,14 @@ _parts:
   osm2pgsql: &osm2pgsql
     type: "postgis"
     dbname: "osm"
-    key_field: ""
     geometry_field: "way"
     extent: "-20037508,-20037508,20037508,20037508"
     host: osmdb
     port: 5432
     user: fr
     password: m4d31nfr4nc3
-    asynchronous_request: 'false'
-    max_async_connection: '1'
+    asynchronous_request: false
+    max_async_connection: 1
 
 Stylesheet:
   - "style.mss"
