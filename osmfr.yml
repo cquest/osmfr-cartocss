@@ -68,26 +68,26 @@ Layer:
   - id: world
     <<: *extents
     geometry: polygon
-
     Datasource:
       file: data/simplified-land-polygons-complete-3857/simplified_land_polygons.shp
       type: shape
 
+
   - id: coast-poly
     <<: *extents
     geometry: polygon
-
     Datasource:
       file: data/land-polygons-split-3857/land_polygons.shp
       type: shape
 
+
   - id: lowzoom
     geometry: raster
     extent: *world
-
     Datasource:
       file: layers/z7.tif
       type: gdal
+
 
   - id: landcover
     <<: *extents
@@ -132,7 +132,10 @@ Layer:
     zoom_min: 14
     Datasource:
       <<: *osm2pgsql
-      table: " /* landcover-line */ (select way from planet_osm_line where man_made='cutline' ) as leisure"
+      table: >-
+        /* landcover-line */ (
+          SELECT way FROM planet_osm_line WHERE man_made='cutline'
+        ) as landcover
       simplify_geometries: 'true'
 
 
@@ -141,7 +144,13 @@ Layer:
     zoom_min: 14
     Datasource:
       <<: *osm2pgsql
-      table: " /* tracks-tunnels */ (select way,tracktype from planet_osm_line where highway='track' and coalesce(tunnel,covered) in ('yes','true','1')) as tracks"
+      table: >-
+        /* tracks-tunnels */ (
+          select way,tracktype
+          from planet_osm_line
+          where highway='track'
+            and coalesce(tunnel,covered) in ('yes','true','1')
+        ) as tracks
       simplify_geometries: 'true'
 
 
@@ -150,7 +159,14 @@ Layer:
     zoom_min: 13
     Datasource:
       <<: *osm2pgsql
-      table: " /* footbikecycle-tunnels */ (select way,highway,toll,horse,foot,bicycle,junction,coalesce(tags->'footway','') as footway from planet_osm_line where highway in ('bridleway','footway','cycleway','path') and coalesce(tunnel,covered) in ('yes','true','1') order by z_order) as roads"
+      table: >-
+        /* footbikecycle-tunnels */ (
+          select way,highway,toll,horse,foot,bicycle,junction,coalesce(tags->'footway','') as footway
+          from planet_osm_line
+          where highway in ('bridleway','footway','cycleway','path')
+            and coalesce(tunnel,covered) in ('yes','true','1')
+          order by z_order
+        ) as roads
       simplify_geometries: 'true'
 
 
@@ -159,7 +175,13 @@ Layer:
     zoom_min: 12
     Datasource:
       <<: *osm2pgsql
-      table: " /* minor-roads-fill-tunnels */ (select way,oneway,junction,toll, coalesce(highway,aeroway) as highway, horse,bicycle,foot,construction,coalesce(tags->'footway','') as footway,  case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge, case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway, case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service, tracktype, case  when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)  when (z_order<10 and z_order>3 and highway='tertiary') then 5 else z_order end as zz_order   from planet_osm_line where (highway is not null or aeroway in ('runway','taxiway','taxipath','parking_position') or railway in ('light_rail','narrow_gauge','funicular','rail','subway','tram','spur','siding','platform','disused','abandoned','construction','miniature','turntable')) and coalesce(tunnel,covered,'') in ('yes','true','1') and route is null order by zz_order) as roads"
+      table: >-
+        /* minor-roads-fill-tunnels */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,oneway,junction,toll, coalesce(highway,aeroway) as highway, horse,bicycle,foot,construction,coalesce(tags->'footway','') as footway,  case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge, case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway, case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service, tracktype, case  when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)  when (z_order<10 and z_order>3 and highway='tertiary') then 5 else z_order end as zz_order
+          FROM planet_osm_line
+          WHERE way && !bbox!
+            AND (highway is not null or aeroway in ('runway','taxiway','taxipath','parking_position') or railway in ('light_rail','narrow_gauge','funicular','rail','subway','tram','spur','siding','platform','disused','abandoned','construction','miniature','turntable')) and coalesce(tunnel,covered,'') in ('yes','true','1') and route is null
+          ORDER BY zz_order) as roads
       simplify_geometries: 'true'
 
 
@@ -168,19 +190,33 @@ Layer:
     zoom_min: 12
     Datasource:
       <<: *osm2pgsql
-      table: " /* tunnels */ (select way, highway, junction, toll from planet_osm_line where highway in ('motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link','residential','unclassified') and coalesce(tunnel,covered) in ('yes','true','1') order by z_order) as tunnels"
+      table: >-
+        /* tunnels */ (
+        SELECT ST_Snaptogrid(way,!pixel_width!/4) as way, highway, junction, toll 
+        FROM planet_osm_line 
+        WHERE way && !bbox!
+          AND highway in ('motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link','residential','unclassified')
+          AND coalesce(tunnel,covered) in ('yes','true','1')
+        ORDER BY z_order) as tunnels
       simplify_geometries: 'true'
 
 
   - id: direction-tunnels
+    class: directions
     <<: *extents
     zoom_min: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* direction-tunnels */ (select '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order<0) as directions"
+      table: >-
+        /* direction-tunnels */ (
+        SELECT '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, ST_Snaptogrid(case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end,!pixel_width!/4) as way 
+        FROM planet_osm_line
+        WHERE way && !bbox!
+          AND ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout'))
+          AND (highway is not null or railway is not null or waterway is not null) AND (bridge is null or bridge not in ('yes','true','1','viaduct'))
+          AND z_order<0) as directions
       simplify_geometries: 'true'
 
-    class: directions
 
   - id: water-lines-casing
     <<: *extents
@@ -196,7 +232,11 @@ Layer:
     zoom_min: 8
     Datasource:
       <<: *osm2pgsql
-      table: " /* water-lines-low-zoom */ (select ST_Snaptogrid(way,!pixel_width!/4) as way, waterway from planet_osm_roads where waterway='river' and osm_id>0 and way && !bbox! ) as water_lines"
+      table: >-
+        /* water-lines-low-zoom */ (
+        SELECT ST_Snaptogrid(way,!pixel_width!/4) as way, waterway
+        FROM planet_osm_roads
+        WHERE waterway='river' and osm_id>0 and way && !bbox!) as water_lines
 
 
   - id: water-areas
@@ -333,13 +373,13 @@ Layer:
 
 
   - id: area-barriers
+    class: barriers
     <<: *extents
     zoom_min: 16
     Datasource:
       <<: *osm2pgsql
       table: " /* area-barriers */ (select way,barrier,\"natural\" from planet_osm_polygon where barrier is not null or \"natural\"='hedge') as barriers"
 
-    class: barriers
 
   - id: highway-area-casing
     status: off
@@ -370,13 +410,13 @@ Layer:
 
 
   - id: line-barriers
+    class: barriers
     <<: *extents
     zoom_min: 16
     Datasource:
       <<: *osm2pgsql
       table: " /* line-barriers */ (select way, barrier, junction from planet_osm_line where barrier is not null) as roads"
 
-    class: barriers
 
   - id: buildings-lz
     <<: *extents
@@ -493,22 +533,22 @@ Layer:
 
 
   - id: access-pre-bridges
+    class: access
     <<: *extents
     zoom_min: 15
     Datasource:
       <<: *osm2pgsql
       table: " /* access-pre-bridges */ (select way,access,highway,coalesce(tags->'footway','') as footway,  case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service from planet_osm_line where access is not null and highway is not null and (bridge is null or bridge not in ('yes','true','1','viaduct')) ) as access"
 
-    class: access
 
   - id: direction-pre-bridges
+    class: directions
     <<: *extents
     zoom_min: 16
     Datasource:
       <<: *osm2pgsql
       table: " /* direction-pre-bridges */ (select '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way from planet_osm_line  where way && !bbox! and ((oneway is not null and oneway not in ('no','false','0')) or (junction='roundabout')) and (highway is not null or railway is not null or waterway is not null)  and (bridge is null or bridge not in ('yes','true','1','viaduct')) AND z_order>=0) as directions"
 
-    class: directions
 
   - id: bridges-poly
     <<: *extents
@@ -524,9 +564,11 @@ Layer:
     Datasource:
       <<: *osm2pgsql
       table: " /* waterway-bridges */ (select way,coalesce(tags->'name:fr',tags->'int_name',name) as name from planet_osm_line where waterway='canal' and bridge in ('yes','true','1','aqueduct') order by z_order) as water"
+      simplify_geometries: 'true'
 
 
   - id: bridges-l0
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -549,10 +591,11 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)
                       ORDER BY z_order) as layer0
+      simplify_geometries: 'true'
 
-    class: bridges
 
   - id: bridges-l1
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -575,10 +618,11 @@ Layer:
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer1
+      simplify_geometries: 'true'
 
-    class: bridges
 
   - id: bridges-l2
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -601,10 +645,11 @@ Layer:
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer2
+      simplify_geometries: 'true'
 
-    class: bridges
 
   - id: bridges-l3
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -627,10 +672,11 @@ Layer:
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer3
+      simplify_geometries: 'true'
 
-    class: bridges
-
+      
   - id: bridges-l4
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -653,10 +699,11 @@ Layer:
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer4
+      simplify_geometries: 'true'
 
-    class: bridges
-
+      
   - id: bridges-l5
+    class: bridges
     <<: *extents
     zoom_min: 12
     Datasource:
@@ -680,8 +727,7 @@ Layer:
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
         or waterway is not null)  ORDER BY z_order) as layer5
 
-    class: bridges
-
+      
   - id: highway_crossings
     <<: *extents
     zoom_min: 19
@@ -742,13 +788,13 @@ Layer:
 
 
   - id: placenames-capital
+    class: placenames
     <<: *extents
     zoom_min: 4
     Datasource:
       <<: *osm2pgsql
       table: " /* placenames-capital */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way ,place,coalesce(tags->'name:fr',tags->'int_name',name) as name, replace(replace(replace(coalesce(tags->'short_name:fr', tags->'name:fr', tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-') as nom, to_int(population) as pop, coalesce(tags->'is_capital', (case when coalesce(admin_level, capital)='2' then 'country' when tags->'importance'='international' then 'state' when coalesce(admin_level, capital)='4' then 'state' when tags->'importance'='national' then 'state' else null end) ) as is_capital, array_length(hstore_to_array(tags),1)/2 as nbtags  FROM planet_osm_point  WHERE  way && !bbox! and place is not null and (capital is not null or tags ? 'is_capital') and (capital is not null or tags ? 'is_capital') and place in ('city','town') and (tags->'is_capital' in ('country','state') or capital in ('2','3','4','5','6','7') or (capital='yes' and admin_level in ('2','3','4','5','6','7')) or tags->'importance' in ('international','national') or array_length(hstore_to_array(tags),1)/2>20) order by is_capital, coalesce(admin_level, capital,'9'), place, pop desc ) as placenames"
 
-    class: placenames
 
   - id: placenames-islands
     <<: *extents
@@ -759,45 +805,50 @@ Layer:
 
 
   - id: placenames-large
+    class: country state
+    zoom_min: 2
     <<: *extents
     Datasource:
       <<: *osm2pgsql
       table: " /* placenames-large */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'short_name:fr',tags->'name:fr',tags->'short_name',tags->'int_name',name) as name, osm_id, to_int(population) as pop, ref,0 as way_area  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place  in ('country','state','continent') and NOT tags ? 'disused:admin_level' order by place, pop desc ) as placenames"
 
-    class: country state
 
   - id: placenames-medium
+    class: placenames
+    zoom_min: 4
     <<: *extents
     Datasource:
       <<: *osm2pgsql
       table: " /* placenames-medium */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, replace(replace(replace(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-') as nom, to_int(population) as pop, tags->'is_capital' as is_capital, 0 as nbtags  FROM  planet_osm_point       WHERE  way && !bbox! and place is not null and place in ('city','town') order by coalesce(admin_level, capital,'9'), place, pop desc ) as placenames"
 
-    class: placenames
 
   - id: placenames-small
     <<: *extents
+    zoom_min: 11
     Datasource:
       <<: *osm2pgsql
       table: " /* placenames-small */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, regexp_replace(regexp_replace(replace(replace(replace(replace(replace(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-'),'Lotissement ','Lot. '),'Résidence ','Rés. '),'^Place ','Pl. '),'^Pointe ','Pᵗᵉ ') as nom, to_int(population) as pop  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm') order by pop desc     ) as placenames"
 
 
   - id: stations-poly
+    class: stations
     <<: *extents
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
       table: " /* stations-poly */ (select way,coalesce(tags->'name:fr',tags->'int_name',tags->'int_name',name) as name,railway,aerialway,disused,highway, amenity, coalesce(tags->'type:RATP','') as type_ratp, operator, '' as l_operator, '' as l_type, '' as l_ref1, tags->'network' as network, case when railway='station' then 2  when railway='halt' then 1  else 0 end as prio, coalesce(tags->'usage','') as usage, coalesce(tags->'ele',tags->'ele:local','') as ele       from planet_osm_polygon      where railway in ('station','halt','tram_stop')         or aerialway='station'     order by prio desc ) as stations"
+      simplify_geometries: 'true'
 
-    class: stations
 
   - id: stations
+    class: stations
     <<: *extents
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
       table: " /* stations */ (select s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.railway as railway,s.aerialway as aerialway,s.disused as disused ,case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator , l.route as l_type, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network, coalesce(s.tags->'type:RATP', case when s.railway='station' then '5'  when s.railway='halt' then '4' when s.railway='tram_stop' then '3' when s.amenity='bus_station' then '2' when s.amenity='bus_stop' then '1' else '0' end) as prio, coalesce(s.tags->'usage','') as usage, coalesce(s.ele,s.tags->'ele:local','') as ele  from planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  where s.way && !bbox! and (s.railway in ('station','halt','tram_stop','subway_entrance') or s.aerialway='station'  or s.amenity='bus_station') order by prio desc, l_operator desc ) as stations"
+      simplify_geometries: 'true'
 
-    class: stations
 
   - id: bus-stops-lz
     <<: *extents
@@ -805,6 +856,7 @@ Layer:
     Datasource:
       <<: *osm2pgsql
       table: " /* bus-stops-lz */ (select st_centroid(cluster) as way, ST_NumGeometries(cluster) as count from (select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster from (select way from planet_osm_point where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes')) UNION select way from planet_osm_polygon where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes'))) as bus) as clusters) as bus_stops_lz"
+
 
   - id: bus-stops
     <<: *extents
@@ -815,6 +867,7 @@ Layer:
 
 
   - id: amenity-symbols
+    class: symbols
     <<: *extents
     zoom_min: 10
     Datasource:
