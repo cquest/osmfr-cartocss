@@ -600,7 +600,7 @@
 
 }
 
-#minor-roads-fill::construction {
+#minor-roads-fill::construction [zoom >= 12]{
   [highway = 'proposed'],
   [highway = 'construction'] {
     line-width: 2;
