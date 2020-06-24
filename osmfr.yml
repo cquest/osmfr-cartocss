@@ -338,7 +338,7 @@ Layer:
     zoom_min: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* golf */ (select way, geo, golf, ref, name, case when golf='rough' then 5 when golf='fairway' then 10  when golf='green' then 20  when golf='bunker' then 30 when golf in ('water_hazard','lateral_water_hazard') then 35 else 40 end as prio from (select way,tags->'golf' as golf, name, ref, way_area, 'polygon' as geo from planet_osm_polygon where tags ? 'golf' AND way && !bbox!  and way_area > !pixel_width!*!pixel_height!*10 UNION select p.way,p.tags->'golf' as golf, p.name, coalesce(p.ref,l.ref) as ref, 0 as way_area, 'point' as geo from planet_osm_point p LEFT JOIN planet_osm_line l ON (ST_Intersects(p.way, l.way) AND l.tags ? 'golf') where p.tags ? 'golf' AND p.way && !bbox! UNION select way,tags->'golf' as golf, name, ref, 0 as way_area, 'line' as geo from planet_osm_line where tags ? 'golf' AND way && !bbox!) as golf order by prio) as golf"
+      table: " /* golf */ (select way, geo, golf, ref, name, case when golf='rough' then 5 when golf='fairway' then 10  when golf='green' then 20  when golf='bunker' then 30 when golf in ('water_hazard','lateral_water_hazard') then 35 else 40 end as prio from (select way,tags->'golf' as golf, name, ref, way_area, 'polygon' as geo from planet_osm_polygon where tags ? 'golf' AND way && !bbox!  and way_area > !pixel_width!*!pixel_height!*10 UNION select p.way,p.tags->'golf' as golf, p.name, coalesce(p.ref,l.ref) as ref, 0 as way_area, 'point' as geo from planet_osm_point p LEFT JOIN planet_osm_line l ON (l.way && !bbox! AND ST_Intersects(p.way, l.way) AND l.tags ? 'golf') where p.tags ? 'golf' AND p.way && !bbox! UNION select way,tags->'golf' as golf, name, ref, 0 as way_area, 'line' as geo from planet_osm_line where tags ? 'golf' AND way && !bbox!) as golf order by prio) as golf"
 
 
   - id: ski
@@ -371,7 +371,7 @@ Layer:
     zoom_min: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on st_dwithin(l.way, p.way,0.1) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circles_casing"
+      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on (l.way && !bbox! AND st_dwithin(l.way, p.way,0.1)) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circles_casing"
 
 
   - id: cliffs
@@ -498,7 +498,7 @@ Layer:
     zoom_min: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on st_dwithin(l.way, p.way,0.1) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circle_fill"
+      table: " /* turning-circle-fill/casing */ (select p.way, substring(max(prio),3) as int_tc_type, max(prio) from planet_osm_point p join planet_osm_line l on (l.way && !bbox! AND st_dwithin(l.way, p.way,0.1)) join (values ('tertiary','1_tertiary'), ('unclassified','2_unclassified'), ('residential','3_residential'), ('living_street','4_living_street'), ('service','5_service') ) as v (highway,prio) on v.highway=l.highway where l.highway is not null and p.highway in ('turning_circle','turning_loop') and p.way && !bbox! group by p.way order by 3) as turning_circle_fill"
 
 
   - id: ferry-routes
@@ -758,7 +758,7 @@ Layer:
                   coalesce(p.tags->'wheelchair',p.tags->'sloped_curb') as wheelchair
                 FROM planet_osm_point as p
                 JOIN planet_osm_line h
-                  ON (st_intersects(p.way,h.way) and h.highway is not null and h.highway not in ('footway','cycleway','path','pedestrian','steps','service'))
+                  ON (h.way && !bbox! AND st_intersects(p.way,h.way) and h.highway is not null and h.highway not in ('footway','cycleway','path','pedestrian','steps','service'))
                 WHERE (p.highway='crossing' or p.tags ? 'crossing') and p.way && !bbox! and h.way && !bbox!
               ) as p
               WHERE ST_GeometryType(way1)='ST_LineString') as p) as crossing
@@ -1064,7 +1064,8 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* area-text */ (SELECT  p.osm_id, coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind, p.tags->'heritage' as heritage, p.way_area, round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_Centroid(p.way) as way, coalesce(p.tags->'name:fr',p.name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom  FROM  planet_osm_polygon p  LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && p.way)  WHERE  p.way && !bbox! AND n.place is null AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p.\"natural\", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome') AND coalesce(p.power, p.place, p.shop) IS null AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo') and (p.admin_level is null or to_int(p.admin_level)>=8) and p.way_area / (!pixel_width!*!pixel_height!) > 1000  ORDER BY  p.way_area DESC) as text"
+      table: " /* area-text */ (SELECT  p.osm_id, coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind, p.tags->'heritage' as heritage, p.way_area, round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_Centroid(p.way) as way, coalesce(p.tags->'name:fr',p.name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom  FROM  planet_osm_polygon p  LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)  WHERE  p.way && !bbox! AND n.place is null AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p.\"natural\", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome') AND coalesce(p.power, p.place, p.shop) IS null AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo') and (p.admin_level is null or to_int(p.admin_level)>=8) and p.way_area / (!pixel_width!*!pixel_height!) > 1000  ORDER BY  p.way_area DESC) as text"
+      simplify_geometries: 'true'
 
 
   - id: text-poly-lz
