@@ -676,7 +676,7 @@
 	  [aeroway = 'aerodrome'][aerodrome = 'airport'],
 	  [aeroway = 'aerodrome'][aerodrome = 'continental'],
 	  [aerodrome =~ '(military|airfield)'],
-    [military = 'airfield'],
+    [aeroway = 'airfield'],
 	  [aeroway = 'airport'] {
       [zoom>=11] {
   			text-dy: -12;
@@ -687,7 +687,7 @@
   			text-placement: interior;
   			text-face-name: @bold-fonts;
         text-wrap-width: 40;
-  			[military = 'airfield'],
+  			[aeroway = 'airfield'],
         [aerodrome =~ '(military|airfield)'] {
           text-fill: black;
           text-face-name: @book-fonts;
@@ -711,14 +711,14 @@
     		[zoom>=12] {
     			text-size: 9;
     			text-face-name: @oblique-fonts;
-          [military = 'airfield'],
+          [aeroway = 'airfield'],
           [aerodrome =~ '(military|airfield)'] {
             text-fill: black;
             text-face-name: @book-fonts;
           }
     		}
   	  }
-      [military = 'airfield'],
+      [aeroway = 'airfield'],
       [aerodrome =~ '(military|airfield)'] {
         point-file: url('symbols/airport-red.svg');
       }
@@ -804,13 +804,11 @@
 
     [highway = 'gate'],
     [barrier = 'gate'] {
-      [zoom >= 15] {
-        point-file: url('symbols/gate2.png');
-        point-placement: interior;
-      }
+      point-file: url('symbols/gate2.png');
+      point-placement: interior;
     }
 
-    [barrier = 'toll_booth'][zoom >= 15],
+    [barrier = 'toll_booth'],
     [barrier = 'lift_gate'][zoom >= 16] {
       point-file: url('symbols/lift_gate.svg');
       point-placement: interior;
@@ -1427,7 +1425,7 @@
     }
  }
 
- [military = 'danger_area'][zoom >= 12]::military {
+ [aeroway = 'danger_area'][zoom >= 12]::military {
    text-name: "[name]";
    text-size: 9;
    text-fill: pink;
