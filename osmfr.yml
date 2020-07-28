@@ -134,7 +134,7 @@ Layer:
                 OR building in ('civic','public')
               )
               and way && !bbox!
-              and way_area > !pixel_width!*!pixel_height!/2
+              and way_area > !pixel_width!*!pixel_height!
             ORDER BY z_order,way_area desc) as landcover ) as features
 
   - id: landcover-line
