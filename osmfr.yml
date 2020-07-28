@@ -189,7 +189,22 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* minor-roads-fill-tunnels */ (
-          SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,oneway,junction,toll, coalesce(highway,aeroway) as highway, horse,bicycle,foot,construction,coalesce(tags->'footway','') as footway,  case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge, case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway, case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service, tracktype, case  when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)  when (z_order<10 and z_order>3 and highway='tertiary') then 5 else z_order end as zz_order
+          SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,
+            oneway,
+            junction,
+            toll,
+            coalesce(highway,aeroway) as highway,
+            horse,
+            bicycle,
+            foot,
+            construction,
+            coalesce(tags->'footway','') as footway,
+            case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel,
+            case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge,
+            case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway,
+            case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service,
+            tracktype,
+            case  when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)  when (z_order<10 and z_order>3 and highway='tertiary') then 5 else z_order end as zz_order
           FROM planet_osm_line
           WHERE way && !bbox!
             AND ST_Length(way) > !pixel_width! * 4
@@ -361,7 +376,14 @@ Layer:
     zoom_min: 12
     Datasource:
       <<: *osm2pgsql
-      table: " /* piers-area */ (select way,man_made from planet_osm_polygon where man_made in ('pier','breakwater','groyne') and way_area > !pixel_width!*!pixel_height!*10 ) as piers"
+      table: >-
+        /* piers-area */ (
+          select way,
+            man_made
+          from planet_osm_polygon
+          where man_made in ('pier','breakwater','groyne')
+            and way_area > !pixel_width!*!pixel_height!*10
+        ) as piers_area
 
 
   - id: piers
@@ -369,7 +391,13 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* piers */ (select way,man_made from planet_osm_line where man_made in ('pier','breakwater','groyne') AND ST_Length(way) > !pixel_width!) as piers"
+      table: >-
+        /* piers */ (
+          select way,
+            man_made
+          from planet_osm_line
+          where man_made in ('pier','breakwater','groyne')
+            AND ST_Length(way) > !pixel_width!) as piers
 
 
   - id: locks
@@ -385,7 +413,16 @@ Layer:
     zoom_min: 10
     Datasource:
       <<: *osm2pgsql
-      table: " /* sports-grounds */ (select way,leisure, case when leisure='pitch' then 2 when leisure='track' then 1 else 0 end as prio from planet_osm_polygon where leisure in ('sports_centre','stadium','pitch','track')  and way_area > !pixel_width!*!pixel_height!*10 order by z_order,prio,way_area desc ) as sports_grounds"
+      table: >-
+        /* sports-grounds */ (
+          select way,
+            leisure,
+            case when leisure='pitch' then 2 when leisure='track' then 1 else 0 end as prio
+          from planet_osm_polygon
+          where leisure in ('sports_centre','stadium','pitch','track')
+            and way_area > !pixel_width!*!pixel_height!*10
+          order by z_order,prio,way_area desc
+        ) as sports_grounds
 
 
   - id: sports
@@ -509,7 +546,10 @@ Layer:
           case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service
         FROM planet_osm_line
         WHERE coalesce(tunnel,covered,'') not in ('yes','true','1')
-          AND (highway in ('motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link','residential','unclassified','road','service','pedestrian','raceway','living_street','platform')
+          AND (highway in ('motorway','motorway_link','trunk','trunk_link',
+                           'primary','primary_link','secondary','secondary_link','tertiary','tertiary_link',
+                           'residential','unclassified','road','service',
+                           'pedestrian','raceway','living_street','platform')
             OR railway='platform')
           AND route is null
           AND st_length(way) > !pixel_width!
@@ -586,19 +626,19 @@ Layer:
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* minor-roads-fill */ (SELECT  way, oneway, junction, toll, horse, bicycle, foot, tracktype, access, construction,
-          tags->'level' as level,
+        /* minor-roads-fill */ (SELECT  way, construction, junction, horse, foot, bicycle, access, tracktype,
           coalesce(highway, aeroway) as highway,
+          tags->'level' as level,
+          case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service,
+          case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway,
           coalesce(tags->'footway', '') as footway,
           case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge,
-          case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway,
-          case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service,
-          case  when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)
+          case when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)
             when (z_order<10 and z_order>3 and highway='tertiary') then 5
             else z_order end as zz_order
         FROM planet_osm_line
         WHERE coalesce(tunnel,covered,'') not in ('yes','true','1')
-          AND  (highway is not null
+          AND  ((highway is not null AND NOT (highway in ('service','footway','path','track','pedestrian','byway','cycleway','unsurfaced') AND !pixel_width! > 100 /* zoom 14 */))
             OR aeroway in ('runway','taxiway','taxipath','parking_position')
             OR railway in ('light_rail','narrow_gauge','funicular','rail','subway','tram','spur','siding','platform','disused','abandoned','construction','miniature','turntable'))
           AND route is null
@@ -943,7 +983,27 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* admin-boundaries */ (SELECT ST_Simplify(way,!pixel_width!/4) as way, admin_level, coalesce(b.tags->'maritime','no') as maritime, count(r.*) as nb  FROM  planet_osm_roads b LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[osm_id] AND r.members @> ARRAY['w' || osm_id] AND regexp_replace(r.tags::text,'[{}]',',') ~ format(',admin_level,%s,',admin_level) AND regexp_replace(r.tags::text,'[{}]',',') ~ ',boundary,administrative,')  WHERE  way && !bbox! AND boundary='administrative' and admin_level is not null GROUP BY 1,2,3 ORDER BY to_int(admin_level) desc, 4 ) as admin_boundaries"
+      table: >-
+        /* admin-boundaries */ (
+          SELECT way,
+            admin_level,
+            coalesce(b.tags->'maritime','no') as maritime,
+            count(r.*) as nb
+          FROM planet_osm_roads b
+          LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[osm_id]
+            AND r.members @> ARRAY['w' || osm_id]
+            AND r.tags @> ARRAY['boundary','administrative','admin_level'])
+            AND regexp_replace(r.tags::text,'[{}]',',') ~ format(',admin_level,%s,',admin_level)
+          WHERE way && !bbox!
+            AND boundary='administrative'
+            AND admin_level is not null
+            AND (to_int(admin_level) <= 6
+              OR (to_int(admin_level) <= 9 AND !pixel_width! < 400)
+              OR (!pixel_width! < 50))
+          GROUP BY 1,2,3
+          ORDER BY to_int(admin_level) desc, 4
+        ) as admin_boundaries
+      simplify_geometries: 'true'
 
 
   - id: placenames-capital
@@ -1014,8 +1074,9 @@ Layer:
             coalesce(tags->'usage','') as usage,
             coalesce(tags->'ele',tags->'ele:local','') as ele
           from planet_osm_polygon
-          where railway in ('station','halt','tram_stop')
-            or aerialway='station'
+          where (railway is not null or aeroway is not null)
+            and (railway in ('station','halt','tram_stop')
+              or aerialway='station')
           order by prio desc
         ) as stations
       simplify_geometries: 'true'
@@ -1124,36 +1185,47 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* amenity-symbols */ (
-        SELECT
-          way, aeroway, military, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+        SELECT way,
+          coalesce(aeroway, military) as aeroway,
+          man_made,
+          railway,
+          "natural",
+          power,
+          coalesce(power_source, "generator:source") as power_source,
+          highway,
+          barrier,
+          tags->'mountain_pass' as mountain_pass,
+          coalesce(tags->'aerodrome', p.military) as aerodrome,
           fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
         FROM planet_osm_point p
-        WHERE aeroway in ('airport','aerodrome','helipad','military')
-          OR p.military='airfield'
-          OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
-          OR highway in ('mini_roundabout','gate')
+        WHERE (aeroway in ('airport','aerodrome','helipad','military')
+          OR military='airfield'
+          OR (barrier in ('bollard','gate','lift_gate','block','toll_booth') AND !pixel_width! < 50 /* zoom >= 15 */)
+          OR (highway in ('mini_roundabout','gate') AND !pixel_width! < 50)
           OR man_made in ('lighthouse','power_wind','windmill','mast')
           OR power in ('sub_station','substation','plant')
           OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
           OR "natural" in ('peak','volcano','spring','cave_entrance')
           OR tags ? 'mountain_pass'
-          OR railway in ('level_crossing','buffer_stop')
+          OR (railway in ('level_crossing') AND !pixel_width! < 50 /* zoom >= 15 */)
+          OR (railway in ('crossing', 'buffer_stop') AND !pixel_width! < 12 /* zoom >= 17 */))
+          AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass')
         UNION
         SELECT
-          way, aeroway, military, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
           fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
         FROM planet_osm_polygon p
         WHERE (aeroway in ('airport','aerodrome','helipad','military')
-          OR p.military='airfield'
+          OR military='airfield'
           OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
           OR highway in ('mini_roundabout','gate')
           OR man_made in ('lighthouse','power_wind','windmill','mast')
           OR power in ('sub_station','substation','plant')
           OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
           OR "natural" in ('peak','volcano','spring','cave_entrance')
-          OR tags ? 'mountain_pass'
-          OR railway in ('level_crossing','buffer_stop'))
+          OR tags ? 'mountain_pass')
           AND way_area > !pixel_width!*!pixel_height!*10
+          AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass') /* index */
         ) as amenity_symbols
       simplify_geometries: 'true'
 
@@ -1183,6 +1255,7 @@ Layer:
           OR ((!scale_denominator! < 4500
             and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null))
           ) AND way_area > !pixel_width!*!pixel_height!*10)
+          AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass')
         UNION
         SELECT
           way,amenity,shop,tourism,highway,man_made,access,religion,waterway,lock,historic,leisure,power,operator, coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor, to_int(tags->'level') as level, tags->'network' as network, tags->'ref:FR:LaPoste' as ref_laposte, coalesce(tags->'emergency', tags->'medical')  as emergency, tags->'conveying' as conveying, tags->'incline' as incline, tags->'fuel:lpg' as lpg , tags->'heritage' as heritage, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, substring('******',1,to_int(tags->'stars')::integer) as stars, tags->'parking' as parking, 0 as way_area, name, ref, tags->'organic' as organic, office, p.tags->'craft' as craft, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,  case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
@@ -1378,7 +1451,7 @@ Layer:
             osm_id,
             coalesce(tags->'name:fr',tags->'int_name',name) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
-            leisure, "natural", place, tourism,
+            leisure, "natural", place, tourism, aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
             military,
@@ -1401,8 +1474,8 @@ Layer:
             osm_id,
             coalesce(tags->'name:fr',tags->'int_name',name) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
-            leisure, "natural", place, tourism,
-            coalesce(ele,tags->'ele:local','') as ele,
+            leisure, "natural", place, tourism, aeroway,
+            coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
             military,
             'yes'::text as point,
