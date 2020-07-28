@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 import json
 import time
 import sys
@@ -5,7 +7,10 @@ import sys
 import yaml
 import psycopg2
 
-zoom = 16
+if len(sys.argv)>2:
+    zoom = int(sys.argv[2])
+else:
+    zoom = 16
 lon = 2.35
 lat = 48.85
 scale = int(559082264 / (2 ** zoom))
@@ -30,13 +35,14 @@ req_max = 0
 req = ''
 layers = 0
 
+print("time,objects,layer,columns")
 for l in yml['Layer']:
-    if (('status' not in l or l['status'])
+    if (('status' not in l or l['status'] != 'off')
         and ('properties' not in l or 'minzoom' not in l['properties'] or zoom >= l['properties']['minzoom'])
         and ('properties' not in l or 'maxzoom' not in l['properties'] or zoom <= l['properties']['maxzoom'])
         and ('zoom_min' not in l or zoom >= l['zoom_min'])
         and ('zoom_max' not in l or zoom <= l['zoom_max'])):
-        if 'table' in l['Datasource'] and (len(sys.argv) == 2 or l['id'] == sys.argv[2]):
+        if 'table' in l['Datasource'] and (len(sys.argv) == 3 or l['id'] == sys.argv[3]):
             layers = layers + 1
             sql = l['Datasource']['table']
             sql = sql.replace('!bbox!', bbox)
@@ -53,7 +59,7 @@ for l in yml['Layer']:
                 req = sql
                 req_max = time.time()-start
             objets = objets + db.rowcount
-print("TOTAL: %s layers in %sms with %s objets" % (layers, int(temps*1000), objets))
+print("zoom %s: %s layers in %sms with %s objets" % (zoom, layers, int(temps*1000), objets))
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 3:
     print(req)
