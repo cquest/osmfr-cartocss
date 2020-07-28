@@ -98,7 +98,7 @@ Layer:
       table: >-
         /* landcover */ (
           SELECT  ST_Snaptogrid(way,!pixel_width!/4) as way,
-            religion, wood,
+            wood,
             coalesce (aeroway, amenity, wetland, landuse, leisure, military,
             "natural", power, tourism, highway, man_made, building) as feature
           FROM (
@@ -114,8 +114,7 @@ Layer:
               ('tourism_' || (case when  tourism in ('attraction', 'camp_site', 'caravan_site', 'picnic_site', 'zoo', 'museum') then tourism else null end)) as tourism,
               ('highway_' || (case when highway in ('services', 'rest_area') then highway else null end)) as highway,
               ('man_made_' || (case when man_made is not null then man_made else null end)) as man_made,
-              ('building_' || (case when building in ('civic','public') then building else null end)) as building,
-              case when religion in ('christian','jewish') then religion else 'INT-generic'::text end as religion
+              ('building_' || (case when building in ('civic','public') then building else null end)) as building
             FROM planet_osm_polygon
             WHERE  (landuse is not null
                 OR wetland is not null
