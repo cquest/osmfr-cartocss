@@ -50,6 +50,8 @@ for l in yml['Layer']:
             sql = sql.replace('!pixel_height!', str(pixel_width))
             sql = sql.replace('!scale_denominator!', str(scale))
             sql = "SELECT * FROM " + sql + " where way && "+bbox
+            if len(sys.argv) > 3:
+                print(sql)
             start = time.time()
             db.execute(sql)
             rows = db.fetchall()
@@ -60,6 +62,3 @@ for l in yml['Layer']:
                 req_max = time.time()-start
             objets = objets + db.rowcount
 print("zoom %s: %s layers in %sms with %s objets" % (zoom, layers, int(temps*1000), objets))
-
-if len(sys.argv) > 3:
-    print(req)
