@@ -785,7 +785,7 @@ Layer:
                 case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway end as railway,
                 case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service
         FROM planet_osm_line
-        WHERE way && !bbox!
+        WHERE way && !bbox! AND ST_length(way) > !pixel_width!*8
           AND bridge in ('yes','true','1','viaduct')
           AND (layer is null or layer ='0')
           AND (highway is not null or aeroway in ('runway','taxiway','taxipath','parking_position')
@@ -815,7 +815,7 @@ Layer:
         end as railway,  case when service in
         ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
         'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND bridge in ('yes','true','1','viaduct')  AND layer ='1'  AND
+        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='1'  AND
         (highway is not null or aeroway in
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
@@ -842,7 +842,7 @@ Layer:
         end as railway,  case when service in
         ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
         'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND bridge in ('yes','true','1','viaduct')  AND layer ='2'  AND
+        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='2'  AND
         (highway is not null or aeroway in
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
@@ -869,7 +869,7 @@ Layer:
         end as railway,  case when service in
         ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
         'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND bridge in ('yes','true','1','viaduct')  AND layer ='3'  AND
+        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='3'  AND
         (highway is not null or aeroway in
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
@@ -896,7 +896,7 @@ Layer:
         end as railway,  case when service in
         ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
         'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND bridge in ('yes','true','1','viaduct')  AND layer ='4'  AND
+        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='4'  AND
         (highway is not null or aeroway in
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
@@ -923,7 +923,7 @@ Layer:
         end as railway,  case when service in
         ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
         'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND bridge in ('yes','true','1','viaduct')  AND layer ='5'  AND
+        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='5'  AND
         (highway is not null or aeroway in
         ('runway','taxiway','taxipath','parking_position') or railway in
         ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
