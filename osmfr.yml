@@ -1275,26 +1275,26 @@ Layer:
         )
         ORDER BY prio desc, way_area desc ) as points
 
-    class: points
-
 
   - id: entrance
     <<: *extents
     zoom_min: 17
     Datasource:
       <<: *osm2pgsql
-      table: " /* entrance */ (SELECT
-        p.way,
-        fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
-        p.ref,
-        coalesce(p.tags->'indoor',case when to_int(p.tags->'level')<0 then 'yes'::text when p.tags->'location'='underground' then 'yes'::text else null end) as indoor,
-        to_int(p.tags->'level') as level,
-        max((w.tags @> ARRAY['building'])::integer) as building_entrance,
-        max((w.tags @> ARRAY['room'])::integer) as room_entrance
-      FROM planet_osm_point p
-      LEFT JOIN planet_osm_ways w ON (w.nodes @> ARRAY[p.osm_id])
-      WHERE p.tags ? 'entrance'
-      GROUP BY p.way, p.tags, p.name, p.ref) as entrance"
+      table: >-
+        /* entrance */ (
+          SELECT
+            p.way,
+            fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+            p.ref,
+            coalesce(p.tags->'indoor',case when to_int(p.tags->'level')<0 then 'yes'::text when p.tags->'location'='underground' then 'yes'::text else null end) as indoor,
+            to_int(p.tags->'level') as level
+          FROM planet_osm_point p
+          LEFT JOIN planet_osm_polygon w ON (ST_Intersects(w.way, p.way) AND NOT ST_Covers(w.way, p.way) AND (p.building is not null))
+          WHERE w.way && !bbox! AND p.way && !bbox!
+            AND p.tags ? 'entrance'
+          GROUP BY p.way, p.tags, p.name, p.ref
+        ) as entrance
 
 
   - id: power-line

@@ -636,7 +636,6 @@
 }
 
 #entrance [zoom >= 17] {
-  [building_entrance=0][room_entrance=1] { marker-width: 0; }
   marker-fill: grey;
   marker-width: 2;
   marker-line-width: 0;
