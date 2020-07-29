@@ -190,7 +190,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* minor-roads-fill-tunnels */ (
-          SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,
+          SELECT way,
             oneway,
             junction,
             toll,
@@ -427,6 +427,7 @@ Layer:
             and way_area > !pixel_width!*!pixel_height!*10
           order by z_order,prio,way_area desc
         ) as sports_grounds
+      simplify_geometries: 'true'
 
 
   - id: sports
