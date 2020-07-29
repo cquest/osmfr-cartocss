@@ -47632,67 +47632,67 @@ FROM planet_osm_point p WHERE (
   <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <Filter>([highway] = 'parking_position')</Filter>
-    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <Filter>([highway] = 'taxipath')</Filter>
-    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'motorway') and ([length] = 8)</Filter>
-    <ShieldSymbolizer file="symbols/mot_shield7.png" size="10" fill="#ffffff" placement="line" repeat-distance="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer file="symbols/mot_shield7.png" size="10" fill="#ffffff" placement="line" repeat-distance="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'motorway') and ([length] = 7)</Filter>
-    <ShieldSymbolizer file="symbols/mot_shield6.png" size="10" fill="#ffffff" placement="line" repeat-distance="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer file="symbols/mot_shield6.png" size="10" fill="#ffffff" placement="line" repeat-distance="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <Filter>([highway] = 'taxiway')</Filter>
-    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <Filter>([highway] = 'runway')</Filter>
-    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#333333" placement="line" fontset-name="fontset-0" halo-radius="1" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <Filter>([highway] = 'residential')</Filter>
-    <TextSymbolizer size="10" fill="#000000" fontset-name="fontset-3" halo-radius="2" halo-fill="rgba(255, 255, 255, 0.7)" repeat-distance="256" placement="line" dy="8"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#000000" fontset-name="fontset-3" halo-radius="2" halo-fill="rgba(255, 255, 255, 0.7)" repeat-distance="256" placement="line" dy="8" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <Filter>([highway] = 'unclassified')</Filter>
-    <TextSymbolizer size="10" fill="#000000" fontset-name="fontset-3" halo-radius="2" halo-fill="rgba(255, 255, 255, 0.7)" repeat-distance="256" placement="line" dy="8"><![CDATA[[ref]]]></TextSymbolizer>
+    <TextSymbolizer size="10" fill="#000000" fontset-name="fontset-3" halo-radius="2" halo-fill="rgba(255, 255, 255, 0.7)" repeat-distance="256" placement="line" dy="8" avoid-edges="true" clip="true"><![CDATA[[ref]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'motorway') and ([length] &lt; 9)</Filter>
-    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/mot_shield[length].png" repeat-distance="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/mot_shield[length].png" repeat-distance="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'tertiary')</Filter>
-    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/ter_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/ter_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'secondary')</Filter>
-    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/sec_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/sec_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'primary')</Filter>
-    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/pri_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/pri_shield[length].png" spacing="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([highway] = 'trunk')</Filter>
-    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/tru_shield[length].png" repeat-distance="256" fontset-name="fontset-3" margin="20"><![CDATA[[ref]]]></ShieldSymbolizer>
+    <ShieldSymbolizer size="10" fill="#ffffff" placement="line" file="symbols/tru_shield[length].png" repeat-distance="256" fontset-name="fontset-3" margin="20" avoid-edges="true" clip="true"><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
 </Style>
 <Layer name="roads-text-ref"
@@ -47711,7 +47711,7 @@ FROM planet_osm_point p WHERE (
        <Parameter name="asynchronous_request"><![CDATA[false]]></Parameter>
        <Parameter name="max_async_connection"><![CDATA[1]]></Parameter>
        <Parameter name="table"><![CDATA[/* roads-text-ref */ (
-  SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,30),st_linemerge(st_collect(way))) as way,
+  SELECT st_linemerge(st_collect(way)) as way,
     junction,
     coalesce(highway,aeroway) as highway,
     ref,
