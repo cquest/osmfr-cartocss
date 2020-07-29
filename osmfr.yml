@@ -951,21 +951,20 @@ Layer:
           ) as highway_crossings
 
 
-  - id: trams
+  - id: trams_guideways
     <<: *extents
     zoom_min: 13
     Datasource:
       <<: *osm2pgsql
-      table: " /* trams */ (select way,railway,bridge from planet_osm_line where railway='tram' and (tunnel is null and covered is null or coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))) as trams"
-      simplify_geometries: 'true'
-
-
-  - id: guideways
-    <<: *extents
-    zoom_min: 13
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* guideways */ (select way from planet_osm_line where highway='bus_guideway' and (tunnel is null and covered is null or coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))) as guideways"
+      table: >-
+        /* trams */ (
+          select way,
+            coalesce(railway,highway) as type,
+            bridge
+          from planet_osm_line
+          where (railway='tram' or highway='bus_guideway')
+            and (tunnel is null and covered is null or coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))
+        ) as trams
       simplify_geometries: 'true'
 
 
