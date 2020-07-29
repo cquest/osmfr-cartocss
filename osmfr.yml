@@ -1421,7 +1421,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* roads-text-ref */ (
-          SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,30),st_linemerge(st_collect(way))) as way,
+          SELECT st_linemerge(st_collect(way)) as way,
             junction,
             coalesce(highway,aeroway) as highway,
             ref,
