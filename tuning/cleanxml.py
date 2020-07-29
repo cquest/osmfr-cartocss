@@ -30,4 +30,4 @@ for l in xml:
     if state == 0 and l != '':
         print(l[:-1])
 
-print('<!-- %s bad filters (rules removed), %s rules kept -->' %(nb_bad, nb_ok))
+print('><!-- %s bad filters (rules removed), %s rules kept -->' %(nb_bad, nb_ok))
