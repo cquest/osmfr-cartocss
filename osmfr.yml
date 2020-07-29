@@ -167,7 +167,8 @@ Layer:
 
   - id: footbikecycle-tunnels
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -250,7 +251,8 @@ Layer:
 
   - id: water-lines-casing
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -267,7 +269,8 @@ Layer:
 
   - id: water-lines-low-zoom
     <<: *extents
-    zoom_min: 8
+    properties:
+      minzoom: 8
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -283,7 +286,8 @@ Layer:
 
   - id: water-areas
     <<: *extents
-    zoom_min: 8
+    properties:
+      minzoom: 8
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -506,7 +510,8 @@ Layer:
 
   - id: cliffs
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
       table: " /* cliffs */ (select way,\"natural\",man_made, junction from planet_osm_line where \"natural\" = 'cliff' or man_made = 'embankment') as roads"
@@ -515,7 +520,8 @@ Layer:
   - id: area-barriers
     class: barriers
     <<: *extents
-    zoom_min: 16
+    properties:
+      minzoom: 16
     Datasource:
       <<: *osm2pgsql
       table: " /* area-barriers */ (select way,barrier,\"natural\" from planet_osm_polygon where barrier is not null or \"natural\"='hedge') as barriers"
@@ -524,7 +530,8 @@ Layer:
   - id: highway-area-casing
     status: off
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: " /* highway-area-casing */ (SELECT way,highway,railway,toll,coalesce(tags->'footway','') as footway, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, junction FROM planet_osm_polygon WHERE (highway in ('residential','unclassified','pedestrian','service','footway','track','path','platform','cycleway') OR railway='platform') ORDER BY z_order,way_area DESC) as highway_area_casing"
@@ -666,7 +673,8 @@ Layer:
 
   - id: aerialways
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: " /* aerialways */ (select way,aerialway,name from planet_osm_line where aerialway is not null) as aerialways"
@@ -685,7 +693,6 @@ Layer:
 
   - id: trees
     <<: *extents
-    zoom_min: 17
     properties:
       minzoom: 17
     Datasource:
@@ -1232,7 +1239,8 @@ Layer:
   - id: amenity-points
     class: points
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
