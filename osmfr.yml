@@ -1365,7 +1365,7 @@ Layer:
           SELECT *,
             fr_abbrev(coalesce(short_name, name)) as nom
           FROM (
-            SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,12),st_linemerge(st_collect(way))) as way,
+            SELECT st_linemerge(st_collect(way)) as way,
               highway,
               name,
               short_name,

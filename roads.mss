@@ -2496,6 +2496,9 @@
 
 #roads-text-name [zoom >= 13] {
   [zoom >= 15] {
+    // fixes #50
+    text-avoid-edges: true;
+
   	text-name: "[nom]";
   	text-size: 9;
   	text-fill: black;
