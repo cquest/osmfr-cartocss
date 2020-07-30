@@ -10,7 +10,7 @@
   }
 }
 
-#misc-boundaries [zoom >= 7] {
+#parks::national_park [park='national_park'][zoom >= 7] {
   [zoom < 13] {
     polygon-opacity: 0.05;
     polygon-fill: green;
@@ -35,15 +35,13 @@
   }
 }
 
-#theme-park [zoom >= 13] {
-  [tourism = 'theme_park'] {
-    line-color: #734a08;
-    line-width: 1.5;
-    line-dasharray: 9,3;
-    line-opacity: 0.6;
-    [zoom >= 15] {
-      line-width: 2.5;
-    }
+#parks::theme_park [park='theme_park'][zoom >= 13] {
+  line-color: #734a08;
+  line-width: 1.5;
+  line-dasharray: 9,3;
+  line-opacity: 0.6;
+  [zoom >= 15] {
+    line-width: 2.5;
   }
 }
 

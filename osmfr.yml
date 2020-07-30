@@ -1678,21 +1678,21 @@ Layer:
         ) as housenames
 
 
-  - id: misc-boundaries
+  - id: parks
     <<: *extents
     zoom_min: 7
     Datasource:
       <<: *osm2pgsql
-      table: " /* misc-boundaries */ (select way,way_area,coalesce(tags->'name:fr',tags->'int_name',name) as name,boundary from planet_osm_polygon where boundary='national_park' and building is null) as boundary"
-      simplify_geometries: 'true'
-
-
-  - id: theme-park
-    <<: *extents
-    zoom_min: 13
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* theme-park */ (select way,coalesce(tags->'name:fr',tags->'int_name',name) as name,tourism from planet_osm_polygon where tourism='theme_park') as theme_park"
+      table: >-
+        /* parks */ (
+          select way,
+            way_area,
+            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(boundary, tourism) as park
+          from planet_osm_polygon
+          where (boundary='national_park' or tourism='theme_park')
+            AND way_area > !pixel_width!*!pixel_height!*100
+        ) as boundary
       simplify_geometries: 'true'
 
 
