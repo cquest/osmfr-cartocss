@@ -1431,9 +1431,7 @@ Layer:
             AND (highway is not null
               OR aeroway is not null)
             AND ref is not null
-            AND (position('GR' in ref)!=1
-              AND position('G.R' in ref) !=1
-              AND position('G R ' in ref) !=1)
+            AND ref !~ '^(GR|G.R )'
             AND char_length(ref) between 1 and 8
             AND (tunnel is null and covered is null
               OR coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))
