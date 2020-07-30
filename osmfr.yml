@@ -1346,7 +1346,17 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* highway-junctions */ (select way,ref,coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr', name)) as nom, coalesce(highway, aeroway) as type  from planet_osm_point where highway='motorway_junction' ) as junctions"
+      table: >-
+        /* highway-junctions */ (
+          select way,
+            ref,
+            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr', name)) as nom,
+            coalesce(highway, aeroway) as type
+          from planet_osm_point
+          where highway='motorway_junction'
+            AND /* index poi */ COALESCE(aeroway, military, barrier, man_made, railway, "natural", power, shop, tourism, waterway, historic, leisure, highway) IS NOT NULL OR tags ? 'mountain_pass'::text
+        ) as junctions
 
 
   - id: crossroad_names
