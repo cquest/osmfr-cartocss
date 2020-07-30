@@ -580,14 +580,6 @@ Layer:
       table: " /* line-barriers */ (select way, barrier, junction from planet_osm_line where barrier is not null) as roads"
 
 
-  - id: buildings-lz
-    status: off
-    <<: *extents
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* buildings-lz */ (select ST_Simplify(way,!pixel_width!/4) as way ,building,railway,amenity,shop from planet_osm_polygon where (railway='station' or building in ('train_station','station','supermarket','civic','public') or amenity in ('place_of_worship', 'public_building','townhall','courthouse','police','post_office','theatre','community_centre','social_facility') or shop in ('mall','department_store')) and way_area < 2000000 and way_area > !pixel_width!*!pixel_height! and way && !bbox! order by z_order,way_area desc) as buildings"
-
-
   - id: buildings
     <<: *extents
     zoom_min: 14
