@@ -1454,7 +1454,6 @@ Layer:
   - id: text-poly-lz
     <<: *extents
     zoom_min: 12
-    zoom_max: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -1463,45 +1462,41 @@ Layer:
             osm_id,
             coalesce(tags->'name:fr',tags->'int_name',name) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
-            leisure, "natural", place, tourism, aeroway,
+            leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
-            military,
-            'no'::text as point,
             way_area,
-            NULL as way_len,
-            power,
-            null as office
+            power
           FROM planet_osm_polygon
           WHERE way && !bbox!
             AND COALESCE(name, tags -> 'name:fr'::text, tags -> 'int_name'::text, tags -> 'stars'::text, tags -> 'ele'::text, tags -> 'ele:local'::text, ref, tags -> 'school:FR'::text) IS NOT NULL
-            and (leisure is not null
-              or tourism is not null
+            and (leisure = 'golf_course'
               or place='island'
               or military='danger_area'
+              or aeroway = 'danger_area'
+              or "natural" in ('saddle','peak','volcano','bay')
+              or tourism in ('zoo','theme_park')
               or power in ('generator','substation','sub_station','plant'))
-            and way_area > !pixel_width!*!pixel_height!*10
+            and way_area > !pixel_width!*!pixel_height!*100
           UNION
           SELECT way,
             osm_id,
             coalesce(tags->'name:fr',tags->'int_name',name) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
-            leisure, "natural", place, tourism, aeroway,
+            leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
-            military,
-            'yes'::text as point,
             0 as way_area,
-            NULL as way_len,
-            power,
-            null as office
+            power
           FROM planet_osm_point
           WHERE way && !bbox!
             AND name is not null
-            and (leisure is not null
-              or tourism is not null
+            and (leisure = 'golf_course'
               or place='island'
               or military='danger_area'
+              or aeroway = 'danger_area'
+              or "natural" in ('saddle','peak','volcano','bay')
+              or tourism in ('zoo','theme_park')
               or power in ('generator','substation','sub_station','plant'))
           order by way_area desc
         ) as text
