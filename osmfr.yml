@@ -1604,7 +1604,7 @@ Layer:
       table: >-
         /* admin-boundaries-text */ (
         SELECT
-          ST_Simplify(ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom),!pixel_width!/2) as way,
+          ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom) as way,
           to_int(admin_level) as admin_level,
           coalesce(tags->'name:fr',tags->'int_name',name) as name,
           tags->'ref:INSEE' as insee,
@@ -1617,6 +1617,7 @@ Layer:
           AND ST_Area(way) > !pixel_width! * !pixel_height! * 100
         ORDER BY 2 desc
         ) as admin_boundaries_text
+      simplify_geometries: 'true'
 
 
   - id: placenames-small-lz
