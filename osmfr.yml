@@ -754,7 +754,8 @@ Layer:
   - id: bridges-l0
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -783,7 +784,8 @@ Layer:
   - id: bridges-l1
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 12
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -810,7 +812,8 @@ Layer:
   - id: bridges-l2
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -837,7 +840,8 @@ Layer:
   - id: bridges-l3
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -864,7 +868,8 @@ Layer:
   - id: bridges-l4
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -891,7 +896,8 @@ Layer:
   - id: bridges-l5
     class: bridges
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
