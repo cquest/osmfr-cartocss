@@ -535,33 +535,6 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: minor-roads-casing
-    <<: *extents
-    zoom_min: 12
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* minor-roads-casing */ (
-        SELECT way,
-          highway,
-          junction,
-          toll,
-          coalesce(tags->'footway','') as footway,
-          case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service
-        FROM planet_osm_line
-        WHERE coalesce(tunnel,covered,'') not in ('yes','true','1')
-          AND (highway in ('motorway','motorway_link','trunk','trunk_link',
-                           'primary','primary_link','secondary','secondary_link','tertiary','tertiary_link',
-                           'residential','unclassified','road','service',
-                           'pedestrian','raceway','living_street','platform')
-            OR railway='platform')
-          AND route is null
-          AND st_length(way) > !pixel_width!
-          ORDER BY z_order
-        ) as roads
-      simplify_geometries: 'true'
-
-
   - id: highway-area-fill
     status: off
     <<: *extents
@@ -616,29 +589,38 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: minor-roads-fill
+  - id: minor-roads
     <<: *extents
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* minor-roads-fill */ (SELECT  way, construction, junction, horse, foot, bicycle, access, tracktype,
-          coalesce(highway, aeroway) as highway,
-          tags->'level' as level,
-          case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service,
-          case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway,
-          coalesce(tags->'footway', '') as footway,
-          case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge,
-          case when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)
-            when (z_order<10 and z_order>3 and highway='tertiary') then 5
-            else z_order end as zz_order
+        /* minor-roads */ (
+          SELECT way,
+            construction,
+            junction,
+            toll,
+            horse,
+            foot,
+            bicycle,
+            access,
+            tracktype,
+            coalesce(highway, aeroway) as highway,
+            tags->'level' as level,
+            case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service,
+            case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'spur-siding-yard'::text else railway end as railway,
+            coalesce(tags->'footway', '') as footway,
+            case when bridge in ('yes','true','1','viaduct') then 'yes'::text else 'no'::text end as bridge,
+            case when (z_order<10 and z_order>3 and highway in ('motorway_link','trunk_link','primary_link','secondary_link','tertiary_link')) then 4+(z_order/10)
+              when (z_order<10 and z_order>3 and highway='tertiary') then 5
+              else z_order end as zz_order
         FROM planet_osm_line
         WHERE coalesce(tunnel,covered,'') not in ('yes','true','1')
-          AND  ((highway is not null AND NOT (highway in ('service','footway','path','track','pedestrian','byway','cycleway','unsurfaced') AND !pixel_width! > 100 /* zoom 14 */))
+          AND (highway is not null
             OR aeroway in ('runway','taxiway','taxipath','parking_position')
             OR railway in ('light_rail','narrow_gauge','funicular','rail','subway','tram','spur','siding','platform','disused','abandoned','construction','miniature','turntable'))
           AND route is null
-          AND ST_Length(way) > !pixel_width!
+          AND ST_Length(way) > !pixel_width!*2
         ORDER BY zz_order) as roads
       simplify_geometries: 'true'
 
