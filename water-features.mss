@@ -1,4 +1,4 @@
-#dam [zoom >= 13] {
+#waterway-low-zoom::dam [zoom >= 13] {
   line-width: 2;
   line-color: #444;
   line-join: round;
