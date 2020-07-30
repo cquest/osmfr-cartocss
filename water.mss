@@ -95,7 +95,8 @@
   }
 }
 
-#water-lines [zoom >= 12] {
+#water-lines-low-zoom [zoom >= 12]
+#water-lines [zoom >= 15] {
   [waterway = 'river'][zoom >= 12] {
     line-color: @water-color;
     line-width: 2;

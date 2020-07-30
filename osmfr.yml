@@ -281,7 +281,7 @@ Layer:
         /* water-lines-low-zoom */ (
         SELECT ST_Snaptogrid(way,!pixel_width!/4) as way, waterway
         FROM planet_osm_roads
-        WHERE waterway='river'
+        WHERE waterway in ('river','canal','dam')
           AND ST_Length(way) > !pixel_width!
           AND osm_id>0
           AND way && !bbox!
@@ -335,7 +335,8 @@ Layer:
 
   - id: water-lines
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -358,15 +359,6 @@ Layer:
               OR bridge not in ('yes','true','1','aqueduct'))
           ORDER BY z_order
         ) as water_lines
-      simplify_geometries: 'true'
-
-
-  - id: dam
-    <<: *extents
-    zoom_min: 13
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* dam */ (select way,coalesce(tags->'name:fr',tags->'int_name',name) as name from planet_osm_line where waterway='dam') as dam"
       simplify_geometries: 'true'
 
 
