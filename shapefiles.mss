@@ -1,8 +1,4 @@
-#world [zoom <= 9] {
-  polygon-fill: @water-color;
-}
-
-
+#world [zoom <= 9],
 #coast-poly [zoom >= 10] {
-    polygon-fill: @water-color;
+  polygon-fill: @water-color;
 }
