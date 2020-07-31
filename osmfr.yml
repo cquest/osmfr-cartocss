@@ -70,7 +70,7 @@ Layer:
     <<: *extents
     geometry: polygon
     Datasource:
-      file: data/simplified-land-polygons-complete-3857/simplified_land_polygons.shp
+      file: data/simplified-water-polygons-split-3857/simplified_water_polygons.shp
       type: shape
 
 
@@ -78,7 +78,7 @@ Layer:
     <<: *extents
     geometry: polygon
     Datasource:
-      file: data/land-polygons-split-3857/land_polygons.shp
+      file: data/water-polygons-split-3857/water_polygons.shp
       type: shape
 
 

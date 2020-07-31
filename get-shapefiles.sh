@@ -8,16 +8,16 @@ cd data
 
 rm -f *-3857.zip
 
-wget https://osmdata.openstreetmap.de/download/simplified-land-polygons-complete-3857.zip
-wget https://osmdata.openstreetmap.de/download/land-polygons-split-3857.zip
+wget -N https://osmdata.openstreetmap.de/download/simplified-water-polygons-split-3857.zip
+wget -N https://osmdata.openstreetmap.de/download/water-polygons-split-3857.zip
 
-unzip simplified-land-polygons-complete-3857.zip
-unzip land-polygons-split-3857.zip
+unzip simplified-water-polygons-split-3857.zip
+unzip water-polygons-split-3857.zip
 
-cd simplified-land-polygons-complete-3857
+cd simplified-water-polygons-split-3857
 shapeindex *.shp
 
-cd ../land-polygons-split-3857
+cd ../water-polygons-split-3857
 shapeindex *.shp
 
 cd ..
