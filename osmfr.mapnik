@@ -5258,41 +5258,6 @@ FROM (
     </Datasource>
   </Layer>
 
-<Layer name="minor-roads-casing"
-  status="on"
-  srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
-    
-    <Datasource>
-       <Parameter name="type"><![CDATA[postgis]]></Parameter>
-       <Parameter name="dbname"><![CDATA[osm]]></Parameter>
-       <Parameter name="geometry_field"><![CDATA[way]]></Parameter>
-       <Parameter name="extent"><![CDATA[-20037508,-20037508,20037508,20037508]]></Parameter>
-       <Parameter name="host"><![CDATA[osmdb]]></Parameter>
-       <Parameter name="port"><![CDATA[5432]]></Parameter>
-       <Parameter name="user"><![CDATA[fr]]></Parameter>
-       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
-       <Parameter name="asynchronous_request"><![CDATA[false]]></Parameter>
-       <Parameter name="max_async_connection"><![CDATA[1]]></Parameter>
-       <Parameter name="table"><![CDATA[/* minor-roads-casing */ ( SELECT way,
-  highway,
-  junction,
-  toll,
-  coalesce(tags->'footway','') as footway,
-  case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service
-FROM planet_osm_line WHERE coalesce(tunnel,covered,'') not in ('yes','true','1')
-  AND (highway in ('motorway','motorway_link','trunk','trunk_link',
-                   'primary','primary_link','secondary','secondary_link','tertiary','tertiary_link',
-                   'residential','unclassified','road','service',
-                   'pedestrian','raceway','living_street','platform')
-    OR railway='platform')
-  AND route is null
-  AND st_length(way) > !pixel_width! *2
-  ORDER BY z_order
-) as roads]]></Parameter>
-       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
-    </Datasource>
-  </Layer>
-
 <Layer name="highway-area-fill"
   status="off"
   srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
@@ -37831,7 +37796,7 @@ FROM planet_osm_point p WHERE (aeroway in ('airport','aerodrome','helipad','mili
   OR tags ? 'mountain_pass'
   OR (railway in ('level_crossing') AND !pixel_width! < 50 /* zoom >= 15 */)
   OR (railway in ('crossing', 'buffer_stop') AND !pixel_width! < 12 /* zoom >= 17 */))
-  AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass')
+  AND /* poi index */ (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
 UNION SELECT
   way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
   fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
@@ -37845,7 +37810,7 @@ FROM planet_osm_polygon p WHERE (aeroway in ('airport','aerodrome','helipad','mi
   OR "natural" in ('peak','volcano','spring','cave_entrance')
   OR tags ? 'mountain_pass')
   AND way_area > !pixel_width!*!pixel_height!*10
-  AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass') /* index */
+  AND /* poi index */ (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass') /* index */
 ) as amenity_symbols]]></Parameter>
        <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
     </Datasource>
@@ -41997,22 +41962,23 @@ FROM planet_osm_polygon p WHERE (
   OR ((!scale_denominator! < 4500
     and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null))
   ) AND way_area > !pixel_width!*!pixel_height!*10)
-  AND (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure) is not null or tags ? 'mountain_pass')
+  AND /* poi index */ (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
 UNION SELECT
   way,amenity,shop,tourism,highway,man_made,access,religion,waterway,lock,historic,leisure,power,operator, coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor, to_int(tags->'level') as level, tags->'network' as network, tags->'ref:FR:LaPoste' as ref_laposte, coalesce(tags->'emergency', tags->'medical')  as emergency, tags->'conveying' as conveying, tags->'incline' as incline, tags->'fuel:lpg' as lpg , tags->'heritage' as heritage, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, substring('******',1,to_int(tags->'stars')::integer) as stars, tags->'parking' as parking, 0 as way_area, name, ref, tags->'organic' as organic, office, p.tags->'craft' as craft, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,  case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
 FROM planet_osm_point p WHERE (
-  ((!scale_denominator! < 72000)
+  (!scale_denominator! < 72000
     and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
-  OR ((!scale_denominator! < 36000)
+  OR (!scale_denominator! < 36000
     and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
-  OR ((!scale_denominator! < 18000)
+  OR (!scale_denominator! < 18000
     and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
-  OR ((!scale_denominator! < 9000
+  OR (!scale_denominator! < 9000
     and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
-  OR ((!scale_denominator! < 4500
-    and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null))
+  OR (!scale_denominator! < 4500
+    and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
   )
-) ORDER BY prio desc, way_area desc ) as points]]></Parameter>
+  AND /* poi index */ (coalesce(aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
+ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     </Datasource>
   </Layer>
 
