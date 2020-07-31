@@ -2420,7 +2420,6 @@
     shield-repeat-distance: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-avoid-edges: true;
     shield-clip: true;
     [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
     [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
@@ -2435,7 +2434,6 @@
     shield-repeat-distance: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-avoid-edges: true;
     shield-clip: true;
   }
 
@@ -2448,7 +2446,6 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-avoid-edges: true;
     shield-clip: true;
   }
 
@@ -2461,7 +2458,6 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-avoid-edges: true;
     shield-clip: true;
   }
 
@@ -2474,7 +2470,6 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-avoid-edges: true;
     shield-clip: true;
   }
 
@@ -2490,7 +2485,6 @@
       text-repeat-distance: @shield_spacing;
       text-placement: line;
       text-dy: 8;
-      text-avoid-edges: true;
       text-clip: true;
     }
   }
@@ -2508,7 +2502,6 @@
       // text-min-distance: 18;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
-      text-avoid-edges: true;
       text-clip: true;
     }
   }
@@ -2517,7 +2510,7 @@
 #roads-text-name [zoom >= 13] {
   [zoom >= 15] {
     // fixes #50
-    text-avoid-edges: true;
+    text-clip: true;
 
   	text-name: "[nom]";
   	text-size: 9;
