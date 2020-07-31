@@ -205,6 +205,7 @@
       text-face-name: @oblique-fonts;
       [boat!='no'] { text-face-name: @bold-oblique-fonts;}
       text-placement: line;
+      text-clip: true;
       text-fill: #6699cc;
       text-spacing: 400;
       text-character-spacing: 2;
@@ -230,6 +231,7 @@
       text-halo-radius: 1;
       text-size: 9;
       text-placement: line;
+      text-clip: true;
       text-fill: #6699cc;
       [zoom >= 14] {
         text-size: 10;
@@ -248,6 +250,7 @@
         text-fill: #80d1ae;
         text-face-name: @book-fonts;
         text-placement: line;
+        text-clip: true;
         text-spacing: 600;
         text-halo-radius: 1;
       }
@@ -264,8 +267,8 @@
         text-fill: #6699cc;
         text-spacing: 600;
         text-placement: line;
-        text-halo-radius: 1;
         text-clip: true;
+        text-halo-radius: 1;
       }
     }
   }

@@ -268,7 +268,7 @@ Layer:
           AND ST_Length(way) > !pixel_width!
           AND osm_id>0
           AND way && !bbox!
-        ) as water_lines
+        ) as water_lines_lz
 
 
   - id: water-areas
