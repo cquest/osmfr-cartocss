@@ -253,28 +253,11 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: water-lines-casing
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* water-lines-casing */ (
-        SELECT way,waterway
-        FROM planet_osm_line
-        WHERE osm_id>0
-          AND ST_Length(way) > !pixel_width!
-          AND waterway in ('stream','drain','ditch')
-          AND (tunnel is null AND covered is null OR coalesce(tunnel,covered,'') not in ('yes','true','1','building_passage'))
-        ) as water_lines
-      simplify_geometries: 'true'
-
-
   - id: water-lines-low-zoom
     <<: *extents
     properties:
       minzoom: 8
+      maxzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -352,7 +335,6 @@ Layer:
             case when tags->'motorboat'='yes' then 'motorboat' when tags->'boat'='yes' then 'boat' else 'no' end as boat
           FROM planet_osm_line
           WHERE way && !bbox!
-            AND ST_Length(way) > !pixel_width!
             AND osm_id>0
             AND waterway in ('weir','river','canal','derelict_canal','stream','drain','ditch','wadi')
             AND (bridge is null
