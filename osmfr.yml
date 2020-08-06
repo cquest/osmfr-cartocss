@@ -1174,7 +1174,7 @@ Layer:
           OR tags ? 'mountain_pass'
           OR (railway in ('level_crossing') AND !pixel_width! < 50 /* zoom >= 15 */)
           OR (railway in ('crossing', 'buffer_stop') AND !pixel_width! < 12 /* zoom >= 17 */))
-          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
+          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         UNION
         SELECT
           way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
@@ -1190,7 +1190,7 @@ Layer:
           OR "natural" in ('peak','volcano','spring','cave_entrance')
           OR tags ? 'mountain_pass')
           AND way_area > !pixel_width!*!pixel_height!*10
-          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass') /* index */
+          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
         ) as amenity_symbols
       simplify_geometries: 'true'
 
@@ -1204,13 +1204,25 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* amenity-points */ (
-        SELECT
-          way,amenity,shop,tourism,highway,man_made,access,religion,waterway,lock,
-          historic,leisure,power,operator,
+        SELECT way,
+          amenity,shop,tourism,highway,man_made,waterway,
+          historic,leisure,power,
+          operator, access, religion, lock, office,
+          p.tags->'craft' as craft, tags->'emergency' as emergency,
+
+          ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
           coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
           to_int(tags->'level') as level, tags->'network' as network,
-          tags->'ref:FR:LaPoste' as ref_laposte, coalesce(tags->'emergency', tags->'medical') as emergency,
-          coalesce(tags->'conveying', tags->'conveyor_dir') as conveying, tags->'incline' as incline, tags->'fuel:lpg' as lpg, tags->'heritage' as heritage, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, substring('******',1,to_int(tags->'stars')::integer) as stars, tags->'parking' as parking, way_area, name, ref, tags->'organic' as organic, office, p.tags->'craft' as craft, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom, case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
+          tags->'ref:FR:LaPoste' as ref_laposte, 
+          coalesce(tags->'conveying', tags->'conveyor_dir') as conveying, tags->'incline' as incline,
+          tags->'fuel:lpg' as lpg, tags->'heritage' as heritage,
+          coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type,
+          substring('******',1,to_int(tags->'stars')::integer) as stars,
+          tags->'parking' as parking,
+          tags->'organic' as organic, 
+          
+          way_area,
+          case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
         FROM planet_osm_polygon p
         WHERE (
           ((!scale_denominator! < 72000) and (coalesce(amenity,tourism) in ('townhall','alpine_hut')))
@@ -1221,24 +1233,41 @@ Layer:
           OR ((!scale_denominator! < 4500
             and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null))
           ) AND way_area > !pixel_width!*!pixel_height!*10)
-          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
+          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         UNION
-        SELECT
-          way,amenity,shop,tourism,highway,man_made,access,religion,waterway,lock,historic,leisure,power,operator, coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor, to_int(tags->'level') as level, tags->'network' as network, tags->'ref:FR:LaPoste' as ref_laposte, coalesce(tags->'emergency', tags->'medical')  as emergency, tags->'conveying' as conveying, tags->'incline' as incline, tags->'fuel:lpg' as lpg , tags->'heritage' as heritage, coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type, substring('******',1,to_int(tags->'stars')::integer) as stars, tags->'parking' as parking, 0 as way_area, name, ref, tags->'organic' as organic, office, p.tags->'craft' as craft, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,  case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
+        SELECT way,
+          amenity,shop,tourism,highway,man_made,waterway,
+          historic,leisure,power,
+          operator, access, religion, lock, office,
+          p.tags->'craft' as craft, tags->'emergency' as emergency,
+
+          ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+          coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
+          to_int(tags->'level') as level, tags->'network' as network,
+          tags->'ref:FR:LaPoste' as ref_laposte, 
+          coalesce(tags->'conveying', tags->'conveyor_dir') as conveying, tags->'incline' as incline,
+          tags->'fuel:lpg' as lpg, tags->'heritage' as heritage,
+          coalesce(tags->'post_office:type', tags->'recycling_type', tags->'shelter_type',tags->'information','') as poi_type,
+          substring('******',1,to_int(tags->'stars')::integer) as stars,
+          tags->'parking' as parking,
+          tags->'organic' as organic, 
+          
+          0 as way_area,
+          case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
         FROM planet_osm_point p
         WHERE (
-          (!scale_denominator! < 72000
+          (!scale_denominator! < 72000 /* zoom >= 13 */
             and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
           OR (!scale_denominator! < 36000
             and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
           OR (!scale_denominator! < 18000
             and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
           OR (!scale_denominator! < 9000
-            and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
+            and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten','emergency'))
           OR (!scale_denominator! < 4500
             and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
           )
-          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass')
+          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         ORDER BY prio desc, way_area desc ) as points
 
 
