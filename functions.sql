@@ -41,8 +41,8 @@ CREATE OR REPLACE FUNCTION fr_prenoms(text) RETURNS text
 regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
 regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
 regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace($1,
-    '(Jean|John|Johann?)-','J-'),'Pierre-','P-'),
-    'Marie-','M-'),'Anne-','A-'),
+    '(Jean|John|Johann?)-([^0-9]*[a-z]$)','J-\2'),'Pierre-([^0-9]*[a-z]$)','P-\2'),
+    'Marie-([^0-9]*[a-z]$)','M-\2'),'Anne-([^0-9]*[a-z]$)','A-\2'),
     '(Abel|Achille|Ad[eé]laïde|Adèle|Adeline|Adolphe|Adrien|Agathe|Agnès|Aimée?|Alain|Alberte?|Alexandre|Alexis|Alfred|Alphonse|Ambroise|Amédée|Anatole|Andrée?|Angèle|Angela|Anselme|Anthelme|Antoine|Apolline|Aristide|Armand|Armel|Arthur|Astride|Athanase|Auban|Aubin|Aude|Auguste|Augustin|Aurèle|Amadeus) ([^0-9]*[a-z])','A. \2'),
     '(Bap?tiste|Barbe|Barnabé|Barthélemy|Basile|Benjamin|Benoîte?|Bérenger|Bernadette|Bernard|Bernardin|Bertille|Bibiane|Blaise|Bonaventure|Boniface|Boris|Brice|Brigitte|Bruno) ([^0-9]*[a-z])','B. \2'),
     '(Charles|Christine|Christophe|Christiane?|Chantal) ([^0-9]*[a-z])','Ch. \2'),
