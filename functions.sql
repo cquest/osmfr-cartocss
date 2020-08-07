@@ -33,3 +33,41 @@ CREATE OR REPLACE FUNCTION bbbox(box2d,float,float,integer) RETURNS geometry
   LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $_$
 select ST_SetSRID(ST_MakeBox2D(ST_Point(ST_XMin($1)+$2*((select num from params where key='x_bleed')+(select num from params where key='buffer')+$4),ST_Ymin($1)+$3*((select num from params where key='y_bleed')+(select num from params where key='buffer')+$4)), ST_Point(ST_XMax($1)-$2*((select num from params where key='x_bleed')+(select num from params where key='buffer')+$4),ST_Ymax($1)-$3*((select num from params where key='y_bleed')+(select num from params where key='buffer')+10))),3857);
 $_$;
+
+
+CREATE OR REPLACE FUNCTION fr_prenoms(text) RETURNS text
+    LANGUAGE sql IMMUTABLE PARALLEL SAFE
+    AS $$ select regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace($1,
+    '(Jean|John|Johann?)-','J-'),'Pierre-','P-'),
+    'Marie-','M-'),'Anne-','A-'),
+    '(Abel|Achille|Adélaïde|Adèle|Adeline|Adrien|Agathe|Agnès|Aimée?|Alain|Alberte?|Alexandre|Alexis|Alfred|Alphonse|Ambroise|Anatole|Andrée?|Angèle|Anselme|Anthelme|Antoine|Apolline|Aristide|Armand|Armel|Arthur|Astride|Athanase|Auban|Aubin|Aude|Auguste|Augustin|Aurèle|Amadeus) ','A. '),
+    '(Bap?tiste|Barbe|Barnabé|Barthélemy|Basile|Benjamin|Benoîte?|Bérenger|Bernadette|Bernard|Bernardin|Bertille|Bibiane|Blaise|Bonaventure|Boniface|Boris|Brice|Brigitte|Bruno) ','B. '),
+    '(Charles|Christine|Christophe|Christiane?|Chantal) ','Ch. '),
+    '(Camille|Caroline|Casimir|Catherine|Cécile|Célestine?|Céline|Claire|Claude|Clément|Clotilde|Colette|Constant|Constantin|Corentin|Cyrille) ','C. '),
+    '(Daniel|Danielle|David|Denise?|Désirée?|Didier|Dominique|Delano) ','D. '),
+    '(Edith|Edgar|Edmond|Edmée|Edouard|Édouard|Elisabeth|Elisée|Eloi|Éloi|Emmanuel|Emmanuelle|Émile|Emile|Éric|Eric|Ernest|Estelle|Etienne|Étienne|Eugène) ','E. '),
+    '(Fabien|Faustine|Ferdinand|Félix|Fernande?|Fiacre|Fidèle|Firmin|Florence|Florentin|Françoise?|Franck|Franklin|Frédéric|Frédérique|Fitzgerald) ','F. '),
+    '(Gabriel|Gaétan|Gaston|Gatien|Gautier|Geneviève|Geoffroy|Georges?|Georgette|Gérald|Gérard|Germaine?|Gilberte?|Gildas|Gilles|Gladys|Grégoire|Guénolé|Guillaume|Gustave) ','G. '),
+    '(Hélène|Henri|Henry|Herbert|Hervé|Hilaire|Hippolyte|Honorat|Honoré|Honorine|Hubert|Hugues) ','H. '),
+    '(Ignace|Ingrid|Irène|Irénée|Isaac|Isidore) ','I. '),
+    '(Jacques|Jean|Jeanne|Jérémie|Jérôme|Joseph|Joséphine|Judicaël|Judith|Jules|Julien?|Julienne|Juliette|Justine?|John) ','J. '),
+    '(Kevin|Karl) ','K. '),
+    '(Lattre|Laurent|Laure|Léon|Léonard|Léonce|Lise|Louis|Louise|Lucie|Lucien|Ludwig) ','L. '),
+    '(Madeleine|Marc|Marcel|Marcell?in|Marguerite|Maria|Marie|Marthe|Martial|Martine?|Maryse|Mathilde|Matthias|Matthieu|Maurice|Maxime|Maximilien|Michel|Michelle|Modeste|Monique) ','M. '),
+    '(Narcisse|Nathalie|Nestor|Nicolas|Nino|Norbert) ','N. '),
+    '(Odile|Olive|Olivier) ','O. '),
+    '(Philibert|Philippe) ','Ph. '),
+    '(Pablo|Pacôme|Parfait|Pascale?|Patrick|Paule?|Paulin|Pierre|Prosper) ','P. '),
+    '(Quentin) ','Q. '),
+    '(Ralph|Raoul|Raphaël|Raymond|Remi|Rémi|Renée?|Richard|Rita|Roberte?|Roger|Romain|Romuald|Rosa|Rosalie|Rose|Rosine) ','R. '),
+    '(Sabine?|Salomé|Samson|Sébastien|Serge|Sernin|Séverine?|Silvain|Simone?|Solange|Sophie|Stanislas|Stéphani?e|Suzanne|Sylvain|Sylvestre) ','S. '),
+    '(Tanguy|Tatiana|Théodore|Thérèse|Thierry|Thomas) ','T. '),
+    '(Ulric|Ursule) ','U. '),
+    '(Valentin|Valérie|Venceslas|Véronique|Victor|Vincent|Virgile) ','V. '),
+    '(Yves|Yvette) ','Y. '),
+    '(Waldeck|Wolfgang) ','W. '),
+    '(Xavier) ','X. ');
+    $$;
