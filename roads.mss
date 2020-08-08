@@ -2507,16 +2507,19 @@
 }
 
 #roads-text-name [zoom >= 13] {
-  [zoom >= 15] {
-    // fixes #50
-    text-clip: true;
+  // fixes #50 et valeurs par défaut
+  text-clip: true;
+  text-avoid-edges: true;
+  text-name: "";
+  text-face-name: @book-fonts;
+  text-placement: line;
+	text-fill: black;
+  text-halo-radius: 0;
 
+  [zoom >= 15] {
   	text-name: "[nom]";
   	text-size: 9;
-  	text-fill: black;
     [railway!=''] { text-fill: #444; }
-  	text-placement: line;
-  	text-face-name: @book-fonts;
   	text-halo-radius: 1.5;
   	text-halo-fill: fadeout(white, 30%);
   	[highway != '']  { text-spacing: 300; }
@@ -2536,113 +2539,92 @@
   [highway = 'trunk_link'],
   [highway = 'primary'],
   [highway = 'primary_link'] {
-	[zoom >= 13] {
-	  [zoom>=17] { text-name: "[name]"; }
-	  text-name: "[nom]";
-	  text-size: 8;
-	  text-fill: black;
-	  text-placement: line;
-	  text-face-name: @book-fonts;
-	  text-halo-radius: 0;
-	}
-	[zoom >= 14] {
-	  text-size: 9;
-	}
-	[zoom >= 15] {
-	  text-size: 10;
-	}
-	[zoom >= 17] {
-	  text-size: 11;
-	}
-	[zoom >= 19] {
-	  text-size: 13;
-	  text-min-path-length: 100;
-	  text-fill: #444;
-	}
+    text-name: "[nom]";
+    text-size: 8;
+    text-halo-radius: 0;
+    [zoom >= 14] { text-size: 9; }
+    [zoom >= 15] { text-size: 10; }
+    [zoom >= 17] {
+      text-size: 11;
+      text-name: "[name]";
+    }
+    [zoom >= 19] {
+      text-size: 13;
+      text-min-path-length: 100;
+      text-fill: #444;
+    }
   }
+
   [highway = 'secondary'],
   [highway = 'secondary_link'] {
-	[zoom >= 13] {
-	  [zoom>=17] { text-name: "[name]"; }
 	  text-name: "[nom]";
 	  text-size: 8;
-	  text-fill: black;
-	  text-placement: line;
-	  text-face-name: @book-fonts;
-	  text-halo-radius: 0;
-	}
-	[zoom >= 14] {
-	  text-size: 9;
-	}
-	[zoom >= 15] {
-	  text-size: 10;
-	}
-	[zoom >= 17] {
-	  text-size: 11;
-	}
-	[zoom >= 19] {
-	  text-size: 13;
-	  text-min-path-length: 100;
-	  text-fill: #444;
-	}
+    text-halo-radius: 0;
+    [zoom >= 14] {
+      text-size: 9;
+    }
+    [zoom >= 15] {
+      text-size: 10;
+    }
+    [zoom >= 17] {
+      text-size: 11;
+      text-name: "[name]";
+    }
+    [zoom >= 19] {
+      text-size: 13;
+      text-min-path-length: 100;
+      text-fill: #444;
+    }
   }
-  [highway = 'tertiary'],
-  [highway = 'tertiary_link'] {
-	[zoom >= 15] {
-	  [zoom>=17] { text-name: "[name]"; }
-	  text-name: "[nom]";
-	  text-size: 9;
-	  text-fill: #000;
-	  text-placement: line;
-	  text-face-name: @book-fonts;
-	  text-halo-radius: 0;
-	}
-	[zoom >= 17] {
-	  text-size: 11;
-	}
-	[zoom >= 19] {
-	  text-size: 13;
-	  text-min-path-length: 100;
-	  text-fill: #444;
-	}
-  }
+
   [highway = 'proposed'],
   [highway = 'construction'] {
-	[zoom >= 13] {
-	  [zoom>=17] { text-name: "[name]"; }
 	  text-name: "[nom]";
 	  text-size: 9;
-	  text-fill: #000;
-	  text-placement: line;
-	  text-face-name: @book-fonts;
 	  text-halo-radius: 1;
-	}
-	[zoom >= 16] {
-	  text-size: 11;
-	}
-	[zoom >= 19] {
-	  text-size: 13;
-	  text-min-path-length: 100;
-	  text-fill: #444;
-	}
+    [zoom >= 16] {
+      text-size: 11;
+    }
+    [zoom >= 17] { text-name: "[name]"; }
+    [zoom >= 19] {
+      text-size: 13;
+      text-min-path-length: 100;
+      text-fill: #444;
+    }
+  }
+
+  [highway = 'tertiary'],
+  [highway = 'tertiary_link'] {
+    [zoom >= 15] {
+      text-name: "[nom]";
+      text-size: 9;
+      text-halo-radius: 0;
+      [zoom >= 17] {
+        text-size: 11;
+        text-name: "[name]";
+      }
+      [zoom >= 19] {
+        text-size: 13;
+        text-min-path-length: 100;
+        text-fill: #444;
+      }
+  	}
   }
 
   [highway = 'residential'],
   [highway = 'unclassified'] {
   	[zoom >= 15] {
-  	  [zoom>=17] { text-name: "[name]"; }
   	  text-name: "[nom]";
   	  text-size: 8;
   	  text-spacing: 200;
-  	  text-placement: line;
   	  text-halo-radius: 1;
-  	  text-face-name: @book-fonts;
   	}
   	[zoom >= 16] {
   	  text-size: 9;
   	}
   	[zoom >= 17] {
   	  text-size: 10;
+      text-name: "[name]";
   	}
   	[zoom >= 19] {
   	  text-size: 12;
@@ -2654,12 +2636,7 @@
   [zoom >= 15][zoom < 17][railway='platform'],
   [zoom >= 15][railway='platform'][tunnel!=""] {
   	text-name: "";
-  	text-face-name: @book-fonts;
   }
-
-
-  /* Other roads */
-
 }
 
 #area-barriers [zoom >= 16] {
