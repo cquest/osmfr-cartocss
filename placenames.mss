@@ -133,6 +133,8 @@
       b/text-placement-type: simple;
       b/text-placements: "N,11,10,9";
       b/text-wrap-width: 30;
+      text-avoid-edges: true;
+      b/text-avoid-edges: true;
     }
     [zoom >= 14] {
       text-face-name: @oblique-fonts;
@@ -145,6 +147,8 @@
       b/text-placement-type: simple;
       b/text-placements: "N,14,12,10";
       b/text-fill: #777777;
+      text-avoid-edges: true;
+      b/text-avoid-edges: true;
     }
   }
 }
@@ -215,6 +219,7 @@
   text-margin: 15;
   text-wrap-width: 30;
   text-align: center;
+  text-avoid-edges: true;
 
   // deuxième placement décalé au cas où le premier a échoué
   b/text-name: "[nom]";
@@ -231,6 +236,8 @@
   b/text-margin: 15;
   b/text-wrap-width: 30;
   b/text-align: center;
+  b/text-avoid-edges: true;
+
 }
 
 #placenames-small::village [zoom >= 11] {
@@ -244,6 +251,7 @@
     text-margin: 10;
     text-wrap-width: 30;
     text-align: center;
+    text-avoid-edges: true;
 
     // deuxième placement décalé au cas où le premier a échoué
     b/text-name: "[nom]";
@@ -259,6 +267,7 @@
     b/text-margin: 10;
     b/text-wrap-width: 30;
     b/text-align: center;
+    b/text-avoid-edges: true;
 
     [pop>1000],
     [zoom>=12] {
@@ -288,6 +297,7 @@
     text-placements: "X,E,W,N,S,NE,SE,NW,SW";
     text-dx: 4;
     text-dy: 4;
+    text-avoid-edges: true;
     [zoom >= 15] {
       text-name: "[name]";
       text-size: 12;
@@ -305,6 +315,7 @@
   text-wrap-width: 30;
   text-align: center;
   text-margin: 15;
+  text-avoid-edges: true;
 
   // deuxième placement décalé au cas où le premier a échoué
   b/text-name: "[nom]";
@@ -320,6 +331,7 @@
   b/text-margin: 15;
   b/text-wrap-width: 30;
   b/text-align: center;
+  b/text-avoid-edges: true;
 }
 
 #placenames-small [zoom >= 14] {
