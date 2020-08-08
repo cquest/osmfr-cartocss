@@ -237,7 +237,7 @@
   }
 
   [feature = 'natural_desert'][zoom >= 8],
-  [feature = 'natural_sand'][zoom >= 10] {
+  [feature = 'natural_sand'][zoom >= 8] {
     polygon-fill: #ffebb2;
   }
 
