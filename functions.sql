@@ -116,5 +116,5 @@ ON CONFLICT DO NOTHING;
 UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(long_name)) WHERE abrev IS NULL;
 
 -- on ne garde que les noms abrégés
-DELETE FROM abrev where name=abrev_prenoms and name=abrev;
+DELETE FROM abrev where long_name=abrev_prenoms and long_name=abrev;
 VACUUM FULL ANALYZE abrev;
