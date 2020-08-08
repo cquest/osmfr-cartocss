@@ -80,17 +80,16 @@
   }
 }
 
-#water-lines-low-zoom [zoom >= 8][zoom <= 13] {
-  [waterway = 'river'] {
+#water-lines-low-zoom {
     line-color: @water-color;
+    [waterway = 'dam'] { line-color: #aaa; }
     line-width: 0.7;
     [zoom >= 9] { line-width: 1.2; }
     [zoom >= 10] { line-width: 1.6; }
-  }
 }
 
-#water-lines [zoom >= 14] {
-  [waterway = 'river'][zoom >= 12] {
+#water-lines {
+  [waterway = 'river'] {
     line-color: @water-color;
     line-width: 2;
     line-cap: round;

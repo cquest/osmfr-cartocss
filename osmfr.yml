@@ -262,13 +262,14 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* water-lines-low-zoom */ (
-        SELECT ST_Snaptogrid(way,!pixel_width!/4) as way, waterway
-        FROM planet_osm_roads
+        SELECT way,
+          waterway
+        FROM planet_osm_line
         WHERE waterway in ('river','canal','dam')
           AND ST_Length(way) > !pixel_width!
           AND osm_id>0
-          AND way && !bbox!
         ) as water_lines_lz
+      simplify_geometries: 'true'
 
 
   - id: water-areas
