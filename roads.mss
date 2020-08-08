@@ -2484,7 +2484,6 @@
       text-halo-fill: fadeout(white, 30%);
       text-repeat-distance: @shield_spacing;
       text-placement: line;
-      text-dy: 8;
       text-clip: true;
     }
   }
