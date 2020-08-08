@@ -104,6 +104,62 @@
 @track-grade2-width-z15:          0.75;
 
 
+
+ #highway-area-casing [zoom >= 14] {
+  [highway =~ '(residential|unclassified)'] {
+    line-color: #999;
+    line-width: 1;
+  }
+  [highway =~ '(pedestrian|service|cycleway|path|footway)'] {
+    line-color: grey;
+    line-width: 1;
+    [footway != ''][zoom <= 18] {
+      line-width: 0;
+    }
+  }
+  [highway =~ 'track'][zoom >= 15] {
+    line-color: #bb8800;
+    line-width: 3.5;
+  }
+  [railway =~ 'platform'][tunnel!='yes'][zoom >= 17] {
+    line-color: grey;
+    line-width: 2;
+    line-cap: round;
+    line-join: round;
+  }
+}
+
+
+#highway-area-fill {
+  [highway =~ 'living_street'] {
+    polygon-fill: #ccc;
+  }
+  [highway =~ '(residential|unclassified|service)'] {
+    [zoom >= 14] {
+      polygon-fill: #fff;
+    }
+  }
+  [highway =~ '(pedestrian|cycleway|path|footway)'] [zoom >= 14] {
+      polygon-fill: #ededed;
+      opacity: 0.7;
+      [footway != ''][zoom <= 18] {
+        line-width: 0;
+      }
+  }
+  [highway =~ 'track'][zoom >= 14] {
+    polygon-fill: #dfcc66;
+  }
+  [railway =~ 'platform'][tunnel!='yes'][zoom >= 17] {
+    polygon-fill: #bbbbbb;
+  }
+  [aeroway =~ 'runway'][zoom >= 11]::aeroway,
+  [aeroway =~ 'taxiway'][zoom >= 13]::aeroway,
+  [aeroway =~ 'helipad'][zoom >= 16]::aeroway {
+    polygon-fill: #bbc;
+  }
+}
+
+
 #highway-junctions [zoom >= 11] {
   [type='motorway_junction']   {
     ref/text-name: "[ref]";

@@ -507,23 +507,54 @@ Layer:
 
 
   - id: highway-area-casing
-    status: off
     <<: *extents
     properties:
-      minzoom: 14
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* highway-area-casing */ (SELECT way,highway,railway,toll,coalesce(tags->'footway','') as footway, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, junction FROM planet_osm_polygon WHERE (highway in ('residential','unclassified','pedestrian','service','footway','track','path','platform','cycleway') OR railway='platform') ORDER BY z_order,way_area DESC) as highway_area_casing"
+      table: >-
+        /* highway-area-casing */ (
+          SELECT way,
+            highway,
+            railway,
+            toll,
+            coalesce(tags->'footway','') as footway,
+            case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel,
+            junction
+          FROM planet_osm_polygon
+          WHERE (highway in ('residential','unclassified','pedestrian','service','footway','track','path','platform','cycleway')
+            OR railway='platform')
+            AND way_area > !pixel_width! * !pixel_height! * 16
+          ORDER BY z_order,way_area DESC
+        ) as highway_area_casing
       simplify_geometries: 'true'
 
 
   - id: highway-area-fill
-    status: off
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* highway-area-fill */ (select way,highway,junction, toll, railway,aeroway,coalesce(tags->'footway','') as footway, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel /* ,case when highway in ('motorway','motorway_link') then '1' when highway in ('trunk','trunk_link') then '2' when highway in ('primary','primary_link') then '3' when highway in ('secondary','secondary_link') then '4' when highway in ('tertiary','tertiary_link') then '5' when highway in ('residential','unclassified') then '6' else '7' end as prio */ from planet_osm_polygon where highway in ('residential','unclassified','pedestrian','service','footway','living_street','track','path','platform','services','cycleway') or railway='platform' or aeroway in ('runway','taxiway','helipad','taxipath','parking_position') order by z_order, way_area desc) as roads"
+      table: >-
+        /* highway-area-fill */ (
+          select way,
+            highway,
+            junction,
+            toll,
+            railway,
+            aeroway,
+            coalesce(tags->'footway','') as footway,
+            case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel
+             /* ,case when highway in ('motorway','motorway_link') then '1' when highway in ('trunk','trunk_link') then '2' when highway in ('primary','primary_link') then '3' when highway in ('secondary','secondary_link') then '4' when highway in ('tertiary','tertiary_link') then '5' when highway in ('residential','unclassified') then '6' else '7' end as prio */
+          from planet_osm_polygon
+          where (highway in ('residential','unclassified','pedestrian','service','footway','living_street','track','path','platform','services','cycleway')
+            or railway='platform'
+            or aeroway in ('runway','taxiway','helipad','taxipath','parking_position'))
+            AND way_area > !pixel_width! * !pixel_height! * 16
+          order by z_order, way_area desc
+        ) as roads
+      simplify_geometries: 'true'
 
 
   - id: line-barriers
