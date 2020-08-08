@@ -40,20 +40,21 @@ CREATE OR REPLACE FUNCTION fr_prenoms(text) RETURNS text
     AS $$ select regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
 regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
 regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
-regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace($1,
+regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+regexp_replace($1,
     '(Jean|John|Johann?)-([^0-9]*[a-z]$)','J-\2'),'Pierre-([^0-9]*[a-z]$)','P-\2'),
     'Marie-([^0-9]*[a-z]$)','M-\2'),'Anne-([^0-9]*[a-z]$)','A-\2'),
-    '(Abel|Achille|Ad[eé]laïde|Adèle|Adeline|Adolphe|Adrien|Agathe|Agnès|Aimée?|Alain|Alberte?|Alexandre|Alexis|Alfred|Alphonse|Ambroise|Amédée|Anatole|Andrée?|Angèle|Angela|Anselme|Anthelme|Antoine|Apolline|Aristide|Armand|Armel|Arthur|Astride|Athanase|Auban|Aubin|Aude|Auguste|Augustin|Aurèle|Amadeus) ([^0-9]*[a-z])','A. \2'),
+    '(Abel|Achille|Ad[eé]laïde|Adèle|Adeline|Adolphe|Adrien|Agathe|Agnès|Aimée?|Alain|Alberte?|Alexandr?e?r?|Alexis|Alfred|Alphonse|Ambroise|Amédée|Anatole|Andrée?|Angèle|Angela|Anselme|Anthelme|Antoine|Apolline|Aristide|Armand|Armel|Arthur|Astride|Athanase|Auban|Aubin|Aude|Auguste|Augustin|Aurèle|Amadeus) ([^0-9]*[a-z])','A. \2'),
     '(Bap?tiste|Barbe|Barnabé|Barthélemy|Basile|Benjamin|Benoîte?|Bérenger|Bernadette|Bernard|Bernardin|Bertille|Bibiane|Blaise|Bonaventure|Boniface|Boris|Brice|Brigitte|Bruno) ([^0-9]*[a-z])','B. \2'),
     '(Charles|Christine|Christophe|Christiane?|Chantal) ([^0-9]*[a-z])','Ch. \2'),
-    '(Camille|Caroline|Casimir|Catherine|Cécile|Célestine?|Céline|Claire|Claude|Clément|Clotilde|Colette|Constant|Constantin|Corentin|Cyrille) ([^0-9]*[a-z])','C. \2'),
+    '(Camille|Caroline|Casimir|Catherine|Cécile|Célestine?|Céline|César|Claire|Claude|Clément|Clotilde|Colette|Constant|Constantin|Corentin|Cyrille) ([^0-9]*[a-z])','C. \2'),
     '(Daniel|Danielle|David|Denise?|Désirée?|Didier|Dominique|Delano) ([^0-9]*[a-z])','D. \2'),
-    '(Edith|Edgar|Edmonde?|Edmée|Edouard|Édouard|Elisabeth|Elisée|Eloi|Éloi|Emmanuel|Emmanuelle|Émile|Emile|Éric|Eric|Ernest|Estelle|Etienne|Étienne|Eugène) ([^0-9]*[a-z])','E. \2'),
+    '(Edith|Edgar|Edmonde?|Edmée?|Edouard|Édouard|Elisabeth|Elisée|Eloi|Éloi|Elsa|Emmanuel|Emmanuelle|Émile|Emile|Éric|Eric|Ernest|Estelle|Etienne|Étienne|Eugène) ([^0-9]*[a-z])','E. \2'),
     '(Fabien|Faustine|Ferdinand|Félix|Fernande?|Fiacre|Fidèle|Firmin|Florence|Florentin|Francis|Françoise?|Franck|Franklin|Frédéric|Frédérique|Fitzgerald) ([^0-9]*[a-z])','F. \2'),
-    '(Gabriel|Gaétan|Gaston|Gatien|Gautier|Geneviève|Geoffroy|Georges?|Georgette|Gérald|Gérard|Germaine?|Gilberte?|Gildas|Gilles|Gladys|Grégoire|Guénolé|Guillaume|Gustave) ([^0-9]*[a-z])','G. \2'),
+    '(Gabriel|Gaétan|Gaston|Gatien|Gautier|Geneviève|Geoffroy|Georges?|Georgette|Gérald|Géraldine|Gérard|Germaine?|Gilberte?|Gildas|Gilles|Gladys|Grégoire|Guénolé|Guillaume|Gustave) ([^0-9]*[a-z])','G. \2'),
     '(Hector|Hélène|Henri|Henry|Herbert|Hervé|Hilaire|Hippolyte|Honorat|Honoré|Honorine|Hubert|Hugues) ([^0-9]*[a-z])','H. \2'),
     '(Ignace|Ingrid|Irène|Irénée|Isaac|Isidore) ([^0-9]*[a-z])','I. \2'),
-    '(Jacques|Jean|Jeanne|Jérémie|Jérôme|Joseph|Joséphine|Judicaël|Judith|Jules|Julien?|Julienne|Juliette|Juste|Justine?|John) ([^0-9]*[a-z])','J. \2'),
+    '(Jacques|Jacqueline|J[eo]an|Jeanne|Jérémie|Jérôme|Johann?|Joseph|Joséphine|Judicaël|Judith|Jules|Julien?|Julienne|Juliette|Juste|Justine?|John) ([^0-9]*[a-z])','J. \2'),
     '(Kevin|Karl) ([^0-9]*[a-z])','K. \2'),
     '(Lattre|Laurent|Laure|Léon|Léonard|Léonce|Lise|Louis|Louise|Louison|Lucie|Lucien|Ludwig) ([^0-9]*[a-z])','L. \2'),
     '(Madeleine|Marc|Marcel|Marcell?in|Marguerite|Maria|Marie|Marthe|Martial|Martine?|Maryse|Mathilde|Matthias|Matthieu|Maurice|Maxime|Maximilien|Michel|Michelle|Modeste|Monique) ([^0-9]*[a-z])','M. \2'),
@@ -63,11 +64,57 @@ regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regex
     '(Pablo|Pacôme|Parfait|Pascale?|Patrick|Paule?|Paulin|Pierre|Prosper) ([^0-9]*[a-z])','P. \2'),
     '(Quentin) ','Q. \2'),
     '(Ralph|Raoul|Raphaël|Raymond|Remi|Rémi|Régine|Renée?|Richard|Rita|Roberte?|Roger|Rolande?|Romain|Romuald|Rosa|Rosalie|Rose|Rosine) ([^0-9]*[a-z])','R. \2'),
-    '(Sabine?|Salomé|Salomon|Salvador|Samson|Sauveur|Sébastien|Serge|Sernin|Séverine?|Silvain|Simone?|Solange|Sophie|Stanislas|Stéphani?e|Suzanne|Sylvain|Sylvestre) ([^0-9]*[a-z])','S. \2'),
-    '(Tanguy|Tatiana|Théodore|Thérèse|Thierry|Thomas) ([^0-9]*[a-z])','T. \2'),
+    '(Sabine?|Salomé|Salomon|Salvador|Samson|Samuel|Sauveur|Sébastien|Serge|Sernin|Séverine?|Silvain|Simone?|Solange|Sophie|Stanislas|Stéphani?e|Suzanne|Sylvain|Sylvestre) ([^0-9]*[a-z])','S. \2'),
+    '(Tanguy|Tatiana) ([^0-9]*[a-z])','T. \2'),
+    '(Théodore|Thérèse|Thierry|Thomas) ([^0-9]*[a-z])','Th. \2'),
     '(Ulric|Ursule) ','U. \2'),
     '(Valentin|Valérie|Venceslas|Véronique|Victor|Vincent|Virgile|Vladimir) ([^0-9]*[a-z])','V. \2'),
     '(Youri|Yves|Yvette) ([^0-9]*[a-z])','Y. \2'),
-    '(Waldeck|Wolfgang) ([^0-9]*[a-z])','W. \2'),
+    '(Waldeck|Winston|Wolfgang) ([^0-9]*[a-z])','W. \2'),
     '(Xavier) ([^0-9]*[a-z])','X. \2');
     $$;
+
+
+-- création de la table des noms abrégés
+CREATE TABLE IF NOT EXISTS abrev (name text, abrev_prenoms text, abrev text);
+GRANT SELECT ON TABLE abrev TO PUBLIC;
+CREATE UNIQUE INDEX IF NOT EXISTS abrev_index ON abrev (name);
+
+-- remplissage de la table avec les odonymes des territoires français (8mn)
+INSERT INTO abrev
+SELECT
+    l.name,
+    fr_prenoms(l.name) as abrev_prenoms,
+    null as abrev
+FROM planet_osm_polygon p 
+JOIN planet_osm_line l ON l.way && p.way
+WHERE p.boundary= 'administrative' and p.admin_level='3'
+    and (p.tags ? 'ref:INSEE'
+        or p.name in ('France métropolitaine','Guadeloupe','Martinique','Mayotte','La Réunion','Guyane'))
+    AND l.name is not null
+    AND l.highway is not null
+GROUP BY 1,2
+ON CONFLICT DO NOTHING;
+
+-- remplissage de la table avec les odonymes des pays francophones (2 mn)
+INSERT INTO abrev
+SELECT
+    coalesce(l.tags->'name:fr',l.name) as name,
+    fr_prenoms(l.name) as abrev_prenoms,
+    null as abrev
+FROM planet_osm_polygon p 
+JOIN planet_osm_line l ON l.way && p.way
+WHERE p.boundary= 'administrative' and p.admin_level='2'
+    and coalesce(p.tags->'name:fr', p.name) in ('Belgique','Bénin','Burkina Faso',E'Côte d\x027Ivoire', 'Gabon','Guinée','Mali','Monaco','Niger','Sénégal','Togo','Suisse')
+    AND l.name is not null
+    AND l.highway is not null
+GROUP BY 1,2
+ON CONFLICT DO NOTHING;
+
+
+-- application des règles d'abréviation générales (2mn)
+UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(name)) WHERE abrev IS NULL;
+
+-- on ne garde que les noms abrégés
+DELETE FROM abrev where name=abrev_prenoms and name=abrev;
+CLUSTER abrev USING abrev_index;

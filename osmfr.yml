@@ -1368,11 +1368,11 @@ Layer:
       table: >-
         /* roads-text-name */ (
           SELECT *,
-            fr_abbrev(coalesce(short_name, name)) as nom
+            coalesce(short_name, abrev_prenoms, w.name) as nom
           FROM (
             SELECT st_linemerge(st_collect(way)) as way,
               highway,
-              name,
+              ways.name,
               short_name,
               railway,
               tunnel,
@@ -1402,6 +1402,7 @@ Layer:
             GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
             HAVING sum(way_len)> 32 * !pixel_width!
           ) as w
+          LEFT JOIN abrev a ON (a.name = w.name)
           ORDER BY way_len
         ) as roads
       simplify_geometries: 'true'
