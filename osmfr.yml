@@ -285,7 +285,9 @@ Layer:
           waterway,
           landuse,
           amenity,
-          coalesce(tags->'name:fr',tags->'int_name',name) as name,
+          coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
           tags->'basin' as basin,
           water,
           surface
@@ -334,7 +336,9 @@ Layer:
             waterway,
             disused,
             lock,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else coalesce(tunnel,covered) end as tunnel,
             tags->'CEMT' as cemt,
             case when tags->'CEMT'~'V' then 'true' else '' end as cemt_large,
@@ -1014,7 +1018,36 @@ Layer:
     zoom_min: 4
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-capital */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way ,place,coalesce(tags->'name:fr',tags->'int_name',name) as name, replace(replace(replace(coalesce(tags->'short_name:fr', tags->'name:fr', tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-') as nom, to_int(population) as pop, coalesce(tags->'is_capital', (case when coalesce(admin_level, capital)='2' then 'country' when tags->'importance'='international' then 'state' when coalesce(admin_level, capital)='4' then 'state' when tags->'importance'='national' then 'state' else null end) ) as is_capital, array_length(hstore_to_array(tags),1)/2 as nbtags  FROM planet_osm_point  WHERE  way && !bbox! and place is not null and (capital is not null or tags ? 'is_capital') and (capital is not null or tags ? 'is_capital') and place in ('city','town') and (tags->'is_capital' in ('country','state') or capital in ('2','3','4','5','6','7') or (capital='yes' and admin_level in ('2','3','4','5','6','7')) or tags->'importance' in ('international','national') or array_length(hstore_to_array(tags),1)/2>20) order by is_capital, coalesce(admin_level, capital,'9'), place, pop desc ) as placenames"
+      table: >-
+        /* placenames-capital */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+            fr_abbrev(coalesce(tags->'short_name:fr', tags->'name:fr', tags->'int_name', name)) as nom,
+            to_int(population) as pop,
+            coalesce(tags->'is_capital',
+              (case when coalesce(admin_level, capital)='2' then 'country'
+                when tags->'importance'='international' then 'state'
+                when coalesce(admin_level, capital)='4' then 'state'
+                when tags->'importance'='national' then 'state'
+                else null end)
+            ) as is_capital,
+            array_length(hstore_to_array(tags),1)/2 as nbtags
+          FROM planet_osm_point
+          WHERE  way && !bbox!
+            and place is not null
+            and (capital is not null or tags ? 'is_capital')
+            and (capital is not null or tags ? 'is_capital')
+            and place in ('city','town')
+            and (tags->'is_capital' in ('country','state')
+              or capital in ('2','3','4','5','6','7')
+              or (capital='yes' and admin_level in ('2','3','4','5','6','7'))
+              or tags->'importance' in ('international','national')
+              or array_length(hstore_to_array(tags),1)/2>20)
+          order by is_capital, coalesce(admin_level, capital,'9'), place, pop desc
+        ) as placenames
 
 
   - id: placenames-islands
@@ -1022,7 +1055,20 @@ Layer:
     zoom_min: 4
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-islands */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, cast(st_area(st_convexhull(way)) as bigint) way_area, place, coalesce(tags->'short_name:fr',tags->'name:fr',tags->'short_name',tags->'int_name',name) as name  FROM  planet_osm_polygon  WHERE  way && !bbox! and place is not null and place in ('archipelago','island') order by place, way_area desc ) as islands"
+      table: >-
+        /* placenames-islands */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            cast(st_area(st_convexhull(way)) as bigint) way_area,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
+          FROM  planet_osm_polygon
+          WHERE  way && !bbox!
+            and place is not null
+            and place in ('archipelago','island')
+          order by place, way_area desc
+        ) as islands
 
 
   - id: placenames-large
@@ -1031,7 +1077,24 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-large */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'short_name:fr',tags->'name:fr',tags->'short_name',tags->'int_name',name) as name, osm_id, to_int(population) as pop, ref,0 as way_area  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place  in ('country','state','continent') and NOT tags ? 'disused:admin_level' order by place, pop desc ) as placenames"
+      table: >-
+        /* placenames-large */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+            osm_id,
+            to_int(population) as pop,
+            ref,
+            0 as way_area
+          FROM  planet_osm_point
+          WHERE  way && !bbox!
+            and place is not null
+            and place  in ('country','state','continent')
+            and NOT tags ? 'disused:admin_level'
+          order by place, pop desc
+        ) as placenames
 
 
   - id: placenames-medium
@@ -1040,7 +1103,23 @@ Layer:
     <<: *extents
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-medium */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, replace(replace(replace(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-') as nom, to_int(population) as pop, tags->'is_capital' as is_capital, 0 as nbtags  FROM  planet_osm_point       WHERE  way && !bbox! and place is not null and place in ('city','town') order by coalesce(admin_level, capital,'9'), place, pop desc ) as placenames"
+      table: >-
+        /* placenames-medium */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+            to_int(population) as pop,
+            tags->'is_capital' as is_capital,
+            0 as nbtags
+          FROM  planet_osm_point
+          WHERE  way && !bbox!
+            and place is not null
+            and place in ('city','town')
+          order by coalesce(admin_level, capital,'9'), place, pop desc
+        ) as placenames
 
 
   - id: placenames-small
@@ -1048,7 +1127,21 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-small */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, regexp_replace(regexp_replace(replace(replace(replace(replace(replace(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'-sous-','-ss-'),'Lotissement ','Lot. '),'Résidence ','Rés. '),'^Place ','Pl. '),'^Pointe ','Pᵗᵉ ') as nom, to_int(population) as pop  FROM  planet_osm_point  WHERE  way && !bbox! and place is not null and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm') order by pop desc     ) as placenames"
+      table: >-
+        /* placenames-small */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+            to_int(population) as pop
+          FROM  planet_osm_point
+          WHERE  way && !bbox!
+            and place is not null
+            and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
+          order by pop desc
+        ) as placenames
 
 
   - id: stations-poly
@@ -1060,7 +1153,9 @@ Layer:
       table: >-
         /* stations-poly */ (
           select way,
-            coalesce(tags->'name:fr',tags->'int_name',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             railway,
             aerialway,
             disused,
@@ -1380,7 +1475,9 @@ Layer:
         /* highway-junctions */ (
           select way,
             ref,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr', name)) as nom,
             coalesce(highway, aeroway) as type
           from planet_osm_point
@@ -1419,7 +1516,9 @@ Layer:
               SELECT way,
                 st_length(way) as way_len,
                 highway,
-                coalesce(tags->'name:fr',tags->'int_name',name) as name,
+                coalesce(tags->'name:fr',case
+                  when name ~ '[A-Za-z]' then name
+                  else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
                 coalesce(tags->'short_name:fr',tags->'short_name') as short_name,
                 railway,
                 tunnel,
@@ -1489,7 +1588,9 @@ Layer:
         /* text-poly-lz */ (
           SELECT way,
             osm_id,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
@@ -1510,7 +1611,9 @@ Layer:
           UNION
           SELECT way,
             osm_id,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
@@ -1542,7 +1645,9 @@ Layer:
           SELECT way,
             osm_id,
             tags->'heritage' as heritage,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             case when amenity='townhall' then 2 when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
             aeroway,
@@ -1591,7 +1696,9 @@ Layer:
           SELECT way,
             osm_id,
             tags->'heritage' as heritage,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
             fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
             aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
@@ -1637,7 +1744,9 @@ Layer:
         SELECT
           ST_Boundary((ST_Dumprings(ST_ForceRHR((ST_Dump(way)).geom))).geom) as way,
           to_int(admin_level) as admin_level,
-          coalesce(tags->'name:fr',tags->'int_name',name) as name,
+          coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
           tags->'ref:INSEE' as insee,
           fr_abbrev(coalesce(tags->'name:fr',tags->'int_name',name)) as nom
         FROM planet_osm_polygon p
@@ -1657,7 +1766,21 @@ Layer:
     zoom_max: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* placenames-small-lz */ (SELECT ST_Snaptogrid(way,!pixel_width!) as way, place, coalesce(tags->'name:fr',tags->'int_name',name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom, to_int(population) as pop  FROM  planet_osm_point p  WHERE  way && !bbox! and place is not null and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm') order by pop desc, osm_id     ) as placenames"
+      table: >-
+        /* placenames-small-lz */ (
+          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+            place,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+            fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom,
+            to_int(population) as pop
+          FROM  planet_osm_point p
+          WHERE  way && !bbox!
+            and place is not null
+            and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
+          order by pop desc, osm_id
+        ) as placenames
 
 
   - id: interpolation
@@ -1725,7 +1848,9 @@ Layer:
         /* parks */ (
           select way,
             way_area,
-            coalesce(tags->'name:fr',tags->'int_name',name) as name,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             coalesce(boundary, tourism) as park
           from planet_osm_polygon
           where (boundary='national_park' or tourism='theme_park')
