@@ -324,7 +324,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* water-lines */ (
-          SELECT st_intersection(bbbox(!bbox!,!pixel_width!,!pixel_height!,0),way) as way,
+          SELECT way,
             waterway,
             disused,
             lock,
