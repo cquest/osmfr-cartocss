@@ -289,7 +289,12 @@ Layer:
           water,
           surface
         FROM planet_osm_polygon
-        WHERE (waterway in ('dock','mill_pond','riverbank','canal') or landuse in ('reservoir','water','basin','salt_pond') or "natural" in ('lake','water','land','glacier','mud') or amenity='fountain' or water='tidal' or tags->'tidal'='yes')
+        WHERE (waterway in ('dock','mill_pond','riverbank','canal','dam')
+            or landuse in ('reservoir','water','basin','salt_pond')
+            or "natural" in ('lake','water','land','glacier','mud')
+            or amenity='fountain'
+            or water='tidal'
+            or tags->'tidal'='yes')
           and building is null
           and way_area > !pixel_width!*!pixel_height!*10
           and way && !bbox!

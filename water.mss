@@ -16,6 +16,10 @@
     polygon-fill: @water-color;
   }
 
+  [waterway = 'dam'] {
+    polygon-fill: #aaa;
+  }
+
   [landuse = 'basin'][zoom >= 7][zoom<13]::landuse {
       polygon-gamma: 0.75;
       polygon-fill: @water-color;
