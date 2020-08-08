@@ -2420,7 +2420,7 @@
     shield-repeat-distance: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-clip: true;
+    shield-avoid-edges: true;
     [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
     [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
   }
@@ -2434,7 +2434,7 @@
     shield-repeat-distance: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-clip: true;
+    shield-avoid-edges: true;
   }
 
   [highway = 'primary'] {
@@ -2446,7 +2446,7 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-clip: true;
+    shield-avoid-edges: true;
   }
 
   [highway = 'secondary'] {
@@ -2458,7 +2458,7 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-clip: true;
+    shield-avoid-edges: true;
   }
 
   [highway = 'tertiary'] {
@@ -2470,7 +2470,7 @@
     shield-spacing: @shield_spacing;
     shield-face-name: @bold-fonts;
     shield-margin: 20;
-    shield-clip: true;
+    shield-avoid-edges: true;
   }
 
   [highway = 'unclassified'],
