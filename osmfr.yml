@@ -1433,7 +1433,7 @@ Layer:
             GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
             HAVING sum(way_len)> 32 * !pixel_width!
           ) as w
-          LEFT JOIN abrev a ON (a.name = w.name)
+          LEFT JOIN abrev a ON (a.long_name = w.name)
           ORDER BY way_len
         ) as roads
       simplify_geometries: 'true'

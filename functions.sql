@@ -76,14 +76,14 @@ regexp_replace($1,
 
 
 -- création de la table des noms abrégés
-CREATE TABLE IF NOT EXISTS abrev (name text, abrev_prenoms text, abrev text);
+CREATE TABLE IF NOT EXISTS abrev (long_name text, abrev_prenoms text, abrev text);
 GRANT SELECT ON TABLE abrev TO PUBLIC;
-CREATE UNIQUE INDEX IF NOT EXISTS abrev_index ON abrev (name);
+CREATE UNIQUE INDEX IF NOT EXISTS abrev_index ON abrev (long_name);
 
 -- remplissage de la table avec les odonymes des territoires français (8mn)
 INSERT INTO abrev
 SELECT
-    l.name,
+    l.name as long_name,
     fr_prenoms(l.name) as abrev_prenoms,
     null as abrev
 FROM planet_osm_polygon p 
@@ -99,8 +99,8 @@ ON CONFLICT DO NOTHING;
 -- remplissage de la table avec les odonymes des pays francophones (2 mn)
 INSERT INTO abrev
 SELECT
-    coalesce(l.tags->'name:fr',l.name) as name,
-    fr_prenoms(l.name) as abrev_prenoms,
+    coalesce(l.tags->'name:fr',l.name) as long_name,
+    fr_prenoms(coalesce(l.tags->'name:fr',l.name)) as abrev_prenoms,
     null as abrev
 FROM planet_osm_polygon p 
 JOIN planet_osm_line l ON l.way && p.way
@@ -113,8 +113,8 @@ ON CONFLICT DO NOTHING;
 
 
 -- application des règles d'abréviation générales (2mn)
-UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(name)) WHERE abrev IS NULL;
+UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(long_name)) WHERE abrev IS NULL;
 
 -- on ne garde que les noms abrégés
 DELETE FROM abrev where name=abrev_prenoms and name=abrev;
-CLUSTER abrev USING abrev_index;
+VACUUM FULL ANALYZE abrev;
