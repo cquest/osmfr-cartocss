@@ -22617,34 +22617,62 @@ FROM (
 ) as placenames]]></Parameter>
     </Datasource>
   </Layer>
-  <Style filter-mode="first" name="placenames-islands">
+  <Style filter-mode="first" name="placenames-sea-water">
+    <Rule>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 8000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="16" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="16" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 4000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="14" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="14" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 2000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="12" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="12" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 100)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+  </Style>
+  <Style filter-mode="first" name="placenames-sea-land">
     <Rule>
       <MaxScaleDenominator>50000000</MaxScaleDenominator>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([way_area] > 1000000000)]]></Filter>
+      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 1000000000)]]></Filter>
       <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000000</MaxScaleDenominator>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([way_area] > 500000000)]]></Filter>
+      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 500000000)]]></Filter>
       <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([way_area] > 100000000)]]></Filter>
+      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 100000000)]]></Filter>
       <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([way_area] > 30000000)]]></Filter>
+      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 30000000)]]></Filter>
       <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Layer name="placenames-islands" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
-    <StyleName><![CDATA[placenames-islands]]></StyleName>
+  <Layer name="placenames-sea" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+    <StyleName><![CDATA[placenames-sea-land]]></StyleName>
+    <StyleName><![CDATA[placenames-sea-water]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
       <Parameter name="dbname"><![CDATA[osm]]></Parameter>
@@ -22656,19 +22684,32 @@ FROM (
       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[/* placenames-islands */ (
-  SELECT ST_Snaptogrid(way,!pixel_width!) as way,
-    cast(st_area(st_convexhull(way)) as bigint) way_area,
-    place,
+      <Parameter name="table"><![CDATA[/* placenames-sea */ (
+  SELECT way,
+    way_area,
+    0 as sqkm,
+    coalesce(place,"natural") as place,
+    way_area / (!pixel_width!*!pixel_height!) as pixels,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
   FROM  planet_osm_polygon
   WHERE  way && !bbox!
-    and place is not null
-    and place in ('archipelago','island')
-  order by place, way_area desc
-) as islands]]></Parameter>
+    and way_area > !pixel_width!*!pixel_height!
+    and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
+UNION
+  SELECT way,
+    way_area,
+    to_int(coalesce(tags->'sqkm','0')) as sqkm,
+    coalesce(place,"natural") as place,
+    to_int(coalesce(tags->'sqkm','0')) / (!pixel_width!*!pixel_height!) as pixels,
+    coalesce(tags->'name:fr',case
+      when name ~ '[A-Za-z]' then name
+      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
+  FROM  planet_osm_polygon
+  WHERE  way && !bbox!
+    and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
+order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
     </Datasource>
   </Layer>
   <Style filter-mode="first" name="placenames-large">
@@ -47748,127 +47789,6 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <TextSymbolizer dy="12" fill="#006600" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Style filter-mode="first" name="text-poly-lz-natural_bay">
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 250000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 250000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>25000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 250000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 100000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 100000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000</MaxScaleDenominator>
-      <MinScaleDenominator>12500</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 100000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="12" wrap-width="50"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>25000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 100000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 50000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 50000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="12" wrap-width="50"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>25000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 50000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 25000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 25000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="12" wrap-width="50"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>12500</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 25000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>2500</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 10000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <MinScaleDenominator>2500</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 10000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="12" wrap-width="50"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 10000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>2500</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 5000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="12" wrap-width="50"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <MinScaleDenominator>2500</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 5000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay') and ([way_area] > 5000)]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay')]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>50000</MaxScaleDenominator>
-      <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([natural] = 'bay')]]></Filter>
-      <TextSymbolizer fill="#6699cc" fontset-name="fontset-0" halo-radius="1" placement="interior" size="10" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
-    </Rule>
-  </Style>
   <Style filter-mode="first" name="text-poly-lz-natural">
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -48139,7 +48059,6 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <StyleName><![CDATA[text-poly-lz-military]]></StyleName>
     <StyleName><![CDATA[text-poly-lz-power]]></StyleName>
     <StyleName><![CDATA[text-poly-lz-natural]]></StyleName>
-    <StyleName><![CDATA[text-poly-lz-natural_bay]]></StyleName>
     <StyleName><![CDATA[text-poly-lz-golf_course]]></StyleName>
     <StyleName><![CDATA[text-poly-lz-tourism]]></StyleName>
     <Datasource>
@@ -48172,7 +48091,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       or place='island'
       or military='danger_area'
       or aeroway = 'danger_area'
-      or "natural" in ('saddle','peak','volcano','bay')
+      or "natural" in ('saddle','peak','volcano')
       or tourism in ('zoo','theme_park')
       or power in ('generator','substation','sub_station','plant'))
     and way_area > !pixel_width!*!pixel_height!*100
@@ -48195,7 +48114,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       or place='island'
       or military='danger_area'
       or aeroway = 'danger_area'
-      or "natural" in ('saddle','peak','volcano','bay')
+      or "natural" in ('saddle','peak','volcano')
       or tourism in ('zoo','theme_park')
       or power in ('generator','substation','sub_station','plant'))
   order by way_area desc
@@ -57330,4 +57249,4 @@ from planet_osm_point where "addr:housename" is not null ) as housenames]]></Par
     </Datasource>
   </Layer>
 </Map>
-<!-- 1938 bad filters (rules removed), 9359 rules kept -->
+<!-- 1938 bad filters (rules removed), 9343 rules kept -->
