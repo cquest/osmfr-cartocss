@@ -1050,25 +1050,39 @@ Layer:
         ) as placenames
 
 
-  - id: placenames-islands
+  - id: placenames-sea
     <<: *extents
     zoom_min: 4
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* placenames-islands */ (
-          SELECT ST_Snaptogrid(way,!pixel_width!) as way,
-            cast(st_area(st_convexhull(way)) as bigint) way_area,
-            place,
+        /* placenames-sea */ (
+          SELECT way,
+            way_area,
+            0 as sqkm,
+            coalesce(place,"natural") as place,
+            way_area / (!pixel_width!*!pixel_height!) as pixels,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
           FROM  planet_osm_polygon
           WHERE  way && !bbox!
-            and place is not null
-            and place in ('archipelago','island')
-          order by place, way_area desc
-        ) as islands
+            and way_area > !pixel_width!*!pixel_height!
+            and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
+        UNION
+          SELECT way,
+            way_area,
+            to_int(coalesce(tags->'sqkm','0')) as sqkm,
+            coalesce(place,"natural") as place,
+            to_int(coalesce(tags->'sqkm','0')) / (!pixel_width!*!pixel_height!) as pixels,
+            coalesce(tags->'name:fr',case
+              when name ~ '[A-Za-z]' then name
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
+          FROM  planet_osm_polygon
+          WHERE  way && !bbox!
+            and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
+        order by way_area desc, 3 desc
+        ) as placenames_sea
 
 
   - id: placenames-large
@@ -1604,7 +1618,7 @@ Layer:
               or place='island'
               or military='danger_area'
               or aeroway = 'danger_area'
-              or "natural" in ('saddle','peak','volcano','bay')
+              or "natural" in ('saddle','peak','volcano')
               or tourism in ('zoo','theme_park')
               or power in ('generator','substation','sub_station','plant'))
             and way_area > !pixel_width!*!pixel_height!*100
@@ -1627,7 +1641,7 @@ Layer:
               or place='island'
               or military='danger_area'
               or aeroway = 'danger_area'
-              or "natural" in ('saddle','peak','volcano','bay')
+              or "natural" in ('saddle','peak','volcano')
               or tourism in ('zoo','theme_park')
               or power in ('generator','substation','sub_station','plant'))
           order by way_area desc

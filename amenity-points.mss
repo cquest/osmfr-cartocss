@@ -916,32 +916,6 @@
 
 //// zoom 14
 
-  [natural = 'bay'][zoom >= 14]::natural_bay {
-    [zoom >= 17] { text-name: "[name]"; }
-    text-name: "[nom]";
-    text-size: 10;
-    text-fill: #6699cc;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-placement: interior;
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-      text-wrap-width: 50;
-    }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-      text-wrap-width: 60;
-    }
-  }
-
   [leisure = 'golf_course'][zoom >= 14]::golf_course {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
