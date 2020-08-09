@@ -662,7 +662,12 @@ Layer:
     zoom_min: 8
     Datasource:
       <<: *osm2pgsql
-      table: " /* ferry-routes */ (select way from planet_osm_line where route='ferry' ) as routes"
+      table: >-
+        /* ferry-routes */ (
+          select way
+          from planet_osm_roads
+          where route='ferry'
+        ) as routes
       simplify_geometries: 'true'
 
 
