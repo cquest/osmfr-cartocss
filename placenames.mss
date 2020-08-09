@@ -46,18 +46,13 @@
   }
 }
 
-#placenames-sea::land [place =~ 'island|archipelago|isthmus']  {
-  [zoom >= 4][zoom < 9][way_area>1000000000],
-  [zoom >= 5][zoom < 9][way_area>500000000],
-  [zoom >= 6][zoom < 9][way_area>100000000],
-  [zoom >= 7][zoom < 9][way_area>30000000] {
-    text-name: "[name]";
-    text-size: 8;
-    text-face-name: @oblique-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 0;
-    text-margin: 10;
-  }
+#placenames-sea::land [place =~ 'island|archipelago|isthmus'][pixels>4]  {
+  text-name: "[name]";
+  text-size: 8;
+  text-face-name: @oblique-fonts;
+  text-halo-radius: 1;
+  text-wrap-width: 30;
+  text-margin: 10;
 }
 
 #placenames-sea::water [place =~ 'ocean|sea|bay|strait'] [pixels > 100] {
@@ -66,7 +61,7 @@
   text-face-name: @oblique-fonts;
   text-halo-radius: 1;
   text-halo-fill: fadeout(white, 30%);
-  text-wrap-width: 40;
+  text-wrap-width: 30;
   text-margin: 10;
   text-size: 9;
   text-avoid-edges: true;
@@ -76,17 +71,18 @@
   b/text-face-name: @oblique-fonts;
   b/text-halo-radius: 1;
   b/text-halo-fill: fadeout(white, 30%);
-  b/text-wrap-width: 40;
+  b/text-wrap-width: 30;
   b/text-margin: 10;
   b/text-size: 9;
   b/text-placement-type: simple;
   b/text-placements: "N,11,10,9";
   b/text-avoid-edges: true;
+ 
+  [pixels > 1000] { text-size: 10+[enlarge]; b/text-size: 10+[enlarge]; }
+  [pixels > 2000] { text-size: 12+[enlarge]; b/text-size: 11+[enlarge]; }
+  [pixels > 4000][zoom >= 6] { text-size: 14+[enlarge]; b/text-size: 12+[enlarge]; }
+  [pixels > 8000][zoom >= 7] { text-size: 16+[enlarge]; b/text-size: 14+[enlarge]; }
 
-  [pixels > 1000] { text-size: 10; b/text-size: 10; }
-  [pixels > 2000] { text-size: 12; b/text-size: 12; }
-  [pixels > 4000] { text-size: 14; b/text-size: 14; }
-  [pixels > 8000] { text-size: 16; b/text-size: 16; }
 }
 
 .placenames [zoom >= 4] {

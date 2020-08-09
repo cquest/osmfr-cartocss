@@ -1052,16 +1052,16 @@ Layer:
 
   - id: placenames-sea
     <<: *extents
-    zoom_min: 4
+    properties:
+      minzoom: 2
     Datasource:
       <<: *osm2pgsql
       table: >-
         /* placenames-sea */ (
-          SELECT way,
-            way_area,
-            0 as sqkm,
-            coalesce(place,"natural") as place,
+          SELECT ST_PointOnSurface(way) as way,
             way_area / (!pixel_width!*!pixel_height!) as pixels,
+            coalesce("natural",place) as place,
+            case when place = 'ocean' then 2 else 0 end as enlarge,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
