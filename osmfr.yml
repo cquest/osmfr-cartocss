@@ -614,7 +614,8 @@ Layer:
 
   - id: minor-roads
     <<: *extents
-    zoom_min: 11
+    properties:
+      minzoom: 11
     Datasource:
       <<: *osm2pgsql
       table: >-
