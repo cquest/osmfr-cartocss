@@ -15,7 +15,113 @@ GRANT SELECT ON TABLE params TO PUBLIC;
 
 CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
     LANGUAGE sql IMMUTABLE PARALLEL SAFE
-    AS $_$ select regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace($1,'lémentaire ','lem. '),'econdaire ','econd. '),'rimaire ','rim. '),'aternelle ','at. '),'olyvalent ','ol. '),'ommerciale ','omm. '),'Direction ','Dir. '),'Esplanade ','Espl. '),'Chapelle ','Chap. '),'Cathédrale ','Cath. '),' Notre-Dame ',' N.D. '),'Avenue ','Av. '),'Autoroute ','Aut. '),'Boulevard ','Bd. '),'Faubourg ','Fbg. '),'Passage ','Pass. '),'Place ','Pl. '),'Promenade ','Prom. '),'Impasse ','Imp. '),'Centre Commercial ','CCial. '),'Immeuble ','Imm. '),'Lotissement ','Lot. '),'Résidence ','Rés. '),'Square ','Sq. '),'Zone Industrielle ','ZI. '),'Adjudant ','Adj. '),'Agricole ','Agric. '),'Arrondissement','Arrond.'),'Aspirant ','Asp. '),'Colonel ','Col. '),'Commandant ','Cdt. '),'Capitaine ','Capt. '),'Commercial ','Cial. '),'Coopérative ','Coop. '),'Division ','Div. '),'Docteur ','Dr. '),'Général ','Gén. '),'Institut ','Inst. '),'Faculté ','Fac. '),'Laboratoire ','Labo. '),'Lieutenant ','Lt. '),'Maréchal ','Mal. '),'Ministère ','Min. '),'Monseigneur ','Mgr. '),'Médiathèque ','Médiat. '),'Bibliothèque ','Bibl. '),'Tribunal ','Trib. '),'Observatoire ','Obs. '),'Périphérique ','Périph. '),'Préfecture ','Préf. '),'Chevalier ','Chev. '),'Président ','Pdt. '),'Régiment ','Rgt. '),'Saint-','Sᵗ-'),'Sainte-','Sᵗᵉ-'),'Sergent ','Sgt. '),'Université ','Univ. '),'Communauté d.[Aa]gglomération','Comm. d''agglo. '),'Communauté [Uu]rbaine ','Comm. urb. '),'Communauté de [Cc]ommunes ','Comm. comm. '),'Syndicat d.[Aa]gglomération ','Synd. d''agglo. '),'^Chemin ','Ch. '),'^Institut ','Inst. '),'Zone d.[Aa]ctivité.? [Éeée]conommique.? ','Z.A.E. '),'Zone d.[Aa]ctivité.? ','Z.A. '),'Zone  [Aa]rtisanale ','Zone Art. '),'Zone [Ii]ndustrielle ','Z.I. '),' [Pp]ubli(c|que) ',' Publ. '),' [Pp]rofess(eur|ionnel(|le)) ',' Prof. '),' [Tt]echnologique ',' Techno. '),' [Pp]olyvalent ',' Polyv. '),'[EÉeé]tablissement(|s) ','Éts. '),' [Mm]unicipal(|e) ',' Munic. '),' [Dd]épartemental(|e) ',' Départ. '),' [Ii]ntercommunal(|le) ',' Interco. '),' [Rr]égional(|e) ',' Région. '),' [Ii]nterdépartemental(|e) ',' Interdép. '),' [Hh]ospitali(er|ère) ',' Hospit. '),' [EÉeé]lectrique ',' Élect. '),' [Ss]upérieur(|e) ',' Sup. '),'^[Bb][aâ]timent ','Bât. '),'[Aa]éronautique ','Aéron. ') $_$;
+    AS $$ select
+    /* 32 regexp maxi !!!*/
+    regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+    regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+    regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+    regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+    regexp_replace(regexp_replace(regexp_replace(regexp_replace(regexp_replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
+        replace(replace(replace(replace(replace(replace($1,
+    'lémentaire ','lem. '),
+    'econdaire ','econd. '),
+    'rimaire ','rim. '),
+    'aternelle ','at. '),
+    'olyvalent ','ol. '),
+    'ommerciale ','omm. '),
+    'Direction ','Dir. '),
+    'Esplanade ','Espl. '),
+    'Pointe ','Pᵗᵉ '),
+    'Chapelle ','Chap. '),
+    'Cathédrale ','Cath. '),
+    ' Notre-Dame ',' N.D. '),
+    'Avenue ','Av. '),
+    'Autoroute ','Aut. '),
+    'Boulevard ','Bd. '),
+    'Faubourg ','Fbg. '),
+    'Passage ','Pass. '),
+    'Place ','Pl. '),
+    'Promenade ','Prom. '),
+    'Impasse ','Imp. '),
+    'Centre Commercial ','CCial. '),
+    'Domaine ','Dom. '),
+    'Immeuble ','Imm. '),
+    'Lotissement ','Lot. '),
+    'Résidence ','Rés. '),
+    'Square ','Sq. '),
+    'Zone Industrielle ','ZI. '),
+    'Adjudant ','Adj. '),
+    'Agricole ','Agric. '),
+    'Arrondissement','Arrond.'),
+    'Aspirant ','Asp. '),
+    'Boulangerie ','Boul. '),
+    'Colonel ','Col. '),
+    'Commandant ','Cdt. '),
+    'Capitaine ','Capt. '),
+    'Commercial ','Cial. '),
+    'Coopérative ','Coop. '),
+    'Division ','Div. '),
+    'Docteur ','Dr. '),
+    'Général ','Gén. '),
+    'Habitation ','Hab. '),
+    'Institut ','Inst. '),
+    'Impératrice ','Impér. '),
+    'Faculté ','Fac. '),
+    'Laboratoire ','Labo. '),
+    'Lieutenant ','Lt. '),
+    'Maréchal ','Mal. '),
+    'Ministère ','Min. '),
+    'Monseigneur ','Mgr. '),
+    'Médiathèque ','Médiat. '),
+    'National ','Nat. '),
+    'Bibliothèque ','Bibl. '),
+    'Tribunal ','Trib. '),
+    'Observatoire ','Obs. '),
+    'Pharmacie ','Pharm. '),
+    'Périphérique ','Périph. '),
+    'Préfecture ','Préf. '),
+    'Chevalier ','Chev. '),
+    'Président ','Pdt. '),
+    'Régiment ','Rgt. '),
+    'Saint-','Sᵗ-'),
+    'Sainte-','Sᵗᵉ-'),
+    'Sergent ','Sgt. '),
+    'Université ','Univ. '),
+    'Hôpital ','Hop. '),
+    'Collège ','Coll. '),
+    /* expressions régulières (32 maximum !!! */
+    'Communauté d.[Aa]gglomération','Comm. d''agglo. '),
+    'Communauté [Uu]rbaine ','Comm. urb. '),
+    'Communauté de [Cc]ommunes ','Comm. comm. '),
+    'Syndicat d.[Aa]gglomération ','Synd. d''agglo. '),
+    '^Chemin ','Ch. '),
+    '^Institut ','Inst. '),
+    'Zone d.[Aa]ctivité.? [Éeée]conommique.? ','Z.A.E. '),
+    'Zone d.[Aa]ctivité.? ','Z.A. '),
+    'Zone  [Aa]rtisanale ','Zone Art. '),
+    'Zone [Ii]ndustrielle ','Z.I. '),
+    ' [Pp]ubli(c|que) ',' Publ. '),
+    ' [Pp]rofess(eur|ionnel(|le)) ',' Prof. '),
+    ' [Tt]echnologique ',' Techno. '),
+    ' [Pp]olyvalent ',' Polyv. '),
+    '[EÉeé]tablissement(|s) ','Éts. '),
+    ' [Mm]unicipal(|e)( |$)',' Munic. '),
+    ' [Dd]épartemental(|e)( |$)',' Départ. '),
+    ' [Ii]ntercommunal(|le)( |$)',' Interco. '),
+    ' [Rr]égional(|e)( |$)',' Région. '),
+    ' [Ii]nterdépartemental(|e)( |$)',' Interdép. '),
+    ' [Hh]ospitali(er|ère) ',' Hospit. '),
+    ' [EÉeé]lectrique ',' Élect. '),
+    ' [Ss]upérieur(|e) ',' Sup. '),
+    '^[Bb][aâ]timent ','Bât. '),
+    '[Aa]éronautique ','Aéron. ')
+$$;
 
 --
 -- Name: to_int(text); Type: FUNCTION; Schema: public; Owner: osm2pgsql
