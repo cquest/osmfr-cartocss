@@ -218,8 +218,36 @@ GROUP BY 1,2
 ON CONFLICT DO NOTHING;
 
 
+-- remplissage de la table avec les toponymes
+INSERT INTO abrev
+SELECT
+    l.name as long_name,
+    fr_prenoms(l.name) as abrev_prenoms,
+    null as abrev
+FROM planet_osm_polygon p 
+JOIN planet_osm_point l ON l.way && p.way
+WHERE p.boundary= 'administrative' and p.admin_level='3'
+    and (p.tags ? 'ref:INSEE'
+        or p.name in ('France métropolitaine','Guadeloupe','Martinique','Mayotte','La Réunion','Guyane'))
+    AND l.name is not null
+ON CONFLICT DO NOTHING; -- 11mn
+
+INSERT INTO abrev
+SELECT
+    l.name as long_name,
+    fr_prenoms(l.name) as abrev_prenoms,
+    null as abrev
+FROM planet_osm_polygon p 
+JOIN planet_osm_polygon l ON l.way && p.way
+WHERE p.boundary= 'administrative' and p.admin_level='3'
+    and (p.tags ? 'ref:INSEE'
+        or p.name in ('France métropolitaine','Guadeloupe','Martinique','Mayotte','La Réunion','Guyane'))
+    AND l.name is not null
+ON CONFLICT DO NOTHING; -- 25mn
+
+
 -- application des règles d'abréviation générales (2mn)
-UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(long_name)) WHERE abrev IS NULL;
+UPDATE abrev SET (abrev_prenoms, abrev) = (fr_abbrev(abrev_prenoms), fr_abbrev(long_name)) WHERE abrev IS NULL; -- 6mn
 
 -- on ne garde que les noms abrégés
 DELETE FROM abrev where long_name=abrev_prenoms and long_name=abrev;
