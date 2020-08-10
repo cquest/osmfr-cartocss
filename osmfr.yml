@@ -1031,7 +1031,7 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr', tags->'name:fr', tags->'int_name', name)) as nom,
+            coalesce(tags->'short_name:fr', abrev, tags->'name:fr', tags->'int_name', name) as nom,
             to_int(population) as pop,
             coalesce(tags->'is_capital',
               (case when coalesce(admin_level, capital)='2' then 'country'
@@ -1042,6 +1042,7 @@ Layer:
             ) as is_capital,
             array_length(hstore_to_array(tags),1)/2 as nbtags
           FROM planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE  way && !bbox!
             and place is not null
             and (capital is not null or tags ? 'is_capital')
@@ -1130,11 +1131,12 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name', abrev, tags->'name:fr',tags->'int_name', name) as nom,
             to_int(population) as pop,
             tags->'is_capital' as is_capital,
             0 as nbtags
           FROM  planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE  way && !bbox!
             and place is not null
             and place in ('city','town')
@@ -1154,9 +1156,10 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+            coalesce(tags->'short_name:fr', abrev, tags->'name:fr',tags->'int_name', name) as nom,
             to_int(population) as pop
           FROM  planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE  way && !bbox!
             and place is not null
             and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
@@ -1313,8 +1316,9 @@ Layer:
           barrier,
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
-          fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE (aeroway in ('airport','aerodrome','helipad','military')
           OR military='airfield'
           OR (barrier in ('bollard','gate','lift_gate','block','toll_booth') AND !pixel_width! < 50 /* zoom >= 15 */)
@@ -1330,8 +1334,9 @@ Layer:
         UNION
         SELECT
           way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
-          fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE (aeroway in ('airport','aerodrome','helipad','military')
           OR military='airfield'
           OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
@@ -1362,7 +1367,7 @@ Layer:
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-          ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+          ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
           coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
           to_int(tags->'level') as level, tags->'network' as network,
           tags->'ref:FR:LaPoste' as ref_laposte, 
@@ -1376,6 +1381,7 @@ Layer:
           way_area,
           case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
         FROM planet_osm_polygon p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE (
           ((!scale_denominator! < 72000) and (coalesce(amenity,tourism) in ('townhall','alpine_hut')))
           OR ((!scale_denominator! < 36000) and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
@@ -1393,7 +1399,7 @@ Layer:
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-          ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+          ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
           coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
           to_int(tags->'level') as level, tags->'network' as network,
           tags->'ref:FR:LaPoste' as ref_laposte, 
@@ -1407,6 +1413,7 @@ Layer:
           0 as way_area,
           case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
         FROM planet_osm_point p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE (
           (!scale_denominator! < 72000 /* zoom >= 13 */
             and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
@@ -1432,15 +1439,16 @@ Layer:
         /* entrance */ (
           SELECT
             p.way,
-            fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+            coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
             p.ref,
             coalesce(p.tags->'indoor',case when to_int(p.tags->'level')<0 then 'yes'::text when p.tags->'location'='underground' then 'yes'::text else null end) as indoor,
             to_int(p.tags->'level') as level
           FROM planet_osm_point p
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           LEFT JOIN planet_osm_polygon w ON (ST_Intersects(w.way, p.way) AND NOT ST_Covers(w.way, p.way) AND (p.building is not null))
           WHERE w.way && !bbox! AND p.way && !bbox!
             AND p.tags ? 'entrance'
-          GROUP BY p.way, p.tags, p.name, p.ref
+          GROUP BY p.way, p.tags, p.name, p.ref, abrev
         ) as entrance
 
 
@@ -1498,9 +1506,10 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr', name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name', abrev, tags->'name:fr', name) as nom,
             coalesce(highway, aeroway) as type
           from planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           where highway='motorway_junction'
             AND /* index poi */ COALESCE(aeroway, military, barrier, man_made, railway, "natural", power, shop, tourism, waterway, historic, leisure, highway) IS NOT NULL OR tags ? 'mountain_pass'::text
         ) as junctions
@@ -1511,7 +1520,17 @@ Layer:
     zoom_min: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* crossroad_names */ (select way,name,fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom, highway from planet_osm_point p where (junction = 'yes' or highway='traffic_signals') AND name is not null) as crossroad_names"
+      table: >-
+        /* crossroad_names */ (
+          select way,
+            name,
+            coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
+            highway
+          from planet_osm_point p
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
+          where (junction = 'yes' or highway='traffic_signals')
+            AND name is not null
+        ) as crossroad_names
 
 
   - id: roads-text-name
@@ -1595,7 +1614,29 @@ Layer:
     zoom_min: 11
     Datasource:
       <<: *osm2pgsql
-      table: " /* area-text */ (SELECT  p.osm_id, coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind, p.tags->'heritage' as heritage, p.way_area, round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_Centroid(p.way) as way, coalesce(p.tags->'name:fr',p.name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom  FROM  planet_osm_polygon p  LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)  WHERE  p.way && !bbox! AND n.place is null AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p.\"natural\", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome') AND coalesce(p.power, p.place, p.shop) IS null AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo') and (p.admin_level is null or to_int(p.admin_level)>=8) and p.way_area / (!pixel_width!*!pixel_height!) > 1000  ORDER BY  p.way_area DESC) as text"
+      table: >-
+        /* area-text */ (
+          SELECT  p.osm_id,
+            coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind,
+            p.tags->'heritage' as heritage,
+            p.way_area,
+            round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_PointOnSurface(p.way) as way,
+            coalesce(p.tags->'name:fr',p.name) as name,
+            coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom
+          FROM  planet_osm_polygon p
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', p.name)
+          LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)
+          WHERE  p.way && !bbox!
+            AND n.place is null
+            AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL
+            AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p."natural", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome')
+            AND coalesce(p.power, p.place, p.shop) IS null
+            AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo')
+            and (p.admin_level is null
+              or to_int(p.admin_level)>=8)
+            and p.way_area / (!pixel_width!*!pixel_height!) > 1000
+          ORDER BY  p.way_area DESC
+        ) as text
       simplify_geometries: 'true'
 
 
@@ -1611,13 +1652,14 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
             way_area,
             power
           FROM planet_osm_polygon
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
             AND COALESCE(name, tags -> 'name:fr'::text, tags -> 'int_name'::text, tags -> 'stars'::text, tags -> 'ele'::text, tags -> 'ele:local'::text, ref, tags -> 'school:FR'::text) IS NOT NULL
             and (leisure = 'golf_course'
@@ -1634,13 +1676,14 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             coalesce(tags->'ele',tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
             0 as way_area,
             power
           FROM planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
             AND name is not null
             and (leisure = 'golf_course'
@@ -1669,7 +1712,7 @@ Layer:
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             case when amenity='townhall' then 2 when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             aeroway,
             shop,
             access,
@@ -1694,6 +1737,7 @@ Layer:
             office,
             tags->'craft' as craft
           FROM planet_osm_polygon
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
             AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', tags->'ele', tags->'ele:local', ref,tags->'school:FR') is not null
             and (amenity is not null
@@ -1720,7 +1764,7 @@ Layer:
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-            fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
             substring('******',1,to_int(tags->'stars')::integer) as stars,
             coalesce(ele,tags->'ele:local','') as ele,
@@ -1732,6 +1776,7 @@ Layer:
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power, office, tags->'craft' as craft
           FROM planet_osm_point
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
             AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', ele, tags->'ele:local', ref,tags->'school:FR') is not null
             and ((amenity is not null and amenity not in ('townhall'))
@@ -1768,8 +1813,9 @@ Layer:
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
           tags->'ref:INSEE' as insee,
-          fr_abbrev(coalesce(tags->'name:fr',tags->'int_name',name)) as nom
+          coalesce(abrev,tags->'name:fr',tags->'int_name',name) as nom
         FROM planet_osm_polygon p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE ST_Intersects(p.way, !bbox!)
           AND not ST_Covers(p.way,!bbox!)
           AND boundary='administrative'
@@ -1793,9 +1839,10 @@ Layer:
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom,
+            coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom,
             to_int(population) as pop
           FROM  planet_osm_point p
+          LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE  way && !bbox!
             and place is not null
             and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
