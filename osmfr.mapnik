@@ -32,6 +32,7 @@
     <Rule>
       <MinScaleDenominator>750000</MinScaleDenominator>
       <PolygonSymbolizer fill="#b5d0d0" />
+      <LineSymbolizer stroke="#b5d0d0" stroke-width="1" />
     </Rule>
   </Style>
   <Layer name="world" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
@@ -45,6 +46,7 @@
     <Rule>
       <MaxScaleDenominator>750000</MaxScaleDenominator>
       <PolygonSymbolizer fill="#b5d0d0" />
+      <LineSymbolizer stroke="#b5d0d0" stroke-width="1" />
     </Rule>
   </Style>
   <Layer name="coast-poly" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
@@ -60,7 +62,7 @@
       <RasterSymbolizer opacity="0.7" scaling="lanczos" />
     </Rule>
   </Style>
-  <Layer name="lowzoom">
+  <Layer minimum-scale-denominator="3000000" name="lowzoom">
     <StyleName><![CDATA[lowzoom]]></StyleName>
     <Datasource>
       <Parameter name="file"><![CDATA[layers/z7.tif]]></Parameter>
@@ -939,7 +941,7 @@
       <PolygonSymbolizer fill="#cfeca8" />
     </Rule>
   </Style>
-  <Layer name="landcover" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="3000000" name="landcover" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[landcover]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -3679,7 +3681,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[/* water-areas */ ( SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,
+      <Parameter name="table"><![CDATA[/* water-areas */ ( SELECT ST_Snaptogrid(way,!pixel_width!) as way,
   "natural",
   waterway,
   landuse,
@@ -3719,7 +3721,7 @@ ORDER BY z_order,way_area desc ) as water_areas]]></Parameter>
       <TextSymbolizer fill="#9999ff" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="20"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Layer name="glaciers-text" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="3000000" name="glaciers-text" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[glaciers-text]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -4300,7 +4302,7 @@ ORDER BY way_area desc ) as glaciers]]></Parameter>
       <LineSymbolizer stroke="#0000ff" stroke-dasharray="1, 3" stroke-linecap="butt" stroke-opacity="0.5" stroke-width="1" />
     </Rule>
   </Style>
-  <Layer name="marinas-area" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="50000" name="marinas-area" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[marinas-area]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -4323,7 +4325,7 @@ ORDER BY way_area desc ) as glaciers]]></Parameter>
       <PolygonSymbolizer fill="#f2efe9" />
     </Rule>
   </Style>
-  <Layer name="piers-area" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="200000" name="piers-area" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[piers-area]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -7294,23 +7296,6 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
       <LineSymbolizer stroke="#ededed" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
     </Rule>
     <Rule>
-      <MaxScaleDenominator>100000</MaxScaleDenominator>
-      <MinScaleDenominator>50000</MinScaleDenominator>
-      <Filter><![CDATA[([highway] = 'living_street') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500</MaxScaleDenominator>
-      <Filter><![CDATA[([highway] = 'living_street') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" smooth="0.8" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>100000</MaxScaleDenominator>
-      <MinScaleDenominator>50000</MinScaleDenominator>
-      <Filter><![CDATA[([highway] = 'living_street')]]></Filter>
-      <LineSymbolizer stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
-    </Rule>
-    <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
       <LineSymbolizer clip="false" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
@@ -7631,6 +7616,23 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
       <Filter><![CDATA[([highway] = 'bridleway')]]></Filter>
       <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.4" stroke-width="3" />
       <LineSymbolizer stroke="#008000" stroke-dasharray="4, 2" stroke-width="1.2" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <MinScaleDenominator>50000</MinScaleDenominator>
+      <Filter><![CDATA[([highway] = 'living_street') and ([junction] = 'roundabout')]]></Filter>
+      <LineSymbolizer stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500</MaxScaleDenominator>
+      <Filter><![CDATA[([highway] = 'living_street') and ([junction] = 'roundabout')]]></Filter>
+      <LineSymbolizer clip="false" smooth="0.8" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <MinScaleDenominator>50000</MinScaleDenominator>
+      <Filter><![CDATA[([highway] = 'living_street')]]></Filter>
+      <LineSymbolizer stroke="#cccccc" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -9588,7 +9590,7 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
       <LineSymbolizer stroke="#ffc0cb" stroke-linejoin="round" stroke-width="1.2" />
     </Rule>
   </Style>
-  <Layer name="minor-roads" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="400000" name="minor-roads" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[minor-roads-casing_links]]></StyleName>
     <StyleName><![CDATA[minor-roads-casing]]></StyleName>
     <StyleName><![CDATA[minor-roads-fill_links]]></StyleName>
@@ -9751,7 +9753,11 @@ ORDER BY zz_order) as roads]]></Parameter>
       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[ /* ferry-routes */ (select way from planet_osm_line where route='ferry' ) as routes]]></Parameter>
+      <Parameter name="table"><![CDATA[/* ferry-routes */ (
+  select way
+  from planet_osm_roads
+  where route='ferry'
+) as routes]]></Parameter>
       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
     </Datasource>
   </Layer>
@@ -22198,7 +22204,7 @@ FROM (
       <LineSymbolizer stroke="#6c216c" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" />
     </Rule>
   </Style>
-  <Layer name="admin-lz" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="50000000" minimum-scale-denominator="400000" name="admin-lz" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[admin-lz]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -22389,7 +22395,7 @@ FROM (
       <LineSymbolizer stroke="#6c216c" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" />
     </Rule>
   </Style>
-  <Layer name="admin-boundaries" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="400000" name="admin-boundaries" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[admin-boundaries]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -22573,7 +22579,7 @@ FROM (
       <TextSymbolizer clip="false" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-distance="10" size="9" wrap-width="20"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Layer name="placenames-capital" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="50000000" name="placenames-capital" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[placenames-capital]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -22592,7 +22598,7 @@ FROM (
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr', tags->'name:fr', tags->'int_name', name)) as nom,
+    coalesce(tags->'short_name:fr', abrev, tags->'name:fr', tags->'int_name', name) as nom,
     to_int(population) as pop,
     coalesce(tags->'is_capital',
       (case when coalesce(admin_level, capital)='2' then 'country'
@@ -22603,6 +22609,7 @@ FROM (
     ) as is_capital,
     array_length(hstore_to_array(tags),1)/2 as nbtags
   FROM planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE  way && !bbox!
     and place is not null
     and (capital is not null or tags ? 'is_capital')
@@ -22619,58 +22626,59 @@ FROM (
   </Layer>
   <Style filter-mode="first" name="placenames-sea-water">
     <Rule>
+      <MaxScaleDenominator>6500000</MaxScaleDenominator>
       <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 8000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="16" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="16" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="16+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="14+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
+      <MinScaleDenominator>6500000</MinScaleDenominator>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 8000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="14+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="12+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 8000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="12+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="11+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>12500000</MaxScaleDenominator>
       <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 4000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="14" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="14" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="14+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="12+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MinScaleDenominator>12500000</MinScaleDenominator>
+      <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 4000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="12+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="11+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 2000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="12" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="12" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="12+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="11+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="10+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="10+[enlarge]" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <Filter><![CDATA[([place].match('ocean|sea|bay|strait')) and ([pixels] > 100)]]></Filter>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
-      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" size="9" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1" margin="10" placement-type="simple" placements="N,11,10,9" size="9" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
   </Style>
   <Style filter-mode="first" name="placenames-sea-land">
     <Rule>
-      <MaxScaleDenominator>50000000</MaxScaleDenominator>
-      <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 1000000000)]]></Filter>
-      <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>25000000</MaxScaleDenominator>
-      <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 500000000)]]></Filter>
-      <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>12500000</MaxScaleDenominator>
-      <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 100000000)]]></Filter>
-      <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>6500000</MaxScaleDenominator>
-      <MinScaleDenominator>1500000</MinScaleDenominator>
-      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([way_area] > 30000000)]]></Filter>
-      <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="0"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([place].match('island|archipelago|isthmus')) and ([pixels] > 4)]]></Filter>
+      <TextSymbolizer fontset-name="fontset-2" halo-radius="1" margin="10" size="8" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Layer name="placenames-sea" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="200000000" name="placenames-sea" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[placenames-sea-land]]></StyleName>
     <StyleName><![CDATA[placenames-sea-water]]></StyleName>
     <Datasource>
@@ -22685,11 +22693,10 @@ FROM (
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
       <Parameter name="table"><![CDATA[/* placenames-sea */ (
-  SELECT way,
-    way_area,
-    0 as sqkm,
-    coalesce(place,"natural") as place,
+  SELECT ST_PointOnSurface(way) as way,
     way_area / (!pixel_width!*!pixel_height!) as pixels,
+    coalesce("natural",place) as place,
+    case when place = 'ocean' then 2 else 0 end as enlarge,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
@@ -22699,17 +22706,16 @@ FROM (
     and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
 UNION
   SELECT way,
-    way_area,
-    to_int(coalesce(tags->'sqkm','0')) as sqkm,
-    coalesce(place,"natural") as place,
-    to_int(coalesce(tags->'sqkm','0')) / (!pixel_width!*!pixel_height!) as pixels,
+    to_int(coalesce(tags->'sqkm','0'))/5 as pixels,
+    coalesce("natural",place) as place,
+    case when place = 'ocean' then 4 else 0 end as enlarge,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
-  FROM  planet_osm_polygon
-  WHERE  way && !bbox!
+  FROM  planet_osm_point
+  WHERE way && !bbox!
     and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
-order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
+order by 2 desc ) as placenames_sea]]></Parameter>
     </Datasource>
   </Layer>
   <Style filter-mode="first" name="placenames-large">
@@ -22744,7 +22750,7 @@ order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
       <TextSymbolizer fill="#808080" fontset-name="fontset-2" halo-radius="1" size="12"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
   </Style>
-  <Layer name="placenames-large" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
+  <Layer maximum-scale-denominator="200000000" name="placenames-large" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
     <StyleName><![CDATA[placenames-large]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
@@ -22944,11 +22950,12 @@ order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name', abrev, tags->'name:fr',tags->'int_name', name) as nom,
     to_int(population) as pop,
     tags->'is_capital' as is_capital,
     0 as nbtags
   FROM  planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE  way && !bbox!
     and place is not null
     and place in ('city','town')
@@ -23066,9 +23073,10 @@ order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr',tags->'int_name', name)) as nom,
+    coalesce(tags->'short_name:fr', abrev, tags->'name:fr',tags->'int_name', name) as nom,
     to_int(population) as pop
   FROM  planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE  way && !bbox!
     and place is not null
     and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
@@ -37707,8 +37715,8 @@ order by way_area desc, 3 desc ) as placenames_sea]]></Parameter>
   barrier,
   tags->'mountain_pass' as mountain_pass,
   coalesce(tags->'aerodrome', p.military) as aerodrome,
-  fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
-FROM planet_osm_point p WHERE (aeroway in ('airport','aerodrome','helipad','military')
+  regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+FROM planet_osm_point p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name) WHERE (aeroway in ('airport','aerodrome','helipad','military')
   OR military='airfield'
   OR (barrier in ('bollard','gate','lift_gate','block','toll_booth') AND !pixel_width! < 50 /* zoom >= 15 */)
   OR (highway in ('mini_roundabout','gate') AND !pixel_width! < 50)
@@ -37722,8 +37730,8 @@ FROM planet_osm_point p WHERE (aeroway in ('airport','aerodrome','helipad','mili
   AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
 UNION SELECT
   way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
-  fr_abbrev(regexp_replace(regexp_replace(coalesce(tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ')) as nom
-FROM planet_osm_polygon p WHERE (aeroway in ('airport','aerodrome','helipad','military')
+  regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name) WHERE (aeroway in ('airport','aerodrome','helipad','military')
   OR military='airfield'
   OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
   OR highway in ('mini_roundabout','gate')
@@ -41262,7 +41270,7 @@ FROM planet_osm_polygon p WHERE (aeroway in ('airport','aerodrome','helipad','mi
   operator, access, religion, lock, office,
   p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-  ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+  ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
   coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
   to_int(tags->'level') as level, tags->'network' as network,
   tags->'ref:FR:LaPoste' as ref_laposte, 
@@ -41275,7 +41283,7 @@ FROM planet_osm_polygon p WHERE (aeroway in ('airport','aerodrome','helipad','mi
   
   way_area,
   case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
-FROM planet_osm_polygon p WHERE (
+FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name) WHERE (
   ((!scale_denominator! < 72000) and (coalesce(amenity,tourism) in ('townhall','alpine_hut')))
   OR ((!scale_denominator! < 36000) and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
   OR ((!scale_denominator! < 18000) and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
@@ -41291,7 +41299,7 @@ UNION SELECT way,
   operator, access, religion, lock, office,
   p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-  ref, name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+  ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
   coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
   to_int(tags->'level') as level, tags->'network' as network,
   tags->'ref:FR:LaPoste' as ref_laposte, 
@@ -41304,7 +41312,7 @@ UNION SELECT way,
   
   0 as way_area,
   case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
-FROM planet_osm_point p WHERE (
+FROM planet_osm_point p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name) WHERE (
   (!scale_denominator! < 72000 /* zoom >= 13 */
     and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
   OR (!scale_denominator! < 36000
@@ -41499,15 +41507,16 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <Parameter name="table"><![CDATA[/* entrance */ (
   SELECT
     p.way,
-    fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom,
+    coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
     p.ref,
     coalesce(p.tags->'indoor',case when to_int(p.tags->'level')<0 then 'yes'::text when p.tags->'location'='underground' then 'yes'::text else null end) as indoor,
     to_int(p.tags->'level') as level
   FROM planet_osm_point p
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   LEFT JOIN planet_osm_polygon w ON (ST_Intersects(w.way, p.way) AND NOT ST_Covers(w.way, p.way) AND (p.building is not null))
   WHERE w.way && !bbox! AND p.way && !bbox!
     AND p.tags ? 'entrance'
-  GROUP BY p.way, p.tags, p.name, p.ref
+  GROUP BY p.way, p.tags, p.name, p.ref, abrev
 ) as entrance]]></Parameter>
     </Datasource>
   </Layer>
@@ -41794,9 +41803,10 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name', tags->'name:fr', name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name', abrev, tags->'name:fr', name) as nom,
     coalesce(highway, aeroway) as type
   from planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   where highway='motorway_junction'
     AND /* index poi */ COALESCE(aeroway, military, barrier, man_made, railway, "natural", power, shop, tourism, waterway, historic, leisure, highway) IS NOT NULL OR tags ? 'mountain_pass'::text
 ) as junctions]]></Parameter>
@@ -41814,7 +41824,16 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[ /* crossroad_names */ (select way,name,fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name)) as nom, highway from planet_osm_point p where (junction = 'yes' or highway='traffic_signals') AND name is not null) as crossroad_names]]></Parameter>
+      <Parameter name="table"><![CDATA[/* crossroad_names */ (
+  select way,
+    name,
+    coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
+    highway
+  from planet_osm_point p
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
+  where (junction = 'yes' or highway='traffic_signals')
+    AND name is not null
+) as crossroad_names]]></Parameter>
     </Datasource>
   </Layer>
   <Style filter-mode="first" name="roads-text-name">
@@ -47358,7 +47377,28 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
       <Parameter name="asynchronous_request">false</Parameter>
       <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[ /* area-text */ (SELECT  p.osm_id, coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind, p.tags->'heritage' as heritage, p.way_area, round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_Centroid(p.way) as way, coalesce(p.tags->'name:fr',p.name) as name, fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom  FROM  planet_osm_polygon p  LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)  WHERE  p.way && !bbox! AND n.place is null AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p."natural", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome') AND coalesce(p.power, p.place, p.shop) IS null AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo') and (p.admin_level is null or to_int(p.admin_level)>=8) and p.way_area / (!pixel_width!*!pixel_height!) > 1000  ORDER BY  p.way_area DESC) as text]]></Parameter>
+      <Parameter name="table"><![CDATA[/* area-text */ (
+  SELECT  p.osm_id,
+    coalesce(p.leisure, p.boundary, p.landuse, p.natural, p.amenity, p.building, p.shop) as kind,
+    p.tags->'heritage' as heritage,
+    p.way_area,
+    round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_PointOnSurface(p.way) as way,
+    coalesce(p.tags->'name:fr',p.name) as name,
+    coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom
+  FROM  planet_osm_polygon p
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', p.name)
+  LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)
+  WHERE  p.way && !bbox!
+    AND n.place is null
+    AND COALESCE(p.name, p.tags -> 'name:fr'::text, p.tags -> 'int_name'::text, p.tags -> 'stars'::text, p.tags -> 'ele'::text, p.tags -> 'ele:local'::text, p.ref, p.tags -> 'school:FR'::text) IS NOT NULL
+    AND coalesce(p.waterway, p.water, p.aeroway, p.boundary, p.landuse, p."natural", p.building, p.leisure,p.aeroway,p.amenity,p.tourism,'') NOT IN ('','river','riverbank','aerodrome')
+    AND coalesce(p.power, p.place, p.shop) IS null
+    AND coalesce(p.boundary,p.amenity,p.tourism,'') in ('','protected_area','national_park','maritime','school','kindergarten','townhall','public_building','hospital','clinic','courthouse','place_of_worship','recycling','zoo')
+    and (p.admin_level is null
+      or to_int(p.admin_level)>=8)
+    and p.way_area / (!pixel_width!*!pixel_height!) > 1000
+  ORDER BY  p.way_area DESC
+) as text]]></Parameter>
       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
     </Datasource>
   </Layer>
@@ -48078,13 +48118,14 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
     leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
     coalesce(tags->'ele',tags->'ele:local','') as ele,
     tags->'mountain_pass' as mountain_pass,
     way_area,
     power
   FROM planet_osm_polygon
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE way && !bbox!
     AND COALESCE(name, tags -> 'name:fr'::text, tags -> 'int_name'::text, tags -> 'stars'::text, tags -> 'ele'::text, tags -> 'ele:local'::text, ref, tags -> 'school:FR'::text) IS NOT NULL
     and (leisure = 'golf_course'
@@ -48101,13 +48142,14 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
     leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
     coalesce(tags->'ele',tags->'ele:local','') as ele,
     tags->'mountain_pass' as mountain_pass,
     0 as way_area,
     power
   FROM planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE way && !bbox!
     AND name is not null
     and (leisure = 'golf_course'
@@ -56582,7 +56624,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
     case when amenity='townhall' then 2 when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
     aeroway,
     shop,
     access,
@@ -56607,6 +56649,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     office,
     tags->'craft' as craft
   FROM planet_osm_polygon
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE way && !bbox!
     AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', tags->'ele', tags->'ele:local', ref,tags->'school:FR') is not null
     and (amenity is not null
@@ -56633,7 +56676,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
     case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-    fr_abbrev(coalesce(tags->'short_name:fr',tags->'short_name',tags->'alt_name',tags->'name:fr',tags->'int_name',name)) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
     aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
     substring('******',1,to_int(tags->'stars')::integer) as stars,
     coalesce(ele,tags->'ele:local','') as ele,
@@ -56645,6 +56688,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
     power, office, tags->'craft' as craft
   FROM planet_osm_point
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE way && !bbox!
     AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', ele, tags->'ele:local', ref,tags->'school:FR') is not null
     and ((amenity is not null and amenity not in ('townhall'))
@@ -56736,8 +56780,8 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
   tags->'ref:INSEE' as insee,
-  fr_abbrev(coalesce(tags->'name:fr',tags->'int_name',name)) as nom
-FROM planet_osm_polygon p WHERE ST_Intersects(p.way, !bbox!)
+  coalesce(abrev,tags->'name:fr',tags->'int_name',name) as nom
+FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name) WHERE ST_Intersects(p.way, !bbox!)
   AND not ST_Covers(p.way,!bbox!)
   AND boundary='administrative'
   AND admin_level is not NULL
@@ -56783,9 +56827,10 @@ ORDER BY 2 desc ) as admin_boundaries_text]]></Parameter>
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
       else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    fr_abbrev(coalesce(p.tags->'short_name:fr',p.tags->'short_name',p.tags->'name:fr',p.name)) as nom,
+    coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom,
     to_int(population) as pop
   FROM  planet_osm_point p
+  LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
   WHERE  way && !bbox!
     and place is not null
     and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
