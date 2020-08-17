@@ -1250,7 +1250,6 @@ Layer:
           FROM  planet_osm_point
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE  way && !bbox!
-            and place is not null
             and place in ('suburb','neighbourhood','quater','village','large_village','hamlet','locality','isolated_dwelling','farm')
           order by pop desc
         ) as placenames
