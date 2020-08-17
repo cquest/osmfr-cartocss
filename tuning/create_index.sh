@@ -1,5 +1,6 @@
 TABLESPACE='' # exemple 'TABLESPACE nvme' to create index in PG 'nvme' tablespace
 psql osm -c "CREATE INDEX planet_osm_line_boundary ON planet_osm_line USING gist (way) $TABLESPACE WHERE boundary IS NOT NULL" &
+psql osm -c "CREATE INDEX planet_osm_line_bridges ON planet_osm_line USING gist (way) $TABLESPACE WHERE bridge IS NOT NULL OR tunnel IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_highway ON planet_osm_line USING gist (way) $TABLESPACE WHERE highway IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_manmade ON planet_osm_line USING gist (way) $TABLESPACE WHERE man_made IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_minor_roads ON planet_osm_line USING gist (way) $TABLESPACE WHERE highway IS NOT NULL OR railway IS NOT NULL OR aeroway IS NOT NULL" &
