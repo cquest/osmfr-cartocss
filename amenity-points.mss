@@ -782,8 +782,8 @@
     }
   }
 
-  ::power [zoom >= 12] {
-    [zoom >= 12][power = 'plant'],
+  ::power [zoom >= 14] {
+    [zoom >= 14][power = 'plant'],
     [zoom >= 15][power = 'generator'][power_source = 'wind']
      {
         point-file: url('symbols/fr/electricity.svg');
