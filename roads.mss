@@ -1754,7 +1754,6 @@
 }
 
 .bridges [zoom >= 12] {
-  // [zoom>=19] { line-clip: false; line-smooth: 1; }
   ::bridges_casing {
     line-width: 0;
     line-color: black;
