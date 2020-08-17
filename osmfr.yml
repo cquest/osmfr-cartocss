@@ -100,7 +100,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* landcover */ (
-          SELECT  ST_Snaptogrid(way,!pixel_width!/4) as way,
+          SELECT way,
             wood,
             coalesce (aeroway, amenity, wetland, landuse, leisure, military,
             "natural", power, tourism, highway, man_made, building) as feature
@@ -138,6 +138,8 @@ Layer:
               and way && !bbox!
               and way_area > !pixel_width!*!pixel_height!*10
             ORDER BY z_order,way_area desc) as landcover ) as features
+      simplify_geometries: 'true'
+
 
   - id: landcover-line
     <<: *extents
@@ -282,7 +284,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* water-areas */ (
-        SELECT ST_Snaptogrid(way,!pixel_width!/4) as way,
+        SELECT ST_Snaptogrid(way,!pixel_width!) as way,
           "natural",
           waterway,
           landuse,
@@ -477,7 +479,17 @@ Layer:
         minzoom: 14
     Datasource:
       <<: *osm2pgsql
-      table: " /* ski */ (select way, tags->'piste:type' as ski_type, tags->'piste:difficulty' as ski_difficulty, ref, name from planet_osm_line where tags ? 'piste:difficulty') as ski"
+      table: >-
+        /* ski */ (
+          select way,
+            tags->'piste:type' as ski_type,
+            tags->'piste:difficulty' as ski_difficulty,
+            ref,
+            name
+          from planet_osm_line
+          where tags ? 'piste:difficulty' /* index line_lz */
+        ) as ski
+      simplify_geometries: 'true'
 
 
   - id: citywalls
@@ -486,7 +498,19 @@ Layer:
       minzoom: 14
     Datasource:
       <<: *osm2pgsql
-      table: " /* citywalls */ (select way, historic from planet_osm_line where historic in ('citywalls','castle_walls') UNION select way,historic from planet_osm_polygon where historic='castle_walls') as citywalls"
+      table: >-
+        /* citywalls */ (
+          select way,
+            historic
+          from planet_osm_line
+          where historic in ('citywalls','castle_walls') /* index line_lz */
+        UNION
+          select way,
+            historic
+          from planet_osm_polygon
+          where historic='castle_walls' and building is null /* index nobuilding */
+        ) as citywalls
+      simplify_geometries: 'true'
 
 
   - id: landuse-overlay
@@ -512,7 +536,17 @@ Layer:
       minzoom: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* cliffs */ (select way,\"natural\",man_made, junction from planet_osm_line where \"natural\" = 'cliff' or man_made = 'embankment') as roads"
+      table: >-
+        /* cliffs */ (
+          select way,
+            "natural",
+            man_made,
+            junction
+          from planet_osm_line
+          where "natural" = 'cliff'
+            or man_made = 'embankment'
+        ) as roads
+      simplify_geometries: 'true'
 
 
   - id: area-barriers
