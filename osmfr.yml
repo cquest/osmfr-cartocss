@@ -83,7 +83,8 @@ Layer:
 
 
   - id: lowzoom
-    zoom_max: 7
+    properties:
+      maxzoom: 7
     geometry: raster
     extent: *world
     Datasource:
@@ -93,7 +94,8 @@ Layer:
 
   - id: landcover
     <<: *extents
-    zoom_min: 8
+    properties:
+      minzoom: 8
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -306,8 +308,10 @@ Layer:
 
 
   - id: glaciers-text
+    # à merger avec placenames-sea ?
     <<: *extents
-    zoom_min: 8
+    properties:
+      minzoom: 8
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -356,7 +360,8 @@ Layer:
 
   - id: marinas-area
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: " /* marinas-area */ (select way from planet_osm_polygon where leisure ='marina' and way_area > !pixel_width!*!pixel_height!*10 ) as marinas"
@@ -365,7 +370,8 @@ Layer:
 
   - id: piers-area
     <<: *extents
-    zoom_min: 12
+    properties:
+      minzoom: 12
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -420,7 +426,8 @@ Layer:
 
   - id: sports
     <<: *extents
-    zoom_min: 14
+    propeties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -466,7 +473,8 @@ Layer:
 
   - id: ski
     <<: *extents
-    zoom_min: 14
+    properties:
+        minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: " /* ski */ (select way, tags->'piste:type' as ski_type, tags->'piste:difficulty' as ski_difficulty, ref, name from planet_osm_line where tags ? 'piste:difficulty') as ski"
@@ -474,7 +482,8 @@ Layer:
 
   - id: citywalls
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: " /* citywalls */ (select way, historic from planet_osm_line where historic in ('citywalls','castle_walls') UNION select way,historic from planet_osm_polygon where historic='castle_walls') as citywalls"
