@@ -2,7 +2,7 @@ TABLESPACE='' # exemple 'TABLESPACE nvme' to create index in PG 'nvme' tablespac
 psql osm -c "CREATE INDEX planet_osm_line_boundary ON planet_osm_line USING gist (way) $TABLESPACE WHERE boundary IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_bridges ON planet_osm_line USING gist (way) $TABLESPACE WHERE bridge IS NOT NULL OR tunnel IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_highway ON planet_osm_line USING gist (way) $TABLESPACE WHERE highway IS NOT NULL" &
-psql osm -c "CREATE INDEX planet_osm_line_manmade ON planet_osm_line USING gist (way) $TABLESPACE WHERE man_made IS NOT NULL" &
+psql osm -c "CREATE INDEX planet_osm_line_lz ON planet_osm_line USING gist (way) $TABLESPACE WHERE (historic = ANY (ARRAY['citywalls'::text, 'castle_walls'::text])) OR \"natural\" = 'cliff'::text OR man_made = 'embankment'::text OR tags ? 'piste:difficulty'::text OR aerialway IS NOT NULL OR man_made = 'cutline'::text OR (man_made = ANY (ARRAY['pier'::text, 'breakwater'::text, 'groyne'::text]))" &
 psql osm -c "CREATE INDEX planet_osm_line_minor_roads ON planet_osm_line USING gist (way) $TABLESPACE WHERE highway IS NOT NULL OR railway IS NOT NULL OR aeroway IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_line_minor_roads_lz ON planet_osm_line USING gist (way) $TABLESPACE WHERE (highway IS NOT NULL OR railway IS NOT NULL OR aeroway IS NOT NULL) AND st_length(way) > 90::double precision" &
 psql osm -c "CREATE INDEX planet_osm_line_name ON planet_osm_line USING gist (way) $TABLESPACE WHERE name IS NOT NULL" &
