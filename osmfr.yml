@@ -1069,8 +1069,9 @@ Layer:
 
   - id: admin-lz
     <<: *extents
-    zoom_min: 4
-    zoom_max: 10
+    properties:
+      minzoom: 4
+      maxzoom: 10
     Datasource:
       <<: *osm2pgsql
       table: " /* admin-lz */ (select ST_Simplify(way,!pixel_width!/4) as way, admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') order by 2 desc, maritime) as admin"
@@ -1078,7 +1079,8 @@ Layer:
 
   - id: admin-boundaries
     <<: *extents
-    zoom_min: 11
+    properties:
+      minzoom: 11
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -1107,7 +1109,8 @@ Layer:
   - id: placenames-capital
     class: placenames
     <<: *extents
-    zoom_min: 4
+    properties:
+      minzoom: 4
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -1164,23 +1167,23 @@ Layer:
             and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
         UNION
           SELECT way,
-            way_area,
-            to_int(coalesce(tags->'sqkm','0')) as sqkm,
-            coalesce(place,"natural") as place,
-            to_int(coalesce(tags->'sqkm','0')) / (!pixel_width!*!pixel_height!) as pixels,
+            to_int(coalesce(tags->'sqkm','0'))/5 as pixels,
+            coalesce("natural",place) as place,
+            case when place = 'ocean' then 4 else 0 end as enlarge,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name
-          FROM  planet_osm_polygon
-          WHERE  way && !bbox!
+          FROM  planet_osm_point
+          WHERE way && !bbox!
             and coalesce("natural",place) in ('archipelago','island','ocean','sea','bay','strait','isthmus')
-        order by way_area desc, 3 desc
+        order by 2 desc
         ) as placenames_sea
 
 
   - id: placenames-large
     class: country state
-    zoom_min: 2
+    properties:
+      minzoom: 2
     <<: *extents
     Datasource:
       <<: *osm2pgsql
@@ -1383,10 +1386,58 @@ Layer:
       table: " /* stations */ (SELECT s.way as way,coalesce(s.tags->'name:fr',s.tags->'int_name',s.tags->'int_name',s.name) as name,s.disused as disused, case when s.tags->'public_transport'='platform' and s.tags->'bus'='yes' then 'bus_stop' else s.highway end as highway, s.amenity as amenity, coalesce(s.tags->'type:RATP','') as type_ratp,  s.operator as operator, coalesce(l.operator,'') as l_operator, substring(l.ref,1,1) as l_ref1, coalesce(s.tags->'network',l.tags->'network') as network  FROM  planet_osm_point s LEFT JOIN planet_osm_rels r ON (r.parts @> ARRAY[s.osm_id] AND r.members @> ARRAY['n' || s.osm_id]) LEFT JOIN planet_osm_line l ON (l.osm_id=-r.id AND l.route is not null)  WHERE s.way && !bbox! and s.highway = 'bus_stop' ORDER BY l_operator desc ) as bus_stops"
 
 
+  - id: amenity-symbols-lz
+    class: symbols
+    <<: *extents
+    properties:
+      minzoom: 10
+      maxzoom: 13
+    Datasource:
+      <<: *osm2pgsql
+      table: >-
+        /* amenity-symbols */ (
+        SELECT way,
+          coalesce(aeroway, military) as aeroway,
+          man_made,
+          railway,
+          "natural",
+          power,
+          coalesce(power_source, "generator:source") as power_source,
+          highway,
+          barrier,
+          tags->'mountain_pass' as mountain_pass,
+          coalesce(tags->'aerodrome', p.military) as aerodrome,
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+        FROM planet_osm_point p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
+        WHERE aeroway in ('airport','aerodrome','helipad','military')
+          OR military='airfield'
+          OR man_made in ('lighthouse')
+          OR power in ('plant')
+          OR "natural" in ('peak','volcano')
+          OR tags ? 'mountain_pass'
+        UNION
+        SELECT
+          way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+        FROM planet_osm_polygon p
+        LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
+        WHERE (aeroway in ('airport','aerodrome','helipad','military')
+          OR military='airfield'
+          OR man_made in ('lighthouse')
+          OR power in ('plant')
+          OR "natural" in ('peak','volcano')
+          OR tags ? 'mountain_pass')
+          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
+        ) as amenity_symbols
+      simplify_geometries: 'true'
+
+
   - id: amenity-symbols
     class: symbols
     <<: *extents
-    zoom_min: 10
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
