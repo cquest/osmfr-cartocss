@@ -1753,8 +1753,33 @@
     opacity: 0.75;
 }
 
-.bridges [zoom >= 12] {
-  ::bridges_casing {
+#bridges [zoom >= 12] {
+  // fixe l'ordre de rendu des sublayers
+  ::casing_l0 [layer=0] { line-color: black; }
+  ::casing2_l0 [layer=0] { line-color: black; }
+  ::fill_l0   [layer=0] { line-color: white; }
+  ::casing_l1 [layer=1] { line-color: black; }
+  ::casing2_l1 [layer=1] { line-color: black; }
+  ::fill_l1   [layer=1] { line-color: white; }
+  ::casing_l2 [layer=2] { line-color: black; }
+  ::casing2_l2 [layer=2] { line-color: black; }
+  ::fill_l2   [layer=2] { line-color: white; }
+  ::casing_l3 [layer=3] { line-color: black; }
+  ::casing2_l3 [layer=3] { line-color: black; }
+  ::fill_l3   [layer=3] { line-color: white; }
+  ::casing_l4 [layer=4] { line-color: black; }
+  ::casing2_l4 [layer=4] { line-color: black; }
+  ::fill_l4   [layer=4] { line-color: white; }
+  ::casing_l5 [layer=5] { line-color: black; }
+  ::casing2_l5 [layer=5] { line-color: black; }
+  ::fill_l5   [layer=5] { line-color: white; }
+
+  ::casing_l0 [layer=0],
+  ::casing_l1 [layer=1],
+  ::casing_l2 [layer=2],
+  ::casing_l3 [layer=3],
+  ::casing_l4 [layer=4],
+  ::casing_l5 [layer=5] {
     line-width: 0;
     line-color: black;
     [highway = 'motorway'][zoom >= 12],
@@ -1911,7 +1936,12 @@
     }
   }
 
-  ::bridges-casing2 {
+  ::casing2_l0 [layer=0],
+  ::casing2_l1 [layer=1],
+  ::casing2_l2 [layer=2],
+  ::casing2_l3 [layer=3],
+  ::casing2_l4 [layer=4],
+  ::casing2_l5 [layer=5] {
     [highway = 'unsurfaced'][zoom >= 13] {
       line-width: 4;
       line-color: white;
@@ -2014,7 +2044,12 @@
     }
   }
 
-  ::bridges_fill {
+  ::fill_l0   [layer=0],
+  ::fill_l1   [layer=1],
+  ::fill_l2   [layer=2],
+  ::fill_l3   [layer=3],
+  ::fill_l4   [layer=4],
+  ::fill_l5   [layer=5] {
     line-width: 0;
     line-join: round;
     line-cap: round;
@@ -2255,14 +2290,9 @@
       }
     }
   }
-}
+} // #bridges
 
-#bridges-l0::access [access!=''] [zoom >= 15],
-#bridges-l1::access [access!=''] [zoom >= 15],
-#bridges-l2::access [access!=''] [zoom >= 15],
-#bridges-l3::access [access!=''] [zoom >= 15],
-#bridges-l4::access [access!=''] [zoom >= 15],
-#bridges-l5::access [access!=''] [zoom >= 15],
+#bridges::access [access!=''] [zoom >= 15],
 .access  [zoom >= 15]{
   [access = 'permissive'] {
     [highway = 'unclassified'],
@@ -2335,12 +2365,7 @@
   }
 }
 
-#bridges-l0::direction [oneway='-1'] [zoom >= 16],
-#bridges-l1::direction [oneway='-1'] [zoom >= 16],
-#bridges-l2::direction [oneway='-1'] [zoom >= 16],
-#bridges-l3::direction [oneway='-1'] [zoom >= 16],
-#bridges-l4::direction [oneway='-1'] [zoom >= 16],
-#bridges-l5::direction [oneway='-1'] [zoom >= 16],
+#bridges::direction [oneway='-1'] [zoom >= 16],
 .directions [zoom >= 16] {
   [oneway = '-1'][footway=''],
   [oneway = '-1'][footway!=''][zoom>=19]

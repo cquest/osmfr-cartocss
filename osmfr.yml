@@ -832,189 +832,77 @@ Layer:
 
   - id: bridges-poly
     <<: *extents
-    zoom_min: 16
+    properties:
+      minzoom: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* bridges-poly */ (select way from planet_osm_polygon where man_made='bridge'  and way_area > !pixel_width!*!pixel_height!*10 order by z_order) as bridge_poly"
+      table: >-
+        /* bridges-poly */ (
+          select way
+          from planet_osm_polygon
+          where man_made='bridge'
+            and way_area > !pixel_width!*!pixel_height!*10
+          order by z_order
+        ) as bridge_poly
       simplify_geometries: 'true'
 
 
   - id: waterway-bridges
-    <<: *extents
-    zoom_min: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* waterway-bridges */ (select way,coalesce(tags->'name:fr',tags->'int_name',name) as name from planet_osm_line where waterway='canal' and bridge in ('yes','true','1','aqueduct') order by z_order) as water"
-      simplify_geometries: 'true'
-
-
-  - id: bridges-l0
-    class: bridges
     <<: *extents
     properties:
       minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* layer0 */ (
-        SELECT  case when oneway in ('yes','true','1') then ST_Reverse(way) else way end as way,
-                case when oneway is not null then '-1'  else '' end as oneway,
-                access,
-                CASE WHEN bridge in ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge,
-                CASE WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-                junction, toll, coalesce(highway,aeroway) as highway, horse, bicycle, foot, tracktype,
-                coalesce(tags->'footway','') as footway,
-                case when railway in ('spur','siding') or (railway='rail' and service in ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway end as railway,
-                case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else 'INT-normal'::text end as service
-        FROM planet_osm_line
-        WHERE way && !bbox! AND ST_length(way) > !pixel_width!*8
-          AND bridge in ('yes','true','1','viaduct')
-          AND (layer is null or layer ='0')
-          AND (highway is not null or aeroway in ('runway','taxiway','taxipath','parking_position')
-            OR railway in('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-            OR waterway is not null)
-          ORDER BY z_order
-        ) as layer0
+        /* waterway-bridges */ (
+          select way,
+            coalesce(tags->'name:fr',tags->'int_name',name) as name
+          from planet_osm_line
+          where waterway='canal'
+            and bridge in ('yes','true','1','aqueduct')
+          order by z_order
+        ) as water
       simplify_geometries: 'true'
 
 
-  - id: bridges-l1
-    class: bridges
+  - id: bridges
     <<: *extents
     properties:
       minzoom: 12
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* layer1 */ (SELECT case when oneway in ('yes','true','1') then
-        ST_Reverse(way) else way end as way, case when oneway is not null then
-        '-1' else '' end as oneway, access, CASE WHEN bridge in
-        ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge, CASE
-        WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-        junction,toll,coalesce(highway,aeroway) as highway, horse, bicycle,
-        foot, tracktype, coalesce(tags->'footway','') as footway, case when
-        railway in ('spur','siding') or (railway='rail' and service in
-        ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
-        end as railway,  case when service in
-        ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
-        'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='1'  AND
-        (highway is not null or aeroway in
-        ('runway','taxiway','taxipath','parking_position') or railway in
-        ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-        or waterway is not null)  ORDER BY z_order) as layer1
-      simplify_geometries: 'true'
-
-
-  - id: bridges-l2
-    class: bridges
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* layer2 */ (SELECT case when oneway in ('yes','true','1') then
-        ST_Reverse(way) else way end as way,case when oneway is not null then
-        '-1' else '' end as oneway, access, CASE WHEN bridge in
-        ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge, CASE
-        WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-        junction,toll,coalesce(highway,aeroway) as highway, horse, bicycle,
-        foot, tracktype, coalesce(tags->'footway','') as footway, case when
-        railway in ('spur','siding') or (railway='rail' and service in
-        ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
-        end as railway,  case when service in
-        ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
-        'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='2'  AND
-        (highway is not null or aeroway in
-        ('runway','taxiway','taxipath','parking_position') or railway in
-        ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-        or waterway is not null)  ORDER BY z_order) as layer2
-      simplify_geometries: 'true'
-
-
-  - id: bridges-l3
-    class: bridges
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* layer3 */ (SELECT case when oneway in ('yes','true','1') then
-        ST_Reverse(way) else way end as way, case when oneway is not null then
-        '-1' else '' end as oneway, access, CASE WHEN bridge in
-        ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge, CASE
-        WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-        junction,toll,coalesce(highway,aeroway) as highway, horse, bicycle,
-        foot, tracktype, coalesce(tags->'footway','') as footway, case when
-        railway in ('spur','siding') or (railway='rail' and service in
-        ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
-        end as railway,  case when service in
-        ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
-        'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='3'  AND
-        (highway is not null or aeroway in
-        ('runway','taxiway','taxipath','parking_position') or railway in
-        ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-        or waterway is not null)  ORDER BY z_order) as layer3
-      simplify_geometries: 'true'
-
-
-  - id: bridges-l4
-    class: bridges
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* layer4 */ (SELECT case when oneway in ('yes','true','1') then
-        ST_Reverse(way) else way end as way, case when oneway is not null then
-        '-1' else '' end as oneway, access, CASE WHEN bridge in
-        ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge, CASE
-        WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-        junction,toll,coalesce(highway,aeroway) as highway, horse, bicycle,
-        foot, tracktype, coalesce(tags->'footway','') as footway, case when
-        railway in ('spur','siding') or (railway='rail' and service in
-        ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
-        end as railway,  case when service in
-        ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
-        'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='4'  AND
-        (highway is not null or aeroway in
-        ('runway','taxiway','taxipath','parking_position') or railway in
-        ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-        or waterway is not null)  ORDER BY z_order) as layer4
-      simplify_geometries: 'true'
-
-
-  - id: bridges-l5
-    class: bridges
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* layer5 */ (SELECT case when oneway in ('yes','true','1') then
-        ST_Reverse(way) else way end as way, case when oneway is not null then
-        '-1' else '' end as oneway, access, CASE WHEN bridge in
-        ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge, CASE
-        WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
-        junction,toll,coalesce(highway,aeroway) as highway, horse, bicycle,
-        foot, tracktype, coalesce(tags->'footway','') as footway, case when
-        railway in ('spur','siding') or (railway='rail' and service in
-        ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
-        end as railway,  case when service in
-        ('parking_aisle','drive-through','driveway') then 'INT-minor'::text else
-        'INT-normal'::text end as service  FROM planet_osm_line  WHERE way &&
-        !bbox!  AND ST_length(way) > !pixel_width!*8 AND bridge in ('yes','true','1','viaduct')  AND layer ='5'  AND
-        (highway is not null or aeroway in
-        ('runway','taxiway','taxipath','parking_position') or railway in
-        ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
-        or waterway is not null)  ORDER BY z_order) as layer5
+        /* bridges */ (
+          SELECT case when oneway in ('yes','true','1') then ST_Reverse(way) else way end as way,
+            to_int(layer) as layer,
+            case when coalesce(oneway,'') in ('yes','true','1','-1') then '-1' else '' end as oneway,
+            access,
+            CASE WHEN bridge in ('yes','true','1','viaduct') then 'yes' else 'no' END as bridge,
+            CASE WHEN tunnel in ('yes','true','1') then 'yes' else 'no' END as tunnel,
+            junction,
+            toll,
+            coalesce(highway,aeroway) as highway,
+            horse,
+            bicycle,
+            foot,
+            tracktype,
+            coalesce(tags->'footway','') as footway,
+            case when railway in ('spur','siding') or (railway='rail' and service in
+              ('spur','siding','yard')) then 'INT-spur-siding-yard'::text else railway
+              end as railway,
+            case when service in ('parking_aisle','drive-through','driveway') then 'INT-minor'::text
+              else 'INT-normal'::text end as service
+          FROM planet_osm_line
+          WHERE way && !bbox!
+            AND ST_length(way) > !pixel_width!*8
+            AND bridge in ('yes','true','1','viaduct')
+            AND layer is not null
+            AND (highway is not null
+              or aeroway in ('runway','taxiway','taxipath','parking_position')
+              or railway in ('light_rail','subway','narrow_gauge','rail','spur','siding','disused','abandoned','construction')
+              or waterway is not null)
+          ORDER BY to_int(layer), z_order
+          ) as bridges
       simplify_geometries: 'true'
 
 
