@@ -40,7 +40,7 @@
     [zoom >= 7] {
       text-size: 12;
       text-wrap-width: 40;
-      text-min-distance: 5;
+      text-margin: 5;
       text-face-name: @oblique-fonts;
     }
   }
@@ -106,7 +106,7 @@
       text-fill: #000;
   	  text-halo-radius: 2;
   	  text-halo-fill: fadeout(white, 30%);
-      text-min-distance: 10;
+      text-margin: 10;
       text-clip: false;
   	  [zoom >= 6][zoom <= 7] {
         text-dy: -4;
@@ -136,12 +136,12 @@
       text-halo-radius: 1.5;
       text-halo-fill: fadeout(white, 30%);
       text-wrap-width: 20;
-      text-min-distance: 10;
+      text-margin: 10;
       text-clip: false;
     }
     [zoom >= 9] {
       text-size: 10;
-      b/text-min-distance: 10;
+      b/text-margin: 10;
       b/text-face-name: @book-fonts;
       b/text-name: "[nom]";
       b/text-size: 10;
