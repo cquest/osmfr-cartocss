@@ -241,7 +241,7 @@
   text-face-name: @book-fonts;
 	text-halo-radius: 1.25;
 	text-halo-fill: fadeout(white, 30%);
-  text-margin: 15;
+  text-margin: 20;
   text-wrap-width: 30;
   text-align: center;
   text-avoid-edges: true;
@@ -258,11 +258,10 @@
   b/text-placements: "E,W,N,S,NE,SE,NW,SW";
   b/text-dx: 5;
   b/text-dy: 5;
-  b/text-margin: 15;
+  b/text-margin: 20;
   b/text-wrap-width: 30;
   b/text-align: center;
   b/text-avoid-edges: true;
-
 }
 
 #placenames-small::village [zoom >= 11] {
@@ -339,7 +338,7 @@
 	text-halo-fill: fadeout(white, 30%);
   text-wrap-width: 30;
   text-align: center;
-  text-margin: 15;
+  text-margin: 20;
   text-avoid-edges: true;
 
   // deuxième placement décalé au cas où le premier a échoué
@@ -353,7 +352,7 @@
   b/text-placements: "X,E,W,N,S,NE,SE,NW,SW";
   b/text-dx: 4;
   b/text-dy: 4;
-  b/text-margin: 15;
+  b/text-margin: 20;
   b/text-wrap-width: 30;
   b/text-align: center;
   b/text-avoid-edges: true;
