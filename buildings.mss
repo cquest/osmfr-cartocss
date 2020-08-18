@@ -1,17 +1,3 @@
-#buildings-lz [zoom >= 12] {
-  [railway = 'station'],
-  [building = 'train_station'],
-  [building = 'station'] {
-    polygon-fill: #d4aaaa;
-  }
-
-  [shop!=''],[building = 'supermarket'] {
-    polygon-fill: pink;
-    polygon-opacity: 0.5;
-  }
-}
-
-
 #buildings [zoom >= 14] {
   polygon-fill: #bdacac;					/* 9%/74% (sat./bright) */
   [zoom = 16] {polygon-fill: #c2b2b2;}	/* 8%/76% */
