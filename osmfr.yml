@@ -1120,7 +1120,7 @@ Layer:
           WHERE  way && !bbox!
             and place is not null
             and place in ('city','town')
-          order by coalesce(admin_level, capital,'9'), place, pop desc
+          order by to_int(coalesce(admin_level, capital,'9')), place, pop desc
         ) as placenames
 
 
