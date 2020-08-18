@@ -218,7 +218,8 @@ Layer:
             AND (highway is not null
               or aeroway in ('runway','taxiway','taxipath','parking_position')
               or railway in ('light_rail','narrow_gauge','funicular','rail','subway','tram','spur','siding','platform','disused','abandoned','construction','miniature','turntable'))
-            and coalesce(tunnel,covered,'') in ('yes','true','1')
+            and (tunnel in ('yes','true','1')
+              or covered in ('yes','true','1'))
             and route is null
           ORDER BY zz_order) as roads
       simplify_geometries: 'true'
@@ -236,7 +237,9 @@ Layer:
         WHERE way && !bbox!
           AND ST_Length(way) > !pixel_width! * 4
           AND highway in ('motorway','motorway_link','trunk','trunk_link','primary','primary_link','secondary','secondary_link','tertiary','tertiary_link','residential','unclassified')
-          AND coalesce(tunnel,covered) in ('yes','true','1')
+          AND (tunnel in ('yes','true','1')
+              or covered in ('yes','true','1'))
+          and route is null
         ORDER BY z_order) as tunnels
       simplify_geometries: 'true'
 
