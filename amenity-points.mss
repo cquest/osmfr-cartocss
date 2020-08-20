@@ -640,7 +640,7 @@
   text-fill: grey;
   text-face-name: @book-fonts;
   text-halo-radius: 1;
-  text-placement: interior;
+  text-avoid-edges: true;
   text-size: 9;
   text-dy: -4;
   text-wrap-width: 30;
@@ -660,7 +660,7 @@
       text-dy: -12;
       text-face-name: @bold-fonts;
       text-halo-radius: 1;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-wrap-width: 50;
     }
 
@@ -676,7 +676,7 @@
   			text-name: "[nom]";
   			text-fill: #6692da;
         text-halo-radius: 1;
-  			text-placement: interior;
+  			text-avoid-edges: true;
   			text-face-name: @bold-fonts;
         text-wrap-width: 40;
   			[aeroway = 'airfield'],
@@ -693,7 +693,7 @@
   			text-name: "[nom]";
   			text-fill: grey;
   			text-halo-radius: 1;
-  			text-placement: interior;
+  			text-avoid-edges: true;
   			text-face-name: @oblique-fonts;
   		}
 
@@ -827,7 +827,7 @@
     text-size: 9;
     text-face-name: @oblique-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     // variation de la texte du texte en fonction de la surface du polygone
     [zoom>=15][way_area>50000],
     [zoom>=16][way_area>25000],
@@ -883,14 +883,14 @@
       long/text-dy: 5;
       long/text-face-name: @book-fonts;
       long/text-halo-radius: 1;
-      long/text-placement: interior;
+      long/text-avoid-edges: true;
       short/text-name: "[nom]";
       short/text-size: 10;
       short/text-fill: brown;
       short/text-dy: 5;
       short/text-face-name: @book-fonts;
       short/text-halo-radius: 1;
-      short/text-placement: interior;
+      short/text-avoid-edges: true;
       [ele!=''] {
         ele/text-name: "[ele]";
         [ele =~ ".*[0-9]$"] { ele/text-name: "[ele]+' m'";} // add 'm' if ending with a digit
@@ -899,7 +899,7 @@
         ele/text-dy: 4;
         ele/text-face-name: @oblique-fonts;
         ele/text-halo-radius: 1;
-        ele/text-placement: interior;
+        ele/text-avoid-edges: true;
         [name != ''] {
           ele/text-dy: 18;
         }
@@ -917,7 +917,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-dy: 12;
     [zoom >= 16] {
       text-size: 12;
@@ -951,7 +951,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 30;
-    text-placement: interior;
+    text-avoid-edges: true;
     [zoom >= 16] {
       text-size: 10;
     }
