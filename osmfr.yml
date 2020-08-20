@@ -254,7 +254,11 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* direction-tunnels */ (
-        SELECT '-1' as oneway, junction, case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel, coalesce(tags->'footway','') as footway, ST_Snaptogrid(case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end,!pixel_width!/4) as way
+        SELECT '-1' as oneway,
+          junction,
+          case when coalesce(tunnel,covered) in ('yes','true','1') then 'yes'::text else 'no'::text end as tunnel,
+          coalesce(tags->'footway','') as footway,
+          case when oneway in ('yes','true','1') or junction='roundabout' then ST_Reverse(way) else way end as way
         FROM planet_osm_line
         WHERE way && !bbox!
           AND ST_Length(way) > !pixel_width! * 8
