@@ -28,7 +28,7 @@ CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
         replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
         replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
         replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(
-        replace(replace(replace(replace(replace(replace($1,
+        replace(replace(replace(replace(replace(replace(replace(replace($1,
     'lémentaire ','lem. '),
     'econdaire ','econd. '),
     'rimaire ','rim. '),
@@ -95,6 +95,8 @@ CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
     'Université ','Univ. '),
     'Hôpital ','Hop. '),
     'Collège ','Coll. '),
+    'Cimetière ','Cim. '),
+    'Groupe Scolaire ','Grp. Scol. '),
     /* expressions régulières (32 maximum !!! */
     'Communauté d.[Aa]gglomération','Comm. d''agglo. '),
     'Communauté [Uu]rbaine ','Comm. urb. '),
@@ -104,22 +106,22 @@ CREATE OR REPLACE FUNCTION fr_abbrev(text) RETURNS text
     '^Institut ','Inst. '),
     'Zone d.[Aa]ctivité.? [Éeée]conommique.? ','Z.A.E. '),
     'Zone d.[Aa]ctivité.? ','Z.A. '),
-    'Zone  [Aa]rtisanale ','Zone Art. '),
+    'Zone [Aa]rtisanale ','Zone Art. '),
     'Zone [Ii]ndustrielle ','Z.I. '),
     ' [Pp]ubli(c|que) ',' Publ. '),
     ' [Pp]rofess(eur|ionnel(|le)) ',' Prof. '),
     ' [Tt]echnologique ',' Techno. '),
     ' [Pp]olyvalent ',' Polyv. '),
     '[EÉeé]tablissement(|s) ','Éts. '),
-    ' [Mm]unicipal(|e)( |$)',' Munic. '),
-    ' [Dd]épartemental(|e)( |$)',' Départ. '),
-    ' [Ii]ntercommunal(|le)( |$)',' Interco. '),
+    ' [Mm]unicipa(l|le|ux)( |$)',' Munic. '),
+    ' [Dd]épartementa(l|le|ux)( |$)',' Départ. '),
+    ' [Ii]ntercommuna(l|le|ux)( |$)',' Interco. '),
     ' [Rr]égional(|e)( |$)',' Région. '),
-    ' [Ii]nterdépartemental(|e)( |$)',' Interdép. '),
+    ' [Ii]nterdépartementa(l|le|ux)( |$)',' Interdép. '),
     ' [Hh]ospitali(er|ère) ',' Hospit. '),
     ' [EÉeé]lectrique ',' Élect. '),
     ' [Ss]upérieur(|e) ',' Sup. '),
-    '^[Bb][aâ]timent ','Bât. '),
+    '^[Bb][aâ]timents? ','Bât. '),
     '[Aa]éronautique ','Aéron. ')
 $$;
 
