@@ -166,7 +166,8 @@ Layer:
           from planet_osm_line
           where highway='track'
             AND ST_Length(way) > !pixel_width! * 4
-            AND coalesce(tunnel,covered) in ('yes','true','1')
+            AND (tunnel in ('yes','true','1')
+              or covered in ('yes','true','1'))
         ) as tracks
       simplify_geometries: 'true'
 
@@ -182,7 +183,8 @@ Layer:
           select way,highway,toll,horse,foot,bicycle,junction,coalesce(tags->'footway','') as footway
           from planet_osm_line
           where highway in ('bridleway','footway','cycleway','path')
-            and coalesce(tunnel,covered) in ('yes','true','1')
+            and (tunnel in ('yes','true','1')
+              or covered in ('yes','true','1'))
             AND ST_Length(way) > !pixel_width! * 4
           order by z_order
         ) as roads
