@@ -857,19 +857,18 @@
     text-face-name: @bold-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
   }
 
-  [power = 'plant'][zoom >= 12]::power,
-  [power != ''][zoom >= 15]::power {
+  [power = 'plant'][zoom >= 12]::power
+  {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-size: 10;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 60;
-    text-placement: interior;
-    [power != 'generator'] { text-dy: 12; }
+    text-avoid-edges: true;
   }
 
 
