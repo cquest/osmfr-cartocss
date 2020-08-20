@@ -7,7 +7,7 @@
 #housenumbers [zoom >= 17] {
   text-name: "[addr:housenumber]";
   text-placement: interior;
-  text-min-distance: 2;
+  text-margin: 2;
   text-wrap-width: 0;
   text-face-name: @book-fonts;
   text-fill: #585858;
@@ -32,7 +32,7 @@
 
 #bano [zoom >= 17] {
   text-name: "[num]";
-  text-min-distance: 2;
+  text-margin: 2;
   text-wrap-width: 0;
   text-face-name: @oblique-fonts;
   text-fill: #777;
