@@ -1742,7 +1742,7 @@ Layer:
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
-            coalesce(tags->'ele',tags->'ele:local','') as ele,
+            regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             way_area,
             power
@@ -1766,7 +1766,7 @@ Layer:
               else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
             coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
-            coalesce(tags->'ele',tags->'ele:local','') as ele,
+            regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             0 as way_area,
             power
