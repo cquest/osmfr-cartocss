@@ -448,7 +448,7 @@
     text-name: "[nom]";
     [zoom >= 17] { text-name: "[name]"; }
     text-halo-radius: 1;
-    text-clip: false;
+    text-avoid-edges: true;
     text-placement: interior;
     text-margin: 4;
     text-placement-type: simple;
