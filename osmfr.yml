@@ -1321,7 +1321,7 @@ Layer:
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* amenity-symbols */ (
+        /* amenity-symbols-lz */ (
         SELECT way,
           coalesce(aeroway, military) as aeroway,
           man_made,
