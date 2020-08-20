@@ -295,7 +295,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* water-areas */ (
-        SELECT ST_Snaptogrid(way,!pixel_width!) as way,
+        SELECT way,
           "natural",
           waterway,
           landuse,
@@ -318,6 +318,7 @@ Layer:
           and way && !bbox!
         ORDER BY z_order,way_area desc
         ) as water_areas
+      simplify_geometries: 'true'
 
 
   - id: glaciers-text
@@ -971,7 +972,20 @@ Layer:
       maxzoom: 10
     Datasource:
       <<: *osm2pgsql
-      table: " /* admin-lz */ (select ST_Simplify(way,!pixel_width!/4) as way, admin_level, tags->'maritime' as maritime from planet_osm_roads where way && !bbox! and boundary='administrative' and admin_level in ('1','2','3','4','5','6') and osm_id>0 and (\"natural\" is null or \"natural\" != 'coastline') order by 2 desc, maritime) as admin"
+      table: >-
+        /* admin-lz */ (
+          select way,
+            admin_level,
+            tags->'maritime' as maritime
+          from planet_osm_roads
+          where way && !bbox!
+            and boundary='administrative'
+            and admin_level in ('1','2','3','4','5','6')
+            and osm_id>0
+            and ("natural" is null or "natural" != 'coastline')
+          order by 2 desc, maritime
+        ) as admin
+      simplify_geometries: 'true'
 
 
   - id: admin-boundaries
@@ -1224,7 +1238,6 @@ Layer:
             and s.railway in ('station','halt')
           order by prio desc, l_operator desc
         ) as stations GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16) as s
-      simplify_geometries: 'true'
 
 
   - id: stations
@@ -1262,7 +1275,6 @@ Layer:
               or (s.amenity='bus_station' and !pixel_width! > 360))
           order by prio desc, l_operator desc
         ) as stations
-      simplify_geometries: 'true'
 
 
   - id: bus-stops-lz
@@ -1314,19 +1326,29 @@ Layer:
           OR tags ? 'mountain_pass'
         UNION
         SELECT
-          way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          ST_PointOnSurface(way) as way,
+          coalesce(aeroway, military) as aeroway,
+          man_made,
+          railway,
+          "natural",
+          power,
+          coalesce(power_source, "generator:source") as power_source,
+          highway,
+          barrier,
+          tags->'mountain_pass' as mountain_pass,
+          coalesce(tags->'aerodrome', p.military) as aerodrome,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE (aeroway in ('airport','aerodrome','helipad','military')
-          OR military='airfield'
-          OR man_made in ('lighthouse')
-          OR power in ('plant')
-          OR "natural" in ('peak','volcano')
-          OR tags ? 'mountain_pass')
+        WHERE way && !bbox!
+          AND (aeroway in ('airport','aerodrome','helipad','military')
+            OR military='airfield'
+            OR man_made in ('lighthouse')
+            OR power in ('plant')
+            OR "natural" in ('peak','volcano')
+            OR tags ? 'mountain_pass')
           AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
         ) as amenity_symbols
-      simplify_geometries: 'true'
 
 
   - id: amenity-symbols
@@ -1352,37 +1374,48 @@ Layer:
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE (aeroway in ('airport','aerodrome','helipad','military')
-          OR military='airfield'
-          OR (barrier in ('bollard','gate','lift_gate','block','toll_booth') AND !pixel_width! < 50 /* zoom >= 15 */)
-          OR (highway in ('mini_roundabout','gate') AND !pixel_width! < 50)
-          OR man_made in ('lighthouse','power_wind','windmill','mast')
-          OR power in ('sub_station','substation','plant')
-          OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
-          OR "natural" in ('peak','volcano','spring','cave_entrance')
-          OR tags ? 'mountain_pass'
-          OR (railway in ('level_crossing') AND !pixel_width! < 50 /* zoom >= 15 */)
-          OR (railway in ('crossing', 'buffer_stop') AND !pixel_width! < 12 /* zoom >= 17 */))
-          AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
+        WHERE way && !bbox!
+          AND (aeroway in ('airport','aerodrome','helipad','military')
+            OR military='airfield'
+            OR (barrier in ('bollard','gate','lift_gate','block','toll_booth') AND !pixel_width! < 50 /* zoom >= 15 */)
+            OR (highway in ('mini_roundabout','gate') AND !pixel_width! < 50)
+            OR man_made in ('lighthouse','power_wind','windmill','mast')
+            OR power in ('sub_station','substation','plant')
+            OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
+            OR "natural" in ('peak','volcano','spring','cave_entrance')
+            OR tags ? 'mountain_pass'
+            OR (railway in ('level_crossing') AND !pixel_width! < 50 /* zoom >= 15 */)
+            OR (railway in ('crossing', 'buffer_stop') AND !pixel_width! < 12 /* zoom >= 17 */))
+          AND /* poi index */ (COALESCE(amenity, aeroway, military, barrier, man_made, railway, "natural", power, shop, tourism, waterway, historic, leisure, highway) IS NOT NULL OR tags ? 'mountain_pass'::text OR tags ? 'emergency'::text OR tags ? 'craft'::text)
         UNION
         SELECT
-          way, coalesce(aeroway, military) as aeroway, man_made, railway, "natural", power, coalesce(power_source, "generator:source") as power_source, highway, barrier, tags->'mountain_pass' as mountain_pass, coalesce(tags->'aerodrome', p.military) as aerodrome,
+          ST_PointOnSurface(way) as way,
+          coalesce(aeroway, military) as aeroway,
+          man_made,
+          railway,
+          "natural",
+          power,
+          coalesce(power_source, "generator:source") as power_source,
+          highway,
+          barrier,
+          tags->'mountain_pass' as mountain_pass,
+          coalesce(tags->'aerodrome', p.military) as aerodrome,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE (aeroway in ('airport','aerodrome','helipad','military')
-          OR military='airfield'
-          OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
-          OR highway in ('mini_roundabout','gate')
-          OR man_made in ('lighthouse','power_wind','windmill','mast')
-          OR power in ('sub_station','substation','plant')
-          OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
-          OR "natural" in ('peak','volcano','spring','cave_entrance')
-          OR tags ? 'mountain_pass')
+        WHERE way && !bbox!
+          AND (aeroway in ('airport','aerodrome','helipad','military')
+            OR military='airfield'
+            OR barrier in ('bollard','gate','lift_gate','block','toll_booth')
+            OR highway in ('mini_roundabout','gate')
+            OR man_made in ('lighthouse','power_wind','windmill','mast')
+            OR power in ('sub_station','substation','plant')
+            OR (power='generator' and ("generator:source"='wind' or power_source='wind'))
+            OR "natural" in ('peak','volcano','spring','cave_entrance')
+            OR tags ? 'mountain_pass')
           AND way_area > !pixel_width!*!pixel_height!*10
-          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
+          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         ) as amenity_symbols
-      simplify_geometries: 'true'
 
 
   - id: amenity-points
