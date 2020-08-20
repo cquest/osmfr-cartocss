@@ -1283,7 +1283,25 @@ Layer:
     zoom_max: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* bus-stops-lz */ (select st_centroid(cluster) as way, ST_NumGeometries(cluster) as count from (select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster from (select way from planet_osm_point where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes')) UNION select way from planet_osm_polygon where way && !bbox! and (highway='bus_stop' or (tags->'public_transport'='platform' and tags->'bus'='yes'))) as bus) as clusters) as bus_stops_lz"
+      table: >-
+        /* bus-stops-lz */ (
+          select st_centroid(cluster) as way,
+            ST_NumGeometries(cluster) as count
+          from (
+            select unnest(st_clusterwithin(way,!pixel_width!*20)) as cluster
+            from (
+              select way
+              from planet_osm_point
+              where way && !bbox!
+                and (highway='bus_stop'
+                  or (tags->'public_transport'='platform' and tags->'bus'='yes'))
+              UNION
+              select way from planet_osm_polygon
+              where way && !bbox!
+                and (highway='bus_stop'
+                  or (tags->'public_transport'='platform' and tags->'bus'='yes'))
+              ) as bus) as clusters
+        ) as bus_stops_lz
 
 
   - id: bus-stops
