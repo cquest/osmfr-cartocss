@@ -13,6 +13,7 @@
     text-fill: @admin-boundaries;
     text-size: 10;
     text-placement: line;
+    text-avoid-edges: true;
     text-face-name: @oblique-fonts;
     text-halo-radius: 1.5;
     text-halo-fill: fadeout(white, 30%);
