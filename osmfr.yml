@@ -440,8 +440,8 @@ Layer:
 
   - id: sports
     <<: *extents
-    propeties:
-      minzoom: 14
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
       table: >-
