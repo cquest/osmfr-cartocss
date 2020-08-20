@@ -898,10 +898,9 @@
       short/text-avoid-edges: true;
       [ele!=''] {
         ele/text-name: "[ele]";
-        [ele =~ ".*[0-9]$"] { ele/text-name: "[ele]+' m'";} // add 'm' if ending with a digit
         ele/text-size: 9;
         ele/text-fill: brown;
-        ele/text-dy: 4;
+        ele/text-dy: 5;
         ele/text-face-name: @oblique-fonts;
         ele/text-halo-radius: 1;
         ele/text-avoid-edges: true;
