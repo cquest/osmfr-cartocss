@@ -994,7 +994,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
     [heritage != ''] {
     	text-face-name: @bold-fonts;
     	text-fill: #734a08;
@@ -1022,7 +1022,7 @@
     text-halo-radius: 2;
     text-halo-fill: fadeout(white, 30%);
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
 
     // variation de la texte du texte en fonction de la surface du polygone
     text-size: 10;
@@ -1053,7 +1053,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
   }
 
   [historic = 'castle']::historic {
@@ -1066,7 +1066,7 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
   	  [zoom >= 19] {
     		text-size: 10;
     		text-dy: 10;
@@ -1085,7 +1085,7 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
       // variation de la texte du texte en fonction de la surface du polygone
       [zoom>=15][way_area>50000],
       [zoom>=16][way_area>25000],
@@ -1112,7 +1112,7 @@
     text-dy: 10;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     [zoom >= 16] {
       ele/text-name: "[ele]";
       ele/text-size: 8;
@@ -1120,7 +1120,7 @@
       ele/text-dy: 22;
       ele/text-face-name: @oblique-fonts;
       ele/text-halo-radius: 1;
-      ele/text-placement: interior;
+      ele/text-avoid-edges: true;
     }
   }
 
@@ -1132,7 +1132,7 @@
     text-wrap-width: 40;
     text-face-name: @bold-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     [amenity = 'townhall'] { text-dy: 12; }
   }
 
@@ -1143,7 +1143,7 @@
     text-fill: #000033;
     text-face-name: @book-fonts;
     text-halo-radius: 2;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
   }
 
@@ -1173,7 +1173,7 @@
   	  text-fill: #440;
   	  text-face-name: @book-fonts;
   	  text-halo-radius: 1.5;
-  	  text-placement: interior;
+  	  text-avoid-edges: true;
     }
   }
 
@@ -1195,7 +1195,7 @@
 	  text-face-name: @book-fonts;
 	  text-halo-radius: 1.5;
 	  text-wrap-width: 40;
-	  text-placement: interior;
+	  text-avoid-edges: true;
     }
   }
 
@@ -1217,7 +1217,7 @@
 	  text-face-name: @book-fonts;
 	  text-halo-radius: 1.5;
 	  text-wrap-width: 40;
-	  text-placement: interior;
+	  text-avoid-edges: true;
     }
   }
 
@@ -1228,7 +1228,7 @@
     text-dy: 16;
     text-face-name: @book-fonts;
     text-halo-radius: 2;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
   }
 
@@ -1243,7 +1243,7 @@
     long/text-face-name: @book-fonts;
     long/text-halo-radius: 2;
     long/text-wrap-width: 40;
-    long/text-placement: interior;
+    long/text-avoid-edges: true;
     [zoom>=15][way_area>50000],
     [zoom>=16][way_area>25000],
     [zoom>=17][way_area>10000],
@@ -1259,7 +1259,7 @@
     short/text-face-name: @book-fonts;
     short/text-halo-radius: 2;
     short/text-wrap-width: 40;
-    short/text-placement: interior;
+    short/text-avoid-edges: true;
     [zoom>=15][way_area>50000],
     [zoom>=16][way_area>25000],
     [zoom>=17][way_area>10000],
@@ -1291,7 +1291,7 @@
       text-dy: 12;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-wrap-width: 40;
       // variation de la texte du texte en fonction de la surface du polygone
       [zoom>=16][way_area>25000],
@@ -1314,7 +1314,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
   }
 
   [amenity = 'public_building'][zoom >= 16]::amenity,
@@ -1327,7 +1327,7 @@
     text-wrap-width: 40;
     text-face-name: @bold-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     [amenity = 'townhall'],[amenity = 'courthouse'] { text-dy: 12; }
   }
 
@@ -1340,7 +1340,7 @@
     text-face-name: @bold-fonts;
     text-halo-radius: 1;
     text-wrap-width: 70;
-    text-placement: interior;
+    text-avoid-edges: true;
     // variation de la texte du texte en fonction de la surface du polygone
     [zoom>=16][way_area>25000],
     [zoom>=17][way_area>10000],
@@ -1363,7 +1363,7 @@
 			text-face-name: @book-fonts;
 			text-halo-radius: 1;
 		 	text-wrap-width: 20;
-			text-placement: interior;
+			text-avoid-edges: true;
       text-dy: 6;
 
   		[amenity = 'vehicle_inspection'],
@@ -1429,7 +1429,7 @@
   		  text-face-name: @book-fonts;
   		  text-halo-radius: 1;
   		  text-wrap-width: 30;
-  		  text-placement: interior;
+  		  text-avoid-edges: true;
   		}
   		[zoom >= 19] {
   		  text-name: "[name]";
@@ -1439,7 +1439,7 @@
   		  text-face-name: @book-fonts;
   		  text-halo-radius: 1;
   		  text-wrap-width: 40;
-  		  text-placement: interior;
+  		  text-avoid-edges: true;
   		}
 	  }
 	  [shop = 'mall'], [shop = 'department_store'] {
@@ -1451,7 +1451,7 @@
   		  text-face-name: @book-fonts;
   		  text-halo-radius: 1.5;
   		  text-wrap-width: 40;
-  		  text-placement: interior;
+  		  text-avoid-edges: true;
   		}
 	  }
   }
@@ -1467,7 +1467,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
     [access != ''][access != 'public'][access != 'yes'] {
       text-fill: #66ccaf;
     }
@@ -1484,7 +1484,7 @@
     text-dy: 8;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 60;
 	  [zoom >= 19] {
 		text-size: 10;
@@ -1501,7 +1501,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
     // variation de la texte du texte en fonction de la surface du polygone
     [zoom>=15][way_area>50000],
     [zoom>=16][way_area>25000],
@@ -1526,7 +1526,7 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
   	  [zoom >= 19] {
     		text-size: 10;
     		text-dy: 13;
@@ -1541,14 +1541,14 @@
     text-dy: 10;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     ele/text-name: "[ele]";
     ele/text-size: 8;
     ele/text-fill: #6699cc;
     ele/text-dy: 22;
     ele/text-face-name: @oblique-fonts;
     ele/text-halo-radius: 1;
-    ele/text-placement: interior;
+    ele/text-avoid-edges: true;
   }
 
   [amenity = 'prison'][zoom >= 17]::amenity {
@@ -1558,7 +1558,7 @@
     text-dy: 16;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
   }
 
@@ -1569,7 +1569,7 @@
     text-dy: 12;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
   }
 
@@ -1580,7 +1580,7 @@
    text-face-name: @bold-fonts;
    text-halo-radius: 1;
    text-wrap-width: 40;
-   text-placement: interior;
+   text-avoid-edges: true;
    [zoom >= 18] {  text-size: 12; }
  }
 
@@ -1590,7 +1590,7 @@
    text-face-name: @book-fonts;
    text-halo-radius: 1;
    text-wrap-width: 40;
-   text-placement: interior;
+   text-avoid-edges: true;
    text-dy: 8;
  }
 
@@ -1602,7 +1602,7 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
   }
 
   [amenity = 'pub']::amenity,
@@ -1618,7 +1618,7 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
   	  [zoom >= 19] {
     		text-size: 10;
     		text-dy: 10;
@@ -1634,7 +1634,7 @@
     text-dy: 14;
     text-face-name: @bold-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
     // variation de la texte du texte en fonction de la surface du polygone
     [zoom>=17][way_area>10000],
@@ -1653,7 +1653,7 @@
     text-fill: black;
     text-dy: 9;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-face-name: @book-fonts;
     text-wrap-width: 40;
 	  [zoom >= 19] {
@@ -1669,7 +1669,7 @@
       text-dy: 8;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-wrap-width: 60;
   }
 
@@ -1682,7 +1682,7 @@
       text-dy: 11;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-wrap-width: 60;
     }
   }
@@ -1694,7 +1694,7 @@
     text-dy: 9;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
 	  [zoom >= 19] {
   		text-size: 10;
@@ -1709,7 +1709,7 @@
     text-dy: 7;
     text-face-name: @book-fonts;
     text-halo-radius: 1;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-wrap-width: 40;
 	  [zoom >= 19] {
   		text-size: 10;
@@ -1781,7 +1781,7 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
   }
 
   // potentially larger offices
@@ -1809,9 +1809,8 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-fill: @office;
-      text-placement: interior;
     }
   }
 
@@ -1822,10 +1821,9 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-dy: 4;
       text-fill: @office;
-      text-placement: interior;
   }
 
 //// zoom 18
@@ -1860,10 +1858,9 @@
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
-      text-placement: interior;
+      text-avoid-edges: true;
       text-dy: 4;
       text-fill: @office;
-      text-placement: interior;
     }
   }
 
@@ -1876,7 +1873,7 @@
 			text-face-name: @book-fonts;
 			text-halo-radius: 1;
 		 	text-wrap-width: 25;
-			text-placement: interior;
+			text-avoid-edges: true;
 
   		[amenity = 'vehicle_inspection'],
   		[shop = 'bakery'],
@@ -1926,10 +1923,9 @@
     text-face-name: @book-fonts;
     text-halo-radius: 1;
     text-wrap-width: 40;
-    text-placement: interior;
+    text-avoid-edges: true;
     text-dy: 4;
     text-fill: @office;
-    text-placement: interior;
   }
 
 }
