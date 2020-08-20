@@ -1462,22 +1462,26 @@ Layer:
           tags->'parking' as parking,
           tags->'organic' as organic, 
           
-          way_area,
+          0 as way_area,
           case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
-        FROM planet_osm_polygon p
+        FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE (
-          ((!scale_denominator! < 72000) and (coalesce(amenity,tourism) in ('townhall','alpine_hut')))
-          OR ((!scale_denominator! < 36000) and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
-          OR ((!scale_denominator! < 18000) and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
-          OR ((!scale_denominator! < 9000
-            and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
-          OR ((!scale_denominator! < 4500
-            and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null))
-          ) AND way_area > !pixel_width!*!pixel_height!*10)
+        WHERE way && !bbox!
+          AND (
+          (!scale_denominator! < 72000 /* zoom >= 13 */
+            and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
+          OR (!scale_denominator! < 36000
+            and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
+          OR (!scale_denominator! < 18000
+            and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
+          OR (!scale_denominator! < 9000
+            and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten','emergency'))
+          OR (!scale_denominator! < 4500
+            and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
+          )
           AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         UNION
-        SELECT way,
+        SELECT ST_PointOnSurface(way) as way,
           amenity,shop,tourism,highway,man_made,waterway,
           historic,leisure,power,
           operator, access, religion, lock, office,
@@ -1493,23 +1497,23 @@ Layer:
           substring('******',1,to_int(tags->'stars')::integer) as stars,
           tags->'parking' as parking,
           tags->'organic' as organic, 
-          
-          0 as way_area,
+          way_area,
           case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building','hospital','clinic') then 1  else 0 end as prio
-        FROM planet_osm_point p
+        FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE (
-          (!scale_denominator! < 72000 /* zoom >= 13 */
-            and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
-          OR (!scale_denominator! < 36000
-            and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
-          OR (!scale_denominator! < 18000
-            and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
-          OR (!scale_denominator! < 9000
-            and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten','emergency'))
-          OR (!scale_denominator! < 4500
-            and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
+        WHERE way && !bbox!
+          AND ((!scale_denominator! < 72000
+              and coalesce(amenity,tourism) in ('townhall','alpine_hut'))
+            OR (!scale_denominator! < 36000
+              and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
+            OR (!scale_denominator! < 18000
+              and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
+            OR (!scale_denominator! < 9000
+              and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
+            OR (!scale_denominator! < 4500
+              and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
           )
+          AND way_area > !pixel_width!*!pixel_height!*10
           AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         ORDER BY prio desc, way_area desc ) as points
 
@@ -1784,12 +1788,13 @@ Layer:
 
   - id: text-poly
     <<: *extents
-    zoom_min: 15
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
       table: >-
         /* text-poly */ (
-          SELECT way,
+          SELECT st_pointonsurface(way) as way,
             osm_id,
             tags->'heritage' as heritage,
             coalesce(tags->'name:fr',case
@@ -1815,6 +1820,7 @@ Layer:
             historic,
             'no'::text as point,
             way_area,
+            way_area / (!pixel_height! * !pixel_width!) as pixels,
             NULL as way_len,
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power,
@@ -1856,6 +1862,7 @@ Layer:
             ref, military, waterway, historic,
             'yes'::text as point,
             0 as way_area,
+            0 as pixels,
             NULL as way_len,
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power, office, tags->'craft' as craft
@@ -1880,7 +1887,6 @@ Layer:
               or power in ('generator','substation','sub_station','plant'))
           order by prio desc,way_area desc
         ) as text
-      simplify_geometries: 'true'
 
 
   - id: admin-boundaries-text
