@@ -775,16 +775,22 @@
     }
   }
 
-  ::power [zoom >= 14] {
-    [zoom >= 14][power = 'plant'],
+  ::power [power != ''] {
+    [zoom >= 14][power = 'plant']
+    {
+      point-file: url('symbols/fr/electricity.svg');
+      point-placement: interior;
+      text-dy: 12;
+      text-size: 10;
+      text-name: "[nom]";
+      text-halo-radius: 1;
+      text-face-name: @bold-fonts;
+      text-wrap-width: 50;
+    }
     [zoom >= 15][power = 'generator'][power_source = 'wind']
-     {
-        point-file: url('symbols/fr/electricity.svg');
-        point-placement: interior;
-  	  [power = 'generator'][power_source = 'wind']
-  	  {
-  		  point-file: url('symbols/power_wind.png');
-  	  }
+    {
+      point-placement: interior;
+      point-file: url('symbols/power_wind.png');
     }
   }
 
