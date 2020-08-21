@@ -1811,7 +1811,8 @@ Layer:
             "natural",
             place,
             tourism,
-            substring('******',1,to_int(tags->'stars')::integer) as stars,coalesce(tags->'ele',tags->'ele:local','') as ele,
+            substring('******',1,to_int(tags->'stars')::integer) as stars,
+            regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             ref,
             military,
@@ -1822,6 +1823,7 @@ Layer:
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power,
             office,
+            tags->'information' as information,
             tags->'craft' as craft
           FROM planet_osm_polygon
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -1855,13 +1857,16 @@ Layer:
             coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
             aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
             substring('******',1,to_int(tags->'stars')::integer) as stars,
-            coalesce(ele,tags->'ele:local','') as ele,
+            regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             ref, military, waterway, historic,
             0 as way_area,
             0 as pixels,
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
-            power, office, tags->'craft' as craft
+            power,
+            office,
+            tags->'information' as information,
+            tags->'craft' as craft
           FROM planet_osm_point
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
