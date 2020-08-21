@@ -396,6 +396,9 @@
       point-file: url('symbols/information.svg');
       point-placement: interior;
       [indoor='yes'] { point-opacity: 0.5; }
+      [poi_type='guidepost'] {
+        point-file: url('symbols/guidepost.svg');
+      }
     }
 
     [tourism = 'museum'][zoom >= 17]::tourism {
@@ -1350,6 +1353,23 @@
       text-size: 14;
     }
   }
+
+  [tourism = 'information'][information='guidepost']::tourism
+  {
+    text-name: "[name]";
+    text-size: 9;
+    text-dy: 10;
+    text-face-name: @book-fonts;
+    text-wrap-width: 70;
+    text-avoid-edges: true;
+    ele/text-name: "[ele]";
+    ele/text-size: 9;
+    ele/text-dy: 21;
+    ele/text-face-name: @oblique-fonts;
+    ele/text-wrap-width: 70;
+    ele/text-avoid-edges: true;
+  }
+
 
   [amenity = 'vehicle_inspection'][zoom >= 16]::shop,
   [shop != ''][shop != 'vacant'][zoom >= 16]::shop {
