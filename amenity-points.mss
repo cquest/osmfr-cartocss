@@ -609,6 +609,12 @@
       marker-placement: interior;
       marker-clip: false;
     }
+
+    [leisure = 'fitness_station'][zoom >= 17] {
+      marker-file: url('symbols/2016/sports-14.svg');
+      marker-fill: @shop-icon;
+    }
+
   }
 
   // office points
@@ -1379,6 +1385,7 @@
   }
 
 
+  [leisure = 'fitness_station'][zoom >= 16]::shop,
   [amenity = 'vehicle_inspection'][zoom >= 16]::shop,
   [shop != ''][shop != 'vacant'][zoom >= 16]::shop {
 		[zoom >= 17] {
@@ -1392,6 +1399,7 @@
       text-dy: 6;
 
   		[amenity = 'vehicle_inspection'],
+      [leisure = 'fitness_station'],
       [shop = 'bag'],
   		[shop = 'bakery'],
       [shop = 'beauty'],
