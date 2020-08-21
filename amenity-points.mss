@@ -229,6 +229,12 @@
       }
     }
 
+    [amenity='marketplace'] {
+      marker-file: url('symbols/marketplace.svg');
+      marker-transform: "scale(0.025)";
+      marker-fill: @shop-icon;
+    }
+
     [amenity = 'police'][zoom >= 17] {
       marker-file: url('symbols/police.16.svg');
       marker-fill: @brown-poi;
