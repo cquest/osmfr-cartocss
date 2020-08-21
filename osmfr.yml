@@ -2003,16 +2003,34 @@ Layer:
 
   - id: parking-handi
     <<: *extents
-    zoom_min: 17
+    properties:
+      minzoom: 17
     Datasource:
       <<: *osm2pgsql
-      table: " /* parking-handi */ (SELECT way,0 as way_area, to_int(tags->'capacity:disabled') as capacity FROM planet_osm_point WHERE amenity='parking_space' AND (tags->'wheelchair'='yes' or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no'))) UNION SELECT way, way_area, to_int(tags->'capacity:disabled') as capacity FROM planet_osm_polygon WHERE amenity='parking_space' AND (tags->'wheelchair'='yes' or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no')))) as park"
-      simplify_geometries: 'true'
+      table: >-
+        /* parking-handi */ (
+          SELECT way,
+            to_int(tags->'capacity:disabled') as capacity
+          FROM planet_osm_point
+          WHERE way && !bbox!
+            AND amenity='parking_space'
+            AND (tags->'wheelchair'='yes'
+              or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no')))
+        UNION
+          SELECT way,
+            to_int(tags->'capacity:disabled') as capacity
+          FROM planet_osm_polygon
+          WHERE way && !bbox!
+            AND amenity='parking_space'
+            AND (tags->'wheelchair'='yes'
+              or (tags ? 'capacity:disabled' and tags->'capacity:disabled' not in ('0','no')))
+        ) as parking_handi
 
 
   - id: pmr
     <<: *extents
-    zoom_min: 20
+    properties:
+      minzoom: 20
     Datasource:
       <<: *osm2pgsql
       table: " /* pmr */ (SELECT way,highway, coalesce(tags->'conveying',tags->'conveyor_dir') as conveying, tags->'incline' as incline, tags->'wheelchair' as wheelchair, tags->'ramp:wheelchair' as ramp_wheelchair FROM planet_osm_point WHERE (highway in ('steps','footway','elevator','conveyor') or tags ? 'ramp:wheelchair')  and way && !bbox!   UNION    SELECT ST_LineInterpolatePoint(way, 0.5) as way, highway, coalesce(tags->'conveying',tags->'conveyor_dir') as conveying, tags->'incline' as incline, tags->'wheelchair' as wheelchair, tags->'ramp:wheelchair' as ramp_wheelchair FROM planet_osm_line WHERE (highway in ('steps','footway','elevator','conveyor') or tags ? 'ramp:wheelchair')  and way && !bbox! UNION    SELECT way,highway, coalesce(tags->'conveying',tags->'conveyor_dir') as conveying, tags->'incline' as incline, tags->'wheelchair' as wheelchair, tags->'ramp:wheelchair' as ramp_wheelchair FROM planet_osm_polygon WHERE (highway in ('steps','footway','elevator','conveyor') or tags ? 'ramp:wheelchair') and way && !bbox! ) as pmr"
