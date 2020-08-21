@@ -547,6 +547,7 @@
       [amenity = 'ice_cream'] { marker-file: url('symbols/2016/ice-cream-14.svg'); }
       [amenity = 'car_wash'] { marker-file: url('symbols/2016/car_wash-14.svg');  }
       [shop = 'tyres'] { marker-file: url('symbols/tyres.svg'); marker-fill: @shop-icon; }
+      [shop = 'video_games'] { marker-file: url('symbols/video_games.svg'); marker-fill: @shop-icon; }
 
       // icone multicolores donc en point-file...
       [shop = 'butcher'] {
@@ -1428,7 +1429,8 @@
       [shop = 'sports'],
       [shop = 'telephone'],
   		[shop = 'toys'],
-      [shop = 'tyres'] {
+      [shop = 'tyres'],
+      [shop = 'video_games'] {
 				text-dy: 9;
 			}
 
