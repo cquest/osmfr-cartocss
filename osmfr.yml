@@ -1817,10 +1817,8 @@ Layer:
             military,
             waterway,
             historic,
-            'no'::text as point,
             way_area,
             way_area / (!pixel_height! * !pixel_width!) as pixels,
-            NULL as way_len,
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power,
             office,
@@ -1859,10 +1857,8 @@ Layer:
             coalesce(ele,tags->'ele:local','') as ele,
             tags->'mountain_pass' as mountain_pass,
             ref, military, waterway, historic,
-            'yes'::text as point,
             0 as way_area,
             0 as pixels,
-            NULL as way_len,
             replace(replace(replace(replace(tags->'school:FR','maternelle','École Mat.'),'élémentaire','École'),'primaire','École'),'secondaire','Collège-Lycée') as ecole,
             power, office, tags->'craft' as craft
           FROM planet_osm_point
