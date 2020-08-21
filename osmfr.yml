@@ -330,16 +330,16 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* glaciers-text */ (
-        SELECT way,
+        SELECT ST_PointOnSurface(way) as way,
           coalesce(tags->'name:fr',tags->'int_name',name) as name,
           way_area
         FROM planet_osm_polygon
         WHERE "natural"='glacier'
           AND building is null
+          AND way && !bbox!
           AND way_area > !pixel_width!*!pixel_height!*100
         ORDER BY way_area desc
         ) as glaciers
-      simplify_geometries: 'true'
 
 
   - id: water-lines
@@ -1735,7 +1735,7 @@ Layer:
       <<: *osm2pgsql
       table: >-
         /* text-poly-lz */ (
-          SELECT way,
+          SELECT ST_PointOnSurface(way) as way,
             osm_id,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
@@ -1783,7 +1783,6 @@ Layer:
               or power in ('generator','substation','sub_station','plant'))
           order by way_area desc
         ) as text
-      simplify_geometries: 'true'
 
 
   - id: text-poly
