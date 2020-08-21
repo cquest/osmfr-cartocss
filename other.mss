@@ -106,14 +106,6 @@
 }
 
 #parking-handi [zoom>=17] {
-
-  [zoom>=18][way_area>100],
-  [zoom>=18][capacity>1],
-  [zoom>=19] {
-  	line-color: white;
-  	line-width: 2;
-  	line-dasharray: 8,4;
-  }
   point-file: url('symbols/parking_disabled.svg');
 }
 
