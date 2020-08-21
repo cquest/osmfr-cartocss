@@ -1473,7 +1473,7 @@ Layer:
           OR (!scale_denominator! < 36000
             and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
           OR (!scale_denominator! < 18000
-            and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
+            and coalesce(amenity,tourism,tags->'emergency') in ('hospital','clinic','light_house','lock','castle','defibrillator'))
           OR (!scale_denominator! < 9000
             and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten','emergency'))
           OR (!scale_denominator! < 4500
@@ -1507,7 +1507,7 @@ Layer:
             OR (!scale_denominator! < 36000
               and (amenity='zoo' or tags->'heritage'='1' or leisure='golf_course'))
             OR (!scale_denominator! < 18000
-              and coalesce(amenity,tourism) in ('hospital','clinic','light_house','lock','castle'))
+              and coalesce(amenity,tourism,tags->'emergency') in ('hospital','clinic','light_house','lock','castle','defibrillator'))
             OR (!scale_denominator! < 9000
               and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
             OR (!scale_denominator! < 4500
