@@ -1533,8 +1533,7 @@ Layer:
             to_int(p.tags->'level') as level
           FROM planet_osm_point p
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-          LEFT JOIN planet_osm_polygon w ON (ST_Intersects(w.way, p.way) AND NOT ST_Covers(w.way, p.way) AND (p.building is not null))
-          WHERE w.way && !bbox! AND p.way && !bbox!
+          WHERE p.way && !bbox!
             AND p.tags ? 'entrance'
           GROUP BY p.way, p.tags, p.name, p.ref, abrev
         ) as entrance
