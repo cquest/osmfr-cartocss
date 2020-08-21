@@ -827,7 +827,7 @@
 #text-poly-lz [zoom >= 12]
 {
 
-//// zoom 12
+  // zoom 12
 
   [place = 'island'][zoom >= 12]::place {
     [zoom >= 17] { text-name: "[name]"; }
@@ -875,7 +875,7 @@
   }
 
 
-//// zoom 13
+  // zoom 13
 
   [mountain_pass = 'yes']::natural,
   [natural =~ '(saddle|peak|volcano)']::natural {
@@ -914,7 +914,7 @@
     }
   }
 
-//// zoom 14
+  // zoom 14
 
   [leisure = 'golf_course'][zoom >= 14]::golf_course {
     [zoom >= 17] { text-name: "[name]"; }
@@ -982,7 +982,7 @@
 
 #text-poly [zoom >= 15] {
 
-//// zoom 15
+  // zoom 15
 
   [heritage = '1'][zoom >= 15]::amenity,
   [amenity = 'place_of_worship'][zoom >= 17]::amenity {
@@ -1279,7 +1279,7 @@
     text-wrap-width: 70;
   }
 
-//// zoom 16
+  // zoom 16
 
   [amenity = 'library']::amenity,
   [amenity = 'theatre']::amenity {
@@ -1474,7 +1474,7 @@
   }
 
 
-//// zoom 17
+  // zoom 17
 
   [amenity = 'parking'][zoom >= 17]::parking {
     text-name: "[name]";
@@ -1843,7 +1843,7 @@
       text-fill: @office;
   }
 
-//// zoom 18
+  // zoom 18
 
   // other documented office types
   [zoom >= 18] {
@@ -1881,7 +1881,7 @@
     }
   }
 
-//// zomm 19
+  // zoom 19
 
 		[zoom >= 19] {
 			text-name: "[name]";
