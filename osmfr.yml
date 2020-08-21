@@ -1826,6 +1826,7 @@ Layer:
           FROM planet_osm_polygon
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
+            AND name is not null
             AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', tags->'ele', tags->'ele:local', ref,tags->'school:FR') is not null
             and (amenity is not null
               and amenity not in ('townhall','school')
@@ -1864,6 +1865,7 @@ Layer:
           FROM planet_osm_point
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
           WHERE way && !bbox!
+            AND name is not null
             AND coalesce(name, tags->'name:fr',tags->'int_name', tags->'stars', ele, tags->'ele:local', ref,tags->'school:FR') is not null
             and ((amenity is not null and amenity not in ('townhall'))
               or shop is not null
