@@ -5,28 +5,27 @@
 }
 
 #housenumbers [zoom >= 17] {
-  text-name: "[addr:housenumber]";
+  text-name: "[housenumber]";
   text-placement: interior;
   text-margin: 2;
   text-wrap-width: 0;
   text-face-name: @book-fonts;
   text-fill: #585858;
   text-size: 7;
-  [entrance!=''] { text-dy: -5; }
+  [entrance!=''] { text-dy: 5; }
   [zoom >= 18] {
     text-size: 9;
   }
-}
-
-#housenames [zoom >= 17] {
-  text-name: "[addr:housename]";
-  text-placement: interior;
-  text-wrap-width: 20;
-  text-face-name: @book-fonts;
-  text-size: 8;
-  text-fill: #444;
+  // housename
+  name/text-name: "[housename]";
+  name/text-placement: interior;
+  name/text-wrap-width: 20;
+  name/text-face-name: @book-fonts;
+  name/text-size: 8;
+  name/text-fill: #444;
+  [housenumber!=''] { text-dy: 4}
   [zoom >= 18] {
-    text-size: 9;
+    name/text-size: 9;
   }
 }
 
