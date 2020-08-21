@@ -633,9 +633,9 @@
 
 #entrance [zoom >= 17] {
   marker-fill: grey;
-  marker-width: 2;
+  marker-width: 3;
   marker-line-width: 0;
-  [entrance='main'] { text-fill: black; marker-width: 3; }
+  [entrance='main'] { text-fill: black; marker-width: 4;}
   [entrance='emergency'] { marker-fill: #080; text-fill: #080; } // sorties de secours en vert foncé
   [ref!=''][nom!=''] { text-name: [nom]+" / "+[ref]; }
   [nom!=''] { text-name: [nom]; }
