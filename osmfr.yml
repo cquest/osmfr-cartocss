@@ -1951,50 +1951,34 @@ Layer:
 
   - id: housenumbers
     <<: *extents
-    zoom_min: 17
+    properties:
+      minzoom: 17
     Datasource:
       <<: *osm2pgsql
       table: >-
         /* housenumbers */ (
-        SELECT
-          way,
-          "addr:housenumber",
+        SELECT way,
+          "addr:housenumber" as housenumber,
+          "addr:housename" as housename,
           null as entrance
         FROM
           planet_osm_polygon
-        WHERE
-          "addr:housenumber" is not null
-          and building is not null
+        WHERE way && !bbox!
+          AND ("addr:housenumber" is not null
+            OR "addr:housename" is not null)
+          AND building is not null
         UNION
         SELECT
           way,
-          "addr:housenumber",
+          "addr:housenumber" as housenumber,
+          "addr:housename" as housename,
           tags->'entrance' as entrance
         FROM
           planet_osm_point
-        WHERE
-          "addr:housenumber" is not null
+        WHERE way && !bbox!
+          AND ("addr:housenumber" is not null
+            OR "addr:housename" is not null)
         ) as housenumbers
-
-
-  - id: housenames
-    <<: *extents
-    zoom_min: 17
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* housenames */ (
-        select way,
-          "addr:housename"
-        from planet_osm_polygon
-        where "addr:housename" is not null
-          and building is not null
-        union
-        select way,
-          "addr:housename"
-        from planet_osm_point
-        where "addr:housename" is not null
-        ) as housenames
 
 
   - id: parks
