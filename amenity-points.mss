@@ -460,7 +460,8 @@
       marker-clip: false;
     }
 
-    [historic = 'castle'][zoom >= 15] {
+    [historic = 'castle'][zoom >= 15],
+    [historic = 'manor'][zoom >= 15] {
       point-file: url('symbols/castle2.svg');
       point-placement: interior;
     }
@@ -1061,7 +1062,8 @@
     text-avoid-edges: true;
   }
 
-  [historic = 'castle']::historic {
+  [historic = 'castle']::historic,
+  [historic = 'manor']::historic {
     [zoom >= 15],
     [pixels>1000] {
       [zoom >= 17] { text-name: "[name]"; }
