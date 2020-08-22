@@ -190,7 +190,7 @@
   [feature = 'man_made_works'],
   [feature = 'man_made_gasometer'] {
     [zoom >= 10] {
-      polygon-fill: #dfd1d6;
+      polygon-fill: @industrial-color;
       line-width: 0.3;
     }
   }
@@ -199,7 +199,7 @@
   [feature = 'landuse_harbour'],
   [feature = 'landuse_railway'] {
     [zoom >= 10] {
-      polygon-fill: #dfd1d6;
+      polygon-fill: @industrial-color;
     }
   }
 
@@ -314,7 +314,7 @@
   }
 
   [feature = 'amenity_recycling'][zoom >= 14] {
-    polygon-fill: #dfd1d6;
+    polygon-fill: @industrial-color;
     [zoom >= 16]{
     	line-color: #093;
     	line-dasharray: 8,8;

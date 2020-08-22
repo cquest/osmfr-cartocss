@@ -15,6 +15,7 @@ Map {
 @motorway_color: #809bc0;
 @motorway_toll_color: #809bc0;
 @shield_spacing: 256;
+@industrial-color: #dfd4d9;
 
 @health-color: #da0092;
 @shop-icon: #ac39ac;
