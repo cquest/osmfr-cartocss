@@ -1,4 +1,9 @@
 #buildings [zoom >= 14] {
+  [building != 'yes'][zoom >= 18] {
+    line-color: #bdacac;
+    line-width: 0.75;
+  }
+
   polygon-opacity: 0.8;
   polygon-fill: #bdacac;					/* 9%/74% (sat./bright) */
   [zoom = 16] {polygon-fill: #c2b2b2;}	/* 8%/76% */
