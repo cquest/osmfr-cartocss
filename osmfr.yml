@@ -1451,7 +1451,7 @@ Layer:
         /* amenity-points */ (
         SELECT way,
           amenity,shop,tourism,highway,man_made,waterway,
-          historic,leisure,power,
+          historic,military,leisure,power,
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
@@ -1481,13 +1481,13 @@ Layer:
           OR (!scale_denominator! < 9000
             and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten','emergency'))
           OR (!scale_denominator! < 4500
-            and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
+            and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,military,leisure,power) is not null)
           )
           AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')
         UNION
         SELECT ST_PointOnSurface(way) as way,
           amenity,shop,tourism,highway,man_made,waterway,
-          historic,leisure,power,
+          historic,military,leisure,power,
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
@@ -1515,7 +1515,7 @@ Layer:
             OR (!scale_denominator! < 9000
               and coalesce(amenity) in ('post_office','car_sharing','parking','pharmacy','place_of_worship','biergarten'))
             OR (!scale_denominator! < 4500
-              and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,leisure,power) is not null)
+              and coalesce(amenity,shop,tourism,highway,man_made,waterway,historic,military,leisure,power) is not null)
           )
           AND way_area > !pixel_width!*!pixel_height!*10
           AND /* poi index */ (coalesce(amenity,aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft')

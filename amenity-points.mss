@@ -445,6 +445,11 @@
   }
 
   ::historic {
+    [military = 'bunker'][zoom >= 17] {
+      marker-file: url('symbols/bunker.svg');
+      marker-fill: @brown-poi;
+    }
+
     [historic = 'memorial'][zoom >= 17] {
       marker-file: url('symbols/2016/tourist_memorial.16.svg');
       marker-fill: @brown-poi;
