@@ -525,15 +525,6 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: landuse-overlay
-    <<: *extents
-    zoom_min: 10
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* landuse-overlay */ (select way,landuse,leisure,amenity,\"natural\" from planet_osm_polygon where (landuse = 'military' or leisure='nature_reserve' or amenity='prison' or \"natural\" in ('wetland','marsh')) and building is null  and way_area > !pixel_width!*!pixel_height!*10 ) as landuse_overlay"
-      simplify_geometries: 'true'
-
-
   - id: turning-circle-casing
     <<: *extents
     zoom_min: 15
@@ -965,6 +956,15 @@ Layer:
       simplify_geometries: 'true'
 
 
+  - id: landuse-overlay
+    <<: *extents
+    zoom_min: 10
+    Datasource:
+      <<: *osm2pgsql
+      table: " /* landuse-overlay */ (select way,landuse,leisure,amenity,\"natural\" from planet_osm_polygon where (landuse = 'military' or leisure='nature_reserve' or amenity='prison' or \"natural\" in ('wetland','marsh')) and building is null  and way_area > !pixel_width!*!pixel_height!*10 ) as landuse_overlay"
+      simplify_geometries: 'true'
+
+      
   - id: admin-lz
     <<: *extents
     properties:
