@@ -791,7 +791,7 @@
   }
 
   ::power [power != ''] {
-    [zoom >= 14][power = 'plant']
+    [pixels>1000][power = 'plant']
     {
       point-file: url('symbols/fr/electricity.svg');
       point-placement: interior;
@@ -994,10 +994,20 @@
 
 #text-poly [zoom >= 15] {
 
+  [power != ''][pixels>1000] {
+    text-name: "[nom]";
+    text-face-name: @book-fonts;
+    text-halo-radius: 1;
+    text-wrap-width: 40;
+    text-avoid-edges: true;
+  }
+
   // zoom 15
 
   [heritage = '1'][zoom >= 15]::amenity,
-  [amenity = 'place_of_worship'][zoom >= 17]::amenity {
+  [amenity = 'place_of_worship'][zoom >= 17]::amenity,
+  [heritage = '1'][pixels>1000]::amenity,
+  [amenity = 'place_of_worship'][pixels>1000]::amenity {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-size: 10;
@@ -1011,22 +1021,12 @@
     	text-face-name: @bold-fonts;
     	text-fill: #734a08;
     }
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-    }
+    // variation de la taille du texte en fonction de la surface du polygone (en pixels)
+    [pixels > 5000] { text-size: 12; }
   }
 
-  [natural = 'wood'][zoom >= 15]::natural_wood {
+  [natural = 'wood'][zoom >= 15]::natural_wood,
+  [natural = 'wood'][pixels>1000]::natural_wood {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-fill: #060;
@@ -1038,18 +1038,12 @@
 
     // variation de la texte du texte en fonction de la surface du polygone
     text-size: 10;
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels > 5000] {
       text-size: 12;
       text-label-position-tolerance: 8;
       text-wrap-width: 50;
     }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
+    [pixels > 20000] {
       text-size: 14;
       text-label-position-tolerance: 10;
       text-wrap-width: 60;
@@ -1069,7 +1063,8 @@
   }
 
   [historic = 'castle']::historic {
-    [zoom >= 15] {
+    [zoom >= 15],
+    [pixels>1000] {
       [zoom >= 17] { text-name: "[name]"; }
       text-name: "[nom]";
       text-size: 9;
@@ -1089,7 +1084,8 @@
   [natural = 'lake']::natural_water,
   [landuse = 'reservoir']::natural_water,
   [landuse = 'basin']::natural_water {
-    [zoom >= 15] {
+    [zoom >= 15],
+    [pixels>1000] {
       [zoom >= 17] { text-name: "[name]"; }
       text-name: "[nom]";
       text-size: 10;
@@ -1099,17 +1095,11 @@
       text-wrap-width: 40;
       text-avoid-edges: true;
       // variation de la texte du texte en fonction de la surface du polygone
-      [zoom>=15][way_area>50000],
-      [zoom>=16][way_area>25000],
-      [zoom>=17][way_area>10000],
-      [zoom>=18][way_area> 5000] {
+      [pixels > 5000] {
         text-size: 12;
         text-wrap-width: 50;
       }
-      [zoom>=15][way_area>250000],
-      [zoom>=16][way_area>100000],
-      [zoom>=17][way_area>25000],
-      [zoom>=18][way_area>10000] {
+      [pixels > 20000] {
         text-size: 14;
         text-wrap-width: 60;
       }
@@ -1148,21 +1138,25 @@
     [amenity = 'townhall'] { text-dy: 12; }
   }
 
-  [amenity = 'university'][zoom >= 15]::amenity {
-    [zoom >= 17] { text-name: "[name]"; }
-	  text-name: "[nom]";
-    text-size: 9;
-    text-fill: #000033;
-    text-face-name: @book-fonts;
-    text-halo-radius: 2;
-    text-avoid-edges: true;
-    text-wrap-width: 40;
+  [amenity = 'university']::amenity {
+    [zoom >= 15],
+    [pixels>1000] {
+      [zoom >= 17] { text-name: "[name]"; }
+      text-name: "[nom]";
+      text-size: 9;
+      text-fill: #000033;
+      text-face-name: @book-fonts;
+      text-halo-radius: 2;
+      text-avoid-edges: true;
+      text-wrap-width: 40;
+    }
   }
 
   [amenity = 'kindergarten']::school,
   [amenity = 'school']::school,
   [amenity = 'college']::school {
-    [zoom >= 15] {
+    [zoom >= 15],
+    [pixels>1000] {
       text-name: "[nom]";
       [name =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
       [zoom=15] {
@@ -1174,10 +1168,7 @@
       }
   	  text-size: 9;
       text-wrap-width: 30;
-      [zoom>=15][way_area>75000],
-      [zoom>=16][way_area>25000],
-      [zoom>=17][way_area>10000],
-      [zoom>=18][way_area>5000] {
+      [pixels > 5000] {
         text-name: "[name]";
         text-size: 11;
         text-wrap-width: 40;
@@ -1196,10 +1187,7 @@
     [zoom >= 15][ecole != ''] {
 	  text-name: "[nom]";
     [ecole =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
-    [zoom>=15][way_area>75000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area>5000] {
+    [pixels > 5000] {
       text-size: 11;
       text-wrap-width: 60;
     }
@@ -1218,10 +1206,7 @@
     [zoom >= 15][ecole != ''] {
 	  text-name: "[ecole]";
     [ecole =~ '^Section.*']{ text-name: "";} // pas de rendu des "Section d'enseignement..."
-    [zoom>=15][way_area>75000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area>5000] {
+    [pixels > 5000] {
       text-size: 11;
       text-wrap-width: 60;
     }
@@ -1244,9 +1229,9 @@
     text-wrap-width: 40;
   }
 
-  [amenity = 'clinic'][zoom >= 15][way_area>50000]::hospital,
+  [amenity = 'clinic'][pixels>1000]::hospital,
   [amenity = 'clinic'][zoom >= 16]::hospital,
-  [amenity = 'hospital'][zoom >= 15][way_area>50000]::hospital,
+  [amenity = 'hospital'][pixels>1000]::hospital,
   [amenity = 'hospital'][zoom >= 16]::hospital {
     long/text-name: "[name]";
     long/text-fill: #3366cc;
@@ -1256,10 +1241,7 @@
     long/text-halo-radius: 2;
     long/text-wrap-width: 40;
     long/text-avoid-edges: true;
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels > 5000] {
       long/text-size: 12;
       long/text-wrap-width: 60;
     }
@@ -1272,10 +1254,7 @@
     short/text-halo-radius: 2;
     short/text-wrap-width: 40;
     short/text-avoid-edges: true;
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels > 5000] {
       short/text-size: 12;
       short/text-wrap-width: 60;
     }
@@ -1295,7 +1274,8 @@
 
   [amenity = 'library']::amenity,
   [amenity = 'theatre']::amenity {
-    [zoom >= 16] {
+    [zoom >= 16],
+    [pixels>1000] {
       [zoom<17] { text-name: "[nom]"; }
       text-name: "[name]";
       text-size: 11;
@@ -1306,14 +1286,10 @@
       text-avoid-edges: true;
       text-wrap-width: 40;
       // variation de la texte du texte en fonction de la surface du polygone
-      [zoom>=16][way_area>25000],
-      [zoom>=17][way_area>10000],
-      [zoom>=18][way_area> 5000] {
+      [pixels>5000] {
         text-size: 12;
       }
-      [zoom>=16][way_area>100000],
-      [zoom>=17][way_area>25000],
-      [zoom>=18][way_area>10000] {
+      [pixels>20000] {
         text-size: 14;
       }
     }
@@ -1329,44 +1305,42 @@
     text-avoid-edges: true;
   }
 
-  [amenity = 'public_building'][zoom >= 16]::amenity,
-  [amenity = 'community_centre'][zoom >= 16]::amenity,
-  [amenity = 'social_facility'][zoom >= 16]::amenity,
-  [amenity = 'courthouse'][zoom >= 16] {
-    text-name: "[name]";
-    text-size: 10;
-    text-fill: #666;
-    text-wrap-width: 40;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-avoid-edges: true;
-    [amenity = 'townhall'],[amenity = 'courthouse'] { text-dy: 12; }
-  }
-
-  [tourism = 'attraction'][zoom >= 16]::tourism,
-  [tourism = 'museum'][zoom >= 16]::tourism {
-    text-name: "[name]";
-    text-size: 10;
-    text-dy: 10;
-    text-fill: #734a08;
-    text-face-name: @bold-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 70;
-    text-avoid-edges: true;
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
+  [amenity = 'public_building']::amenity,
+  [amenity = 'community_centre']::amenity,
+  [amenity = 'social_facility']::amenity,
+  [amenity = 'courthouse']::amenity {
+    [zoom >= 16],
+    [pixels>1000] {
+      text-name: "[name]";
+      text-size: 10;
+      text-fill: #666;
+      text-wrap-width: 40;
+      text-face-name: @bold-fonts;
+      text-halo-radius: 1;
+      text-avoid-edges: true;
+      [amenity = 'townhall'],[amenity = 'courthouse'] { text-dy: 12; }
     }
   }
 
-  [tourism = 'information'][information='guidepost']::tourism
+  [tourism = 'attraction']::tourism,
+  [tourism = 'museum']::tourism {
+    [zoom>=16],
+    [pixels>1000] {
+      text-name: "[name]";
+      text-size: 10;
+      text-dy: 10;
+      text-fill: #734a08;
+      text-face-name: @bold-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 70;
+      text-avoid-edges: true;
+      // variation de la texte du texte en fonction de la surface du polygone
+      [pixels>5000]  { text-size: 12; }
+      [pixels>20000] { text-size: 14; }
+    }
+  }
+
+  [tourism = 'information'][information='guidepost'][zoom>=16]::tourism
   {
     text-name: "[name]";
     text-size: 9;
@@ -1383,11 +1357,12 @@
   }
 
 
-  [leisure = 'fitness_station'][zoom >= 16]::shop,
-  [amenity = 'vehicle_inspection'][zoom >= 16]::shop,
-  [amenity = 'marketplace'][zoom >= 16]::shop,
-  [shop != ''][shop != 'vacant'][zoom >= 16]::shop {
-		[zoom >= 17] {
+  [leisure = 'fitness_station']::shop,
+  [amenity = 'vehicle_inspection']::shop,
+  [amenity = 'marketplace']::shop,
+  [shop != ''][shop != 'vacant']::shop {
+		[zoom >= 17],
+    [pixels>1000] {
 			text-name: "[name]";
 			text-size: 8;
 			text-fill: #939;
@@ -1456,7 +1431,8 @@
 	  }
 
 	  [shop = 'supermarket'] {
-  		[zoom >= 16] {
+  		[zoom >= 16],
+      [pixels>1000] {
   		  text-name: "[name]";
   		  text-size: 9;
   		  text-dy: 10;
@@ -1477,8 +1453,10 @@
   		  text-avoid-edges: true;
   		}
 	  }
-	  [shop = 'mall'], [shop = 'department_store'] {
-  		[zoom >= 16] {
+	  [shop = 'mall'],
+    [shop = 'department_store'] {
+  		[zoom >= 16],
+      [pixels>1000] {
   		  text-name: "[name]";
   		  text-size: 11;
   		  text-dy: 13;
@@ -1494,22 +1472,25 @@
 
   // zoom 17
 
-  [amenity = 'parking'][zoom >= 17]::parking {
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: #0066ff;
-    text-dy: 9;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-avoid-edges: true;
-    [access != ''][access != 'public'][access != 'yes'] {
-      text-fill: #66ccaf;
+  [amenity = 'parking']::parking {
+    [zoom>=17],
+    [pixels>1000] {
+      text-name: "[name]";
+      text-size: 9;
+      text-fill: #0066ff;
+      text-dy: 9;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-avoid-edges: true;
+      [access != ''][access != 'public'][access != 'yes'] {
+        text-fill: #66ccaf;
+      }
+      [zoom >= 19] {
+      text-size: 10;
+      text-dy: 10;
+      }
     }
-	  [zoom >= 19] {
-		text-size: 10;
-		text-dy: 10;
-	  }
   }
 
   [amenity = 'embassy'][zoom >= 17]::amenity {
@@ -1538,16 +1519,10 @@
     text-wrap-width: 40;
     text-avoid-edges: true;
     // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels>5000] {
       text-size: 12;
     }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
+    [pixels>20000] {
       text-size: 14;
     }
   }
@@ -1672,14 +1647,8 @@
     text-avoid-edges: true;
     text-wrap-width: 40;
     // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-    }
+    [pixels>5000]  { text-size: 12; }
+    [pixels>20000] { text-size: 14; }
   }
 
   [amenity = 'bank'][zoom >= 17]::amenity {
@@ -1775,13 +1744,11 @@
     text-halo-radius: 1;
     text-wrap-width: 60;
     // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels>5000] {
       text-size: 12;
       text-wrap-width: 70;
     }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
+    [pixels>20000] {
       text-size: 14;
       text-wrap-width: 80;
     }
@@ -1796,13 +1763,11 @@
     text-halo-radius: 1;
     text-wrap-width: 60;
     // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
+    [pixels>5000] {
       text-size: 12;
       text-wrap-width: 70;
     }
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
+    [pixels>20000] {
       text-size: 14;
       text-wrap-width: 80;
     }
