@@ -1392,7 +1392,7 @@ Layer:
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
           0 as pixels,
-          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name,brand),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE way && !bbox!
@@ -1422,7 +1422,7 @@ Layer:
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
           way_area / (!pixel_height!*!pixel_width!) as pixels,
-          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
+          regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name,brand),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
         WHERE way && !bbox!
@@ -1455,7 +1455,7 @@ Layer:
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-          ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
+          ref, coalesce(name,brand) as name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name,p.brand) as nom,
           coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
           to_int(tags->'level') as level, tags->'network' as network,
           tags->'ref:FR:LaPoste' as ref_laposte, 
@@ -1491,7 +1491,7 @@ Layer:
           operator, access, religion, lock, office,
           p.tags->'craft' as craft, tags->'emergency' as emergency,
 
-          ref, name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name) as nom,
+          ref, coalesce(name,brand) as name, coalesce(p.tags->'short_name:fr',abrev,p.tags->'short_name',p.tags->'alt_name',p.tags->'name:fr',p.name,p.brand) as nom,
           coalesce(tags->'indoor',case when to_int(tags->'level')<0 then 'yes'::text when tags->'location'='underground' then 'yes'::text else null end) as indoor,
           to_int(tags->'level') as level, tags->'network' as network,
           tags->'ref:FR:LaPoste' as ref_laposte, 
