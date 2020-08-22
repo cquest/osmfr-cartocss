@@ -489,7 +489,6 @@
       marker-file: url('symbols/supermarket.svg');
       marker-clip: false;
       marker-placement: interior;
-      marker-clip: false;
      [organic='yes'],[organic='only'] { marker-file: url('symbols/supermarket-organic.svg');}
      [level<0] { marker-opacity: 0.5; }
     }
@@ -499,7 +498,6 @@
       marker-file: url('symbols/shopping.svg');
       marker-clip: false;
       marker-placement: interior;
-      marker-clip: false;
       [level<0] { marker-opacity: 0.5; }
     }
   }
