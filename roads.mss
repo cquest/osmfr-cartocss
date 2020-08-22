@@ -2435,122 +2435,91 @@
 }
 
 
-#roads-text-ref-low-zoom [zoom>=10] {
+#roads-text-ref-low-zoom [zoom>=10][zoom <= 12][length < 9] {
+  // valeurs par défaut
+  shield-name: "";
+  shield-fill: #fff;
+  shield-placement: line;
+  shield-margin: 15;
+  shield-avoid-edges: true;
+  shield-min-padding: 16;
+  shield-spacing: 500;
+  shield-face-name: @bold-fonts;
+  shield-size: 10;
+  shield-file: url("symbols/mot_shield[length].png");
+  shield-opacity: 0;
+
 	[way_len>10000],
 	[way_len>5000][zoom>=11],
 	[way_len>2500][zoom>=12]
 	{
-	  [highway = 'motorway'][length < 9] {
-		[zoom >= 10][zoom < 13] {
-		  shield-name: "[ref]";
-		  shield-size: 10;
-		  shield-fill: #fff;
-		  shield-placement: line;
+	  [highway = 'motorway']{
+      shield-opacity: 1;
+      shield-name: "[ref]";
 		  shield-file: url("symbols/mot_shield[length].png");
-		  shield-spacing: 500;
-		  shield-margin: 15;
-		  shield-face-name: @bold-fonts;
 		  [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
 		  [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
 		}
+
+	  [highway = 'trunk'][zoom >= 11] {
+      shield-opacity: 1;
+      shield-name: "[ref]";
+		  shield-file: url("symbols/tru_shield[length].png");
 	  }
 
-	  [highway = 'trunk'][zoom >= 11][zoom < 13] {
-		shield-name: "[ref]";
-		shield-size: 10;
-		shield-fill: #fff;
-		shield-placement: line;
-		shield-file: url("symbols/tru_shield[length].png");
-		shield-spacing: 500;
-		shield-margin: 15;
-		shield-face-name: @bold-fonts;
+	  [highway = 'primary'][zoom >= 11] {
+      shield-opacity: 1;
+      shield-name: "[ref]";
+		  shield-file: url("symbols/pri_shield[length].png");
 	  }
 
-	  [highway = 'primary'][zoom >= 11][zoom < 13] {
-		shield-name: "[ref]";
-		shield-size: 10;
-		shield-fill: #fff;
-		shield-placement: line;
-		shield-file: url("symbols/pri_shield[length].png");
-		shield-spacing: 500;
-		shield-margin: 15;
-		shield-face-name: @bold-fonts;
-	  }
-
-	  [highway = 'secondary'][zoom >= 12][zoom < 13] {
-		shield-name: "[ref]";
-		shield-size: 10;
-		shield-fill: #fff;
-		shield-placement: line;
-		shield-file: url("symbols/sec_shield[length].png");
-		shield-spacing: 500;
-		shield-margin: 15;
-		shield-face-name: @bold-fonts;
+	  [highway = 'secondary'][zoom >= 12] {
+      shield-opacity: 1;
+      shield-name: "[ref]";
+		  shield-file: url("symbols/sec_shield[length].png");
 	  }
 	}
 }
 
-#roads-text-ref [zoom >= 13] {
-  [highway = 'motorway'][length < 9] {
-    shield-name: "[ref]";
-    shield-size: 10;
-    shield-fill: #fff;
-    shield-placement: line;
-    shield-file: url("symbols/mot_shield[length].png");
-    shield-repeat-distance: @shield_spacing;
-    shield-face-name: @bold-fonts;
-    shield-margin: 20;
-    shield-avoid-edges: true;
-    [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
-    [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
-  }
-
-  [highway = 'trunk'] {
-    shield-name: "[ref]";
-    shield-size: 10;
-    shield-fill: #fff;
-    shield-placement: line;
-    shield-file: url("symbols/tru_shield[length].png");
-    shield-repeat-distance: @shield_spacing;
-    shield-face-name: @bold-fonts;
-    shield-margin: 20;
-    shield-avoid-edges: true;
-  }
-
-  [highway = 'primary'] {
-    shield-name: "[ref]";
-    shield-size: 10;
-    shield-fill: #fff;
-    shield-placement: line;
-    shield-file: url("symbols/pri_shield[length].png");
-    shield-spacing: @shield_spacing;
-    shield-face-name: @bold-fonts;
-    shield-margin: 20;
-    shield-avoid-edges: true;
-  }
-
-  [highway = 'secondary'] {
-    shield-name: "[ref]";
-    shield-size: 10;
-    shield-fill: #fff;
-    shield-placement: line;
-    shield-file: url("symbols/sec_shield[length].png");
-    shield-spacing: @shield_spacing;
-    shield-face-name: @bold-fonts;
-    shield-margin: 20;
-    shield-avoid-edges: true;
-  }
-
+#roads-text-ref [zoom >= 13][length < 9] {
+  [highway = 'motorway'],
+  [highway = 'trunk'],
+  [highway = 'primary'],
+  [highway = 'secondary'],
   [highway = 'tertiary'] {
+    // valeurs par défaut
     shield-name: "[ref]";
-    shield-size: 10;
     shield-fill: #fff;
     shield-placement: line;
-    shield-file: url("symbols/ter_shield[length].png");
-    shield-spacing: @shield_spacing;
-    shield-face-name: @bold-fonts;
     shield-margin: 20;
     shield-avoid-edges: true;
+    shield-min-padding: 16;
+    shield-spacing: 500;
+    shield-face-name: @bold-fonts;
+    shield-size: 10;
+    shield-repeat-distance: @shield_spacing;
+
+    [highway = 'motorway'] {
+      shield-file: url("symbols/mot_shield[length].png");
+      [length = 7] { shield-file: url('symbols/mot_shield6.png'); }
+      [length = 8] { shield-file: url('symbols/mot_shield7.png'); }
+    }
+
+    [highway = 'trunk'] {
+      shield-file: url("symbols/tru_shield[length].png");
+    }
+
+    [highway = 'primary'] {
+      shield-file: url("symbols/pri_shield[length].png");
+    }
+
+    [highway = 'secondary'] {
+      shield-file: url("symbols/sec_shield[length].png");
+    }
+
+    [highway = 'tertiary'] {
+      shield-file: url("symbols/ter_shield[length].png");
+    }
   }
 
   [highway = 'unclassified'],
@@ -2564,7 +2533,8 @@
       text-halo-fill: fadeout(white, 30%);
       text-repeat-distance: @shield_spacing;
       text-placement: line;
-      text-clip: true;
+      text-avoid-edges: true;
+      text-min-padding: 16;
     }
   }
 
@@ -2581,7 +2551,8 @@
       // text-min-distance: 18;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
-      text-clip: true;
+      text-avoid-edges: true;
+      text-min-padding: 16;
     }
   }
 }
@@ -2590,6 +2561,7 @@
   // fixes #50 et valeurs par défaut
   text-clip: true;
   text-avoid-edges: true;
+  text-min-padding: 10;
   text-name: "";
   text-face-name: @book-fonts;
   text-placement: line;
@@ -2678,7 +2650,6 @@
     [zoom >= 15] {
       text-name: "[nom]";
       text-size: 9;
-      text-halo-radius: 0;
       [zoom >= 17] {
         text-size: 11;
         text-name: "[name]";
