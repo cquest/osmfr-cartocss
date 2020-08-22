@@ -2655,6 +2655,7 @@
     [zoom >= 15] {
       text-name: "[nom]";
       text-size: 9;
+      text-halo-radius: 0;
       [zoom >= 17] {
         text-size: 11;
         text-name: "[name]";
