@@ -1333,6 +1333,7 @@ Layer:
           barrier,
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
+          0 as pixels,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -1355,6 +1356,7 @@ Layer:
           barrier,
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
+          way_area / (!pixel_height!*!pixel_width!) as pixels,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -1366,7 +1368,7 @@ Layer:
             OR "natural" in ('peak','volcano')
             OR tags ? 'mountain_pass')
           AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
-        ) as amenity_symbols
+        ) as amenity_symbols_lz
 
 
   - id: amenity-symbols
@@ -1389,6 +1391,7 @@ Layer:
           barrier,
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
+          0 as pixels,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -1418,6 +1421,7 @@ Layer:
           barrier,
           tags->'mountain_pass' as mountain_pass,
           coalesce(tags->'aerodrome', p.military) as aerodrome,
+          way_area / (!pixel_height!*!pixel_width!) as pixels,
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
