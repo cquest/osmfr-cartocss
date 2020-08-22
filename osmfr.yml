@@ -1641,7 +1641,8 @@ Layer:
               railway,
               tunnel,
               junction,
-              sum(way_len) as way_len
+              sum(way_len) as way_len,
+              z_order
             FROM (
               SELECT way,
                 st_length(way) as way_len,
@@ -1653,7 +1654,8 @@ Layer:
                 railway,
                 tunnel,
                 junction,
-                oneway
+                oneway,
+                z_order
               FROM planet_osm_line p
               WHERE way && !bbox!
                 AND route IS NULL
@@ -1665,11 +1667,11 @@ Layer:
                 AND (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1)
                 AND coalesce(highway, railway, aeroway, man_made) IS NOT NULL
               ) as ways
-            GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
+            GROUP BY highway, name, short_name, railway, tunnel, junction, oneway, z_order
             HAVING sum(way_len)> 32 * !pixel_width!
           ) as w
           LEFT JOIN abrev a ON (a.long_name = w.name)
-          ORDER BY way_len
+          ORDER BY z_order, way_len
         ) as roads
       simplify_geometries: 'true'
 
