@@ -42078,18 +42078,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42101,18 +42101,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42124,18 +42124,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42147,18 +42147,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([way_len] != '') and ([way_len] < 1000) and ([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42934,18 +42934,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42957,18 +42957,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -42980,18 +42980,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -43003,18 +43003,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] != '') and ([way_len] != '') and ([way_len] < 1000) and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -43790,18 +43790,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -43813,18 +43813,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -43836,18 +43836,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -43859,18 +43859,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([tunnel] != '') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -44646,18 +44646,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -44669,18 +44669,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([railway] = 'platform') and ([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45073,19 +45073,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45096,19 +45096,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45119,19 +45119,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45142,19 +45142,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45165,19 +45165,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45188,19 +45188,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" opacity="0.5" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([tunnel] = 'yes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" opacity="0.5" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45211,19 +45211,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link') and ([railway] != '')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
@@ -45234,19 +45234,19 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#444444" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" minimum-path-length="100" placement="line" size="13" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="11" spacing="300"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'tertiary_link')]]></Filter>
-      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="1.5" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" clip="true" fill="#000000" fontset-name="fontset-0" halo-fill="rgba(255, 255, 255, 0.7)" halo-radius="0" minimum-padding="10" placement="line" size="9" spacing="300"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
