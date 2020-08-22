@@ -107,6 +107,10 @@
     polygon-fill: #cfeca8;
   }
 
+  [feature = 'natural_reef'] {
+    polygon-pattern-file: url('symbols/reef.png');
+  }
+  
   [feature = 'leisure_park'],
   [feature = 'leisure_recreation_ground'] {
     [zoom >= 10] {
