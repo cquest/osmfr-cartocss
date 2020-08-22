@@ -512,6 +512,7 @@
       [shop = 'alcohol'] { marker-file: url('symbols/alcohol.svg'); }
       [shop = 'greengrocer'] { marker-file: url('symbols/greengrocer.svg'); }
       [shop = 'confectionery'] { marker-file: url('symbols/confectionery.svg'); }
+      [shop = 'chocolate'] { marker-file: url('symbols/confectionery.svg'); }
       [shop =~ '(clothes|fashion)'] { marker-file: url('symbols/2016/shop_clothes.16.svg'); }
       [shop = 'bag'] { marker-file: url('symbols/2016/bag-14.svg'); }
       [shop = 'doityourself'] { marker-file: url('symbols/diy.svg'); }
@@ -1384,6 +1385,7 @@
       [shop = 'car_repair'],
 			[shop = 'clothes'],
 			[shop = 'confectionery'],
+      [shop = 'chocolate'],
 			[shop = 'convenience'],
   		[shop = 'computer'],
 			[shop = 'copyshop'],
@@ -1882,6 +1884,7 @@
 			[shop = 'car'],
 			[shop = 'clothes'],
 			[shop = 'confectionery'],
+      [shop = 'chocolate'],
 			[shop = 'convenience'],
   		[shop = 'computer'],
 			[shop = 'copyshop'],
