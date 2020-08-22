@@ -797,8 +797,8 @@
       text-size: 10;
       text-name: "[nom]";
       text-halo-radius: 1;
-      text-face-name: @bold-fonts;
-      text-wrap-width: 50;
+      text-face-name: @book-fonts;
+      text-wrap-width: 80;
     }
     [zoom >= 15][power = 'generator'][power_source = 'wind']
     {
