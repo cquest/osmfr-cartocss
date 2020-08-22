@@ -926,13 +926,21 @@ Layer:
             cast(90+degrees(ST_Azimuth(st_lineinterpolatepoint(way1,0),st_lineinterpolatepoint(way1,1))) as integer) % 180 as angle
           FROM (
             SELECT * FROM (
-              SELECT p.osm_id, p.way, ST_LineMerge(ST_Intersection(st_buffer(p.way,0.1), h.way)) as way1,
-                p.tags->'tactile_paving' as tactile_paving, p.tags->'crossing:bollard' as crossing_bollard,
+              SELECT p.osm_id,
+                p.way,
+                ST_LineMerge(ST_Intersection(st_buffer(p.way,0.1), h.way)) as way1,
+                p.tags->'tactile_paving' as tactile_paving,
+                p.tags->'crossing:bollard' as crossing_bollard,
                 coalesce(p.tags->'wheelchair',p.tags->'sloped_curb') as wheelchair
               FROM planet_osm_point as p
               JOIN planet_osm_line h
-                ON (h.way && !bbox! AND st_intersects(p.way,h.way) and h.highway is not null and h.highway not in ('footway','cycleway','path','pedestrian','steps','service'))
-              WHERE (p.highway='crossing' or p.tags ? 'crossing') and p.way && !bbox! and h.way && !bbox!
+                ON (h.way && !bbox!
+                  AND st_intersects(p.way,h.way)
+                  and h.highway is not null
+                  and h.highway not in ('footway','cycleway','path','pedestrian','steps','service'))
+              WHERE (p.highway='crossing'
+                or (p.tags ? 'crossing' and p.tags->'crossing' != 'no'))
+                and p.way && !bbox! and h.way && !bbox!
             ) as p
             WHERE ST_GeometryType(way1)='ST_LineString') as p) as crossing
             GROUP BY osm_id, tactile_paving, crossing_bollard, wheelchair
