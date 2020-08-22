@@ -373,9 +373,10 @@
   [amenity = 'prison']::landuse,
   [landuse = 'military']::landuse {
     polygon-pattern-file: url('symbols/military_red_hz2.png');
+    polygon-pattern-opacity: 0.66;
     line-color: #f55;
-    line-width: 3;
-    line-opacity: 0.329;
+    line-width: 2;
+    line-opacity: 0.25;
   }
   [leisure = 'nature_reserve'] {
     polygon-pattern-file: url('symbols/fr/nature_reserve6.png');
