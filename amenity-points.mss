@@ -231,8 +231,6 @@
 
     [amenity='marketplace'] {
       marker-file: url('symbols/marketplace.svg');
-      marker-transform: "scale(0.025)";
-      marker-fill: @shop-icon;
     }
 
     [amenity = 'police'][zoom >= 17] {
@@ -1387,6 +1385,7 @@
 
   [leisure = 'fitness_station'][zoom >= 16]::shop,
   [amenity = 'vehicle_inspection'][zoom >= 16]::shop,
+  [amenity = 'marketplace'][zoom >= 16]::shop,
   [shop != ''][shop != 'vacant'][zoom >= 16]::shop {
 		[zoom >= 17] {
 			text-name: "[name]";
@@ -1398,7 +1397,8 @@
 			text-avoid-edges: true;
       text-dy: 6;
 
-  		[amenity = 'vehicle_inspection'],
+  		[amenity = 'marketplace'],
+      [amenity = 'vehicle_inspection'],
       [leisure = 'fitness_station'],
       [shop = 'bag'],
   		[shop = 'bakery'],
