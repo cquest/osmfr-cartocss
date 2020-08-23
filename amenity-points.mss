@@ -343,60 +343,48 @@
   }
 
 
-  ::highway {
-    [highway = 'traffic_signals'][zoom >= 17] {
-      point-file: url('symbols/traffic_lights.svg');
-      point-placement: interior;
-    }
-
-    [highway = 'ford'][zoom >= 16] {
-      point-file: url('symbols/transport_ford.svg');
-      point-placement: interior;
-    }
-  }
-
   ::tourism {
-    [tourism = 'alpine_hut'][zoom >= 13]::tourism {
+    [tourism = 'alpine_hut'][zoom >= 13] {
       point-file: url('symbols/alpinehut.svg');
       point-placement: interior;
     }
 
-    [tourism = 'camp_site'][zoom >= 16]::tourism {
+    [tourism = 'camp_site'][zoom >= 16] {
       point-file: url('symbols/camping.svg');
       point-placement: interior;
     }
 
-    [tourism = 'caravan_site'][zoom >= 16]::tourism {
+    [tourism = 'caravan_site'][zoom >= 16] {
       point-file: url('symbols/caravan_park.svg');
       point-placement: interior;
     }
 
-    [tourism = 'guest_house'][zoom >= 17]::tourism {
+    [tourism = 'guest_house'][zoom >= 17] {
       point-file: url('symbols/guest_house.svg');
       point-placement: interior;
     }
 
-    [tourism = 'bed_and_breakfast'][zoom >= 17]::tourism {
+    [tourism = 'bed_and_breakfast'][zoom >= 17] {
       point-file: url('symbols/bandb.svg');
       point-placement: interior;
     }
 
-    [tourism = 'hostel'][zoom >= 17]::tourism {
+    [tourism = 'hostel'][zoom >= 17] {
       point-file: url('symbols/hostel.svg');
       point-placement: interior;
     }
 
-    [tourism = 'hotel'][zoom >= 17]::tourism {
+    [tourism = 'hotel'][zoom >= 17] {
       point-file: url('symbols/hotel2.svg');
       point-placement: interior;
     }
 
-    [tourism = 'motel'][zoom >= 17]::tourism {
+    [tourism = 'motel'][zoom >= 17] {
       point-file: url('symbols/motel.svg');
       point-placement: interior;
     }
 
-    [tourism = 'information'][poi_type!='trail_blaze'][zoom >= 16]::tourism {
+    [tourism = 'information'][poi_type!='trail_blaze'][zoom >= 16] {
       point-file: url('symbols/information.svg');
       point-placement: interior;
       [indoor='yes'] { point-opacity: 0.5; }
@@ -405,43 +393,37 @@
       }
     }
 
-    [tourism = 'museum'][zoom >= 17]::tourism {
+    [tourism = 'museum'][zoom >= 17] {
       point-file: url('symbols/museum.svg');
       point-placement: interior;
       [indoor='yes'] { point-opacity: 0.5; }
     }
 
-    [tourism = 'zoo'][zoom >= 14]::tourism {
+    [tourism = 'zoo'][zoom >= 14] {
       point-file: url('symbols/zoo.svg');
       point-placement: interior;
     }
 
-    [tourism = 'viewpoint'][zoom >= 16]::tourism {
+    [tourism = 'viewpoint'][zoom >= 16] {
       marker-file: url('symbols/2016/viewpoint.16.svg');
       marker-fill: @brown-poi;
       marker-placement: interior;
       marker-clip: false;
     }
 
-    [man_made = 'windmill'][zoom >= 16]::tourism {
+    [man_made = 'windmill'][zoom >= 16] {
       marker-file: url('symbols/2016/windmill.16.svg');
       marker-fill: @brown-poi;
       marker-placement: interior;
       marker-clip: false;
     }
 
-    [man_made = 'lighthouse'][zoom >= 15]::tourism {
+    [man_made = 'lighthouse'][zoom >= 15] {
       marker-file: url('symbols/2016/lighthouse.16.svg');
       marker-fill: @brown-poi;
       marker-placement: interior;
       marker-clip: false;
     }
-  }
-
-  [zoom >= 15][waterway = 'lock']::waterway,
-  [zoom >= 15][lock = 'yes']::lock {
-      point-file: url('symbols/lock_gate.svg');
-      point-placement: interior;
   }
 
   ::historic {
@@ -478,16 +460,10 @@
     }
   }
 
-  ::misc {
-    [man_made = 'mast'][zoom >= 17] {
-      point-file: url('symbols/tower_communications.svg');
+  [zoom >= 15][waterway = 'lock']::lock,
+  [zoom >= 15][lock = 'yes']::lock {
+      point-file: url('symbols/lock_gate.svg');
       point-placement: interior;
-    }
-
-    [man_made = 'water_tower'][zoom >= 16] {
-      point-file: url('symbols/fr/water_tower.svg');
-      point-placement: interior;
-    }
   }
 
   ::mall [zoom >= 16] {
@@ -620,10 +596,29 @@
 
   }
 
-  ::other [zoom >= 17]{
-    // office/craft points
-    [office != ''],
-    [craft != ''] {
+  ::other {
+    [highway = 'ford'][zoom >= 16] {
+      point-file: url('symbols/transport_ford.svg');
+      point-placement: interior;
+    }
+
+    [man_made = 'water_tower'][zoom >= 16] {
+      point-file: url('symbols/fr/water_tower.svg');
+      point-placement: interior;
+    }
+
+    [highway = 'traffic_signals'][zoom >= 17] {
+      point-file: url('symbols/traffic_lights.svg');
+      point-placement: interior;
+    }
+
+    [man_made = 'mast'][zoom >= 17] {
+      point-file: url('symbols/tower_communications.svg');
+      point-placement: interior;
+    }
+
+    [office != ''][zoom >= 17],
+    [craft != ''][zoom >= 17] {
         marker-fill: @office;
         marker-line-width: 0;
         marker-clip: false;
@@ -655,6 +650,54 @@
 }
 
 .symbols {
+
+  ::natural [zoom >= 11] {
+    [natural = 'peak'][zoom >= 11] {
+      point-file: url('symbols/peak.svg');
+      point-placement: interior;
+    }
+
+    [mountain_pass = 'yes'][zoom >= 11],
+    [natural = 'saddle'][zoom >= 11] {
+      point-file: url('symbols/mountain_pass.svg');
+      point-placement: interior;
+    }
+
+    [natural = 'volcano'][zoom >= 11] {
+      point-file: url('symbols/volcano.png');
+      point-placement: interior;
+    }
+
+    [natural = 'cave_entrance'][zoom >= 15] {
+      point-file: url('symbols/poi_cave.p.16.png');
+      point-placement: interior;
+    }
+
+    [natural = 'spring'][zoom >= 14] {
+      point-file: url('symbols/spring.png');
+      point-placement: interior;
+    }
+  }
+
+  ::power [power != ''] {
+    [pixels>1000][power = 'plant']
+    {
+      point-file: url('symbols/fr/electricity.svg');
+      point-placement: interior;
+      text-dy: 12;
+      text-size: 10;
+      text-name: "[nom]";
+      text-halo-radius: 1;
+      text-face-name: @book-fonts;
+      text-wrap-width: 80;
+    }
+    [zoom >= 15][power = 'generator'][power_source = 'wind']
+    {
+      point-placement: interior;
+      point-file: url('symbols/power_wind.png');
+    }
+  }
+
   ::aeroway [zoom>=10] {
     [aeroway = 'helipad'][zoom >= 16] {
       point-file: url('symbols/helipad.svg');
@@ -721,24 +764,22 @@
 	  }
   }
 
-  ::man_made [zoom >= 15] {
-    [man_made = 'lighthouse'][zoom >= 15]::man_made {
+  ::other [zoom >= 15] {
+    [man_made = 'lighthouse'][zoom >= 15] {
       point-file: url('symbols/lighthouse.p.20.png');
       point-placement: interior;
     }
 
-    [man_made = 'windmill'][zoom >= 16]::man_made {
+    [man_made = 'windmill'][zoom >= 16] {
       point-file: url('symbols/windmill.png');
       point-placement: interior;
     }
 
-    [man_made = 'mast'][zoom >= 17]::man_made {
+    [man_made = 'mast'][zoom >= 17] {
       point-file: url('symbols/communications.p.20.png');
       point-placement: interior;
     }
-  }
 
-  ::railway [zoom >= 15] {
     [railway =~ '(level_crossing|crossing)'][zoom >= 15] {
       point-file: url('symbols/level_crossing2.svg');
       point-transform: "scale(0.5)";
@@ -749,56 +790,7 @@
       point-file: url('symbols/buffer_stop.svg');
       [zoom=17] { point-transform: "scale(0.5)"; }
     }
-  }
 
-  ::natural [zoom >= 11] {
-    [natural = 'peak'][zoom >= 11] {
-      point-file: url('symbols/peak.svg');
-      point-placement: interior;
-    }
-
-    [mountain_pass = 'yes'][zoom >= 11],
-    [natural = 'saddle'][zoom >= 11]::natural {
-      point-file: url('symbols/mountain_pass.svg');
-      point-placement: interior;
-    }
-
-    [natural = 'volcano'][zoom >= 11] {
-      point-file: url('symbols/volcano.png');
-      point-placement: interior;
-    }
-
-    [natural = 'cave_entrance'][zoom >= 15] {
-      point-file: url('symbols/poi_cave.p.16.png');
-      point-placement: interior;
-    }
-
-    [natural = 'spring'][zoom >= 14] {
-      point-file: url('symbols/spring.png');
-      point-placement: interior;
-    }
-  }
-
-  ::power [power != ''] {
-    [pixels>1000][power = 'plant']
-    {
-      point-file: url('symbols/fr/electricity.svg');
-      point-placement: interior;
-      text-dy: 12;
-      text-size: 10;
-      text-name: "[nom]";
-      text-halo-radius: 1;
-      text-face-name: @book-fonts;
-      text-wrap-width: 80;
-    }
-    [zoom >= 15][power = 'generator'][power_source = 'wind']
-    {
-      point-placement: interior;
-      point-file: url('symbols/power_wind.png');
-    }
-  }
-
-  ::highway [zoom >= 15] {
     [highway = 'mini_roundabout'][zoom >= 16] {
       point-file: url('symbols/mini_round.png');
       point-placement: interior;
@@ -830,7 +822,7 @@
 
   // zoom 12
 
-  [place = 'island'][zoom >= 12]::place {
+  [place = 'island']::place {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-fill: #000;
@@ -853,7 +845,7 @@
     }
   }
 
-  [aeroway = 'danger_area'][zoom >= 12]::military {
+  [aeroway = 'danger_area'] {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-size: 9;
@@ -864,8 +856,7 @@
     text-avoid-edges: true;
   }
 
-  [power = 'plant'][zoom >= 12]::power
-  {
+  [power = 'plant'] {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-size: 10;
@@ -878,9 +869,9 @@
 
   // zoom 13
 
-  [mountain_pass = 'yes']::natural,
-  [natural =~ '(saddle|peak|volcano)']::natural {
-    [zoom >= 13] {
+  [zoom >= 13]::natural {
+    [mountain_pass = 'yes'],
+    [natural =~ '(saddle|peak|volcano)'] {
       marker-width: 3;
       marker-height: 3;
       marker-fill: brown;
@@ -908,7 +899,7 @@
         ele/text-face-name: @oblique-fonts;
         ele/text-halo-radius: 1;
         ele/text-avoid-edges: true;
-        [name != ''] {
+        [ele!=''][name != ''] {
           ele/text-dy: 18;
         }
       }
@@ -917,79 +908,73 @@
 
   // zoom 14
 
-  [leisure = 'golf_course'][zoom >= 14]::golf_course {
-    [zoom >= 17] { text-name: "[name]"; }
-    text-name: "[nom]";
-    text-size: 10;
-    text-fill: #060;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-avoid-edges: true;
-    text-dy: 12;
-    [zoom >= 16] {
-      text-size: 12;
-      text-fill: grey;
-      text-face-name: @oblique-fonts;
-      text-dy: 0;
-    }
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-      text-wrap-width: 50;
-    }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
-      text-wrap-width: 60;
-    }
-  }
-
-  [tourism = 'zoo'][zoom >= 14]::tourism,
-  [tourism = 'theme_park'][zoom >= 14]::tourism {
-    [zoom >= 17] { text-name: "[name]"; }
-    text-name: "[nom]";
-    text-size: 8;
-    text-fill: #734a08;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 30;
-    text-avoid-edges: true;
-    [zoom >= 16] {
+  [zoom >= 14] {
+    [leisure = 'golf_course'] {
+      [zoom >= 17] { text-name: "[name]"; }
+      text-name: "[nom]";
       text-size: 10;
+      text-fill: #060;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 40;
+      text-avoid-edges: true;
+      text-dy: 12;
+      [zoom >= 16] {
+        text-size: 12;
+        text-fill: grey;
+        text-face-name: @oblique-fonts;
+        text-dy: 0;
+      }
+      // variation de la texte du texte en fonction de la surface du polygone
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 12;
+        text-wrap-width: 50;
+      }
+      [zoom>=15][way_area>250000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 14;
+        text-wrap-width: 60;
+      }
     }
-    // variation de la texte du texte en fonction de la surface du polygone
-    [zoom>=15][way_area>50000],
-    [zoom>=16][way_area>25000],
-    [zoom>=17][way_area>10000],
-    [zoom>=18][way_area> 5000] {
-      text-size: 12;
-    }
-    [zoom>=15][way_area>250000],
-    [zoom>=16][way_area>100000],
-    [zoom>=17][way_area>25000],
-    [zoom>=18][way_area>10000] {
-      text-size: 14;
+
+    [tourism = 'zoo'],
+    [tourism = 'theme_park'] {
+      [zoom >= 17] { text-name: "[name]"; }
+      text-name: "[nom]";
+      text-size: 8;
+      text-fill: #734a08;
+      text-face-name: @book-fonts;
+      text-halo-radius: 1;
+      text-wrap-width: 30;
+      text-avoid-edges: true;
+      [zoom >= 16] {
+        text-size: 10;
+      }
+      // variation de la texte du texte en fonction de la surface du polygone
+      [zoom>=15][way_area>50000],
+      [zoom>=16][way_area>25000],
+      [zoom>=17][way_area>10000],
+      [zoom>=18][way_area> 5000] {
+        text-size: 12;
+      }
+      [zoom>=15][way_area>250000],
+      [zoom>=16][way_area>100000],
+      [zoom>=17][way_area>25000],
+      [zoom>=18][way_area>10000] {
+        text-size: 14;
+      }
     }
   }
-
 }
 
 
 #text-poly [zoom >= 15] {
 
-  [power != ''][pixels>1000] {
-    text-name: "[nom]";
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 40;
-    text-avoid-edges: true;
-  }
 
   // zoom 15
 
@@ -1014,8 +999,9 @@
     [pixels > 5000] { text-size: 12; }
   }
 
-  [natural = 'wood'][zoom >= 15]::natural_wood,
-  [natural = 'wood'][pixels>1000]::natural_wood {
+
+  [natural = 'wood'][zoom >= 15]::natural,
+  [natural = 'wood'][pixels>1000]::natural {
     [zoom >= 17] { text-name: "[name]"; }
     text-name: "[nom]";
     text-fill: #060;
@@ -1071,9 +1057,9 @@
     }
   }
 
-  [natural = 'lake']::natural_water,
-  [landuse = 'reservoir']::natural_water,
-  [landuse = 'basin']::natural_water {
+  [natural = 'lake']::natural,
+  [landuse = 'reservoir']::natural,
+  [landuse = 'basin']::natural {
     [zoom >= 15],
     [pixels>1000] {
       [zoom >= 17] { text-name: "[name]"; }
@@ -1142,9 +1128,9 @@
     }
   }
 
-  [amenity = 'kindergarten']::school,
-  [amenity = 'school']::school,
-  [amenity = 'college']::school {
+  [amenity = 'kindergarten']::amenity,
+  [amenity = 'school']::amenity,
+  [amenity = 'college']::amenity {
     [zoom >= 15],
     [pixels>1000] {
       text-name: "[nom]";
@@ -1208,7 +1194,7 @@
     }
   }
 
-  [man_made = 'lighthouse'][zoom >= 15]::man_made {
+  [man_made = 'lighthouse'][zoom >= 15]::other {
     text-name: "[name]";
     text-size: 9;
     text-fill: #000033;
@@ -1250,7 +1236,7 @@
     }
  }
 
-  [waterway = 'lock'][zoom >= 15]::waterway {
+  [waterway = 'lock'][zoom >= 15]::natural {
     text-name: "[name]";
     text-size: 9;
     text-dy: 10;
@@ -1463,7 +1449,7 @@
 
   // zoom 17
 
-  [amenity = 'parking']::parking {
+  [amenity = 'parking']::other {
     [zoom>=17],
     [pixels>1000] {
       text-name: "[name]";
@@ -1563,7 +1549,7 @@
     text-wrap-width: 40;
   }
 
-  [man_made = 'windmill'][zoom >= 17]::man_made {
+  [man_made = 'windmill'][zoom >= 17]::other {
     text-name: "[name]";
     text-size: 9;
     text-fill: #734a08;
@@ -1573,17 +1559,6 @@
     text-avoid-edges: true;
     text-wrap-width: 40;
   }
-
- [aeroway = 'gate'][zoom >= 17]::aeroway {
-   text-name: "[ref]";
-   text-size: 9;
-   text-fill: #aa66cc;
-   text-face-name: @bold-fonts;
-   text-halo-radius: 1;
-   text-wrap-width: 40;
-   text-avoid-edges: true;
-   [zoom >= 18] {  text-size: 12; }
- }
 
  [amenity = 'recycling'][zoom >= 17]::amenity {
    text-name: "[name]";
@@ -1628,7 +1603,7 @@
     }
   }
 
-  [amenity = 'cinema'][zoom >= 17]::cinema {
+  [amenity = 'cinema'][zoom >= 17]::amenity {
     text-name: "[name]";
     text-size: 10;
     text-fill: #734a08;
@@ -1816,6 +1791,17 @@
       text-dy: 4;
       text-fill: @office;
   }
+
+ [aeroway = 'gate'][zoom >= 17] {
+   text-name: "[ref]";
+   text-size: 9;
+   text-fill: #aa66cc;
+   text-face-name: @bold-fonts;
+   text-halo-radius: 1;
+   text-wrap-width: 40;
+   text-avoid-edges: true;
+   [zoom >= 18] {  text-size: 12; }
+ }
 
   // zoom 18
 
