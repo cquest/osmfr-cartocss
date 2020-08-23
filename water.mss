@@ -1,5 +1,5 @@
 #water-areas [zoom >= 8] {
-  [natural = 'glacier']::natural {
+  [natural = 'glacier']::glacier {
     [zoom >= 6] {
       line-dasharray: 4,2;
       line-width: 1.5;
@@ -11,36 +11,36 @@
     }
   }
 
-  [waterway =~ '(dock|mill_pond|canal)'][zoom >= 9]::waterway {
+  [waterway =~ '(dock|mill_pond|canal)'][zoom >= 9]::water {
     polygon-gamma: 0.75;
     polygon-fill: @water-color;
   }
 
-  [waterway = 'dam'] {
-    polygon-fill: #aaa;
-  }
-
-  [landuse = 'basin'][zoom >= 7][zoom<13]::landuse {
+  [landuse = 'basin'][zoom >= 7][zoom<13]::water {
       polygon-gamma: 0.75;
       polygon-fill: @water-color;
   }
 
-  [water = 'intermittent'][zoom >= 13]::landuse,
-  [landuse = 'salt_pond'][zoom >= 13]::landuse,
-  [landuse = 'basin'][zoom >= 13]::landuse {
+  [water = 'intermittent'][zoom >= 13]::water,
+  [landuse = 'salt_pond'][zoom >= 13]::water,
+  [landuse = 'basin'][zoom >= 13]::water {
     polygon-pattern-file: url('symbols/basin.png');
     line-color: @water-color;
   }
 
-  [amenity = 'fountain']::natural,
-  [natural = 'lake']::natural,
-  [natural = 'water']::natural,
-  [landuse = 'reservoir']::landuse,
-  [waterway = 'riverbank']::waterway,
+  [amenity = 'fountain']::water,
+  [natural = 'lake']::water,
+  [natural = 'water']::water,
+  [landuse = 'reservoir']::water,
+  [waterway = 'riverbank']::water,
   [landuse = 'water']::water,
-  [natural = 'bay']::natural {
+  [natural = 'bay']::water {
     polygon-fill: @water-color;
     polygon-gamma: 0.75;
+  }
+
+  [waterway = 'dam']::dam {
+    polygon-fill: #aaa;
   }
 
   [natural = 'mud'][zoom >= 13]::surface,
