@@ -1345,15 +1345,16 @@ Layer:
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_point p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE aeroway in ('airport','aerodrome','helipad','military')
-          OR military='airfield'
-          OR man_made in ('lighthouse')
-          OR power in ('plant')
-          OR "natural" in ('peak','volcano')
-          OR tags ? 'mountain_pass'
+        WHERE p.way && !bbox!
+          AND (aeroway in ('airport','aerodrome','helipad','military')
+            OR military='airfield'
+            OR man_made in ('lighthouse')
+            OR power in ('plant')
+            OR "natural" in ('peak','volcano')
+            OR tags ? 'mountain_pass')
         UNION
         SELECT
-          ST_PointOnSurface(way) as way,
+          ST_PointOnSurface(p.way) as way,
           coalesce(aeroway, military) as aeroway,
           man_made,
           railway,
@@ -1368,7 +1369,7 @@ Layer:
           regexp_replace(regexp_replace(coalesce(abrev, tags->'name:fr',tags->'int_name',name),'^([Aa]éroport|[Aa]érodrome) ([Ii]nternational )?(d.|de la |de |du |)',''),'^Base [Aa]érienne ','B.A. ') as nom
         FROM planet_osm_polygon p
         LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
-        WHERE way && !bbox!
+        WHERE p.way && !bbox!
           AND (aeroway in ('airport','aerodrome','helipad','military')
             OR military='airfield'
             OR man_made in ('lighthouse')
