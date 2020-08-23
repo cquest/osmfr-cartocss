@@ -1375,7 +1375,6 @@ Layer:
             OR power in ('plant')
             OR "natural" in ('peak','volcano')
             OR tags ? 'mountain_pass')
-          AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
         ) as amenity_symbols_lz
 
 
