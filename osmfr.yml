@@ -1585,36 +1585,73 @@ Layer:
         ) as entrance
 
 
-  - id: power-line
+  - id: power-lines-lz
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 14
+      maxzoom: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* power-line */ (select way, coalesce(tags->'location','') as location, tags->'line' as line from planet_osm_line where power='line' and coalesce(tags->'line','') not in ('busbar','bay')) as power_line"
+      table: >-
+        /* power-line-lz */ (
+          select way,
+            power as power_type,
+            coalesce(tags->'location','') as location,
+            tags->'line' as line
+          from planet_osm_line
+          where power='line'
+            and coalesce(tags->'line','') not in ('busbar','bay')
+            AND coalesce(tags->'location','') != 'underground'
+        ) as power_line_lz
 
 
-  - id: power-minorline
+  - id: power-lines
     <<: *extents
-    zoom_min: 16
+    properties:
+      minzoom: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* power-minorline */ (select way, power as power_type, tags->'location' as location, tags->'line' as line from planet_osm_line where power in ('line','minor_line')) as power_minorline"
+      table: >-
+        /* power-minorline */ (
+          select way,
+            power as power_type,
+            coalesce(tags->'location','') as location,
+            tags->'line' as line
+          from planet_osm_line
+          where power in ('line','minor_line')
+            AND coalesce(tags->'location','') != 'underground'
+        ) as power_minorline
 
 
   - id: power-towers
     <<: *extents
-    zoom_min: 14
+    properties:
+      minzoom: 14
+      maxzoom: 15
     Datasource:
       <<: *osm2pgsql
-      table: " /* power-towers */ (select way from planet_osm_point where power='tower') as power_towers"
+      table: >-
+        /* power-towers */ (
+          select way,
+            power as power_type
+          from planet_osm_point
+          where power='tower'
+        ) as power_towers
 
 
   - id: power-poles
     <<: *extents
-    zoom_min: 16
+    properties:
+      minzoom: 16
     Datasource:
       <<: *osm2pgsql
-      table: " /* power-poles */ (select way from planet_osm_point where power='pole') as power_poles"
+      table: >-
+        /* power-poles */ (
+          select way,
+            power as power_type
+          from planet_osm_point
+          where power in ('tower','pole')
+        ) as power_poles
 
 
   - id: roads-text-ref-low-zoom
