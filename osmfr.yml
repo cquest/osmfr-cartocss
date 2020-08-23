@@ -1639,20 +1639,18 @@ Layer:
       table: >-
         /* roads-text-name */ (
           SELECT *,
-            coalesce(short_name, abrev_prenoms, w.name) as nom
+            coalesce(short_name, abrev_prenoms, w.name) as nom,
+            st_length(way) as way_len
           FROM (
-            SELECT st_linemerge(st_collect(way)) as way,
+            SELECT (st_dump(st_linemerge(st_collect(way)))).geom as way,
               highway,
               ways.name,
               short_name,
               railway,
               tunnel,
-              junction,
-              sum(way_len) as way_len,
-              z_order
+              junction
             FROM (
               SELECT way,
-                st_length(way) as way_len,
                 highway,
                 coalesce(tags->'name:fr',case
                   when name ~ '[A-Za-z]' then name
@@ -1661,8 +1659,7 @@ Layer:
                 railway,
                 tunnel,
                 junction,
-                oneway,
-                z_order
+                oneway
               FROM planet_osm_line p
               WHERE way && !bbox!
                 AND route IS NULL
@@ -1673,12 +1670,13 @@ Layer:
                 AND NOT tags ? 'land_area'
                 AND (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1)
                 AND coalesce(highway, railway, aeroway, man_made) IS NOT NULL
+                AND (z_order > 3 or !scale_denominator! < 60000 /* zoom >= 13 */)
               ) as ways
-            GROUP BY highway, name, short_name, railway, tunnel, junction, oneway, z_order
-            HAVING sum(way_len)> 32 * !pixel_width!
+            GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
           ) as w
           LEFT JOIN abrev a ON (a.long_name = w.name)
-          ORDER BY z_order, way_len
+          WHERE ST_length(way)> 32 * !pixel_width!
+          ORDER BY ST_length(way)
         ) as roads
       simplify_geometries: 'true'
 
