@@ -374,8 +374,8 @@
 }
 
 #landuse-overlay [zoom >= 10] {
-  [amenity = 'prison']::landuse,
-  [landuse = 'military']::landuse {
+  [amenity = 'prison'],
+  [landuse = 'military'] {
     polygon-pattern-file: url('symbols/military_red_hz2.png');
     polygon-pattern-opacity: 0.66;
     line-color: #f55;
@@ -400,8 +400,8 @@
     d/line-opacity: 0.1;
     d/line-offset: -5;
   }
-  [natural = 'marsh']::wetland,
-  [natural = 'wetland']::wetland {
+  [natural = 'marsh'],
+  [natural = 'wetland'] {
     polygon-pattern-file: url('symbols/wetland.png');
   }
 
