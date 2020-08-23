@@ -12,7 +12,11 @@
   }
 }
 
-#marinas-area [zoom >= 14] {
+#marinas-piers-area [zoom >= 12] {
+  [man_made != ''] {
+    polygon-fill: @land-color;
+  }
+  [leisure='marina'][zoom >= 14] {
     line-width: 1;
     line-color: blue;
     line-opacity: 0.5;
@@ -22,10 +26,7 @@
       line-width: 2;
       line-offset: -1;
     }
-}
-
-#piers-area [zoom >= 12] {
-  polygon-fill: @land-color;
+  }
 }
 
 #piers [zoom >= 11] {

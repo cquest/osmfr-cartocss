@@ -372,30 +372,24 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: marinas-area
-    <<: *extents
-    properties:
-      minzoom: 14
-    Datasource:
-      <<: *osm2pgsql
-      table: " /* marinas-area */ (select way from planet_osm_polygon where leisure ='marina' and way_area > !pixel_width!*!pixel_height!*10 ) as marinas"
-      simplify_geometries: 'true'
-
-
-  - id: piers-area
+  - id: marinas-piers-area
     <<: *extents
     properties:
       minzoom: 12
     Datasource:
       <<: *osm2pgsql
       table: >-
-        /* piers-area */ (
+        /* marinas-area */ (
           select way,
+            leisure,
             man_made
           from planet_osm_polygon
-          where man_made in ('pier','breakwater','groyne')
+          where (leisure ='marina'
+              OR man_made in ('pier','breakwater','groyne'))
             and way_area > !pixel_width!*!pixel_height!*10
-        ) as piers_area
+          ORDER by way_area desc
+        ) as marinas
+      simplify_geometries: 'true'
 
 
   - id: piers
