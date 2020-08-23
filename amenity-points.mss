@@ -620,32 +620,16 @@
 
   }
 
-  // office points
-  ::office [office != null][zoom >= 17] {
-    marker-fill: @office;
-    marker-line-width: 0;
-    marker-clip: false;
-    marker-placement: interior;
-    marker-file: url('symbols/disque.svg');
-    [office = 'vacant'] {
-      marker-opacity: 0.33;
-      marker-line-width: 0.5;
+  ::other [zoom >= 17]{
+    // office/craft points
+    [office != ''],
+    [craft != ''] {
+        marker-fill: @office;
+        marker-line-width: 0;
+        marker-clip: false;
+        marker-file: url('symbols/disque.svg');
     }
   }
-
-  // craft points
-  ::craft [craft != null][zoom >= 17] {
-    marker-fill: @office;
-    marker-line-width: 0;
-    marker-clip: false;
-    marker-placement: interior;
-    marker-file: url('symbols/disque.svg');
-    [craft = 'vacant'] {
-      marker-opacity: 0.33;
-      marker-line-width: 0.5;
-    }
-  }
-
 }
 
 #entrance [zoom >= 17] {
@@ -1822,9 +1806,9 @@
   }
 
   // crafts
-  [craft != null][craft != 'vacant'][zoom >= 17] {
+  [craft != ''][craft != 'vacant'][zoom >= 17] {
       text-name: "[name]";
-      text-size: 10;
+      text-size: 9;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
@@ -1861,7 +1845,7 @@
     [office = 'therapist'],
     [office = 'travel_agent'] {
       text-name: "[name]";
-      text-size: 10;
+      text-size: 9;
       text-face-name: @book-fonts;
       text-halo-radius: 1;
       text-wrap-width: 40;
