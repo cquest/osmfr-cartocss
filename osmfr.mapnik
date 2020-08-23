@@ -37097,7 +37097,6 @@ FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr',
     OR power in ('plant')
     OR "natural" in ('peak','volcano')
     OR tags ? 'mountain_pass')
-  AND /* poi index */ (coalesce(amenity, aeroway, military,barrier,man_made, railway, "natural", power,shop, tourism, waterway, historic,leisure,highway) is not null or tags ? 'mountain_pass' or tags ? 'emergency' or tags ? 'craft') /* index */
 ) as amenity_symbols_lz]]></Parameter>
     </Datasource>
   </Layer>
@@ -37654,28 +37653,16 @@ FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr',
 ) as amenity_symbols]]></Parameter>
     </Datasource>
   </Layer>
-  <Style filter-mode="first" name="amenity-points-craft">
+  <Style filter-mode="first" name="amenity-points-other">
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] = 'vacant')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" opacity="0.33" placement="interior" stroke-width="0.5" />
+      <Filter><![CDATA[([office] != '')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" stroke-width="0" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null)]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" placement="interior" stroke-width="0" />
-    </Rule>
-  </Style>
-  <Style filter-mode="first" name="amenity-points-office">
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([office] = 'vacant')]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" opacity="0.33" placement="interior" stroke-width="0.5" />
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([office] != null)]]></Filter>
-      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" placement="interior" stroke-width="0" />
+      <Filter><![CDATA[([craft] != '')]]></Filter>
+      <MarkersSymbolizer clip="false" file="symbols/disque.svg" fill="#4863a0" stroke-width="0" />
     </Rule>
   </Style>
   <Style filter-mode="first" name="amenity-points-leisure">
@@ -41401,8 +41388,7 @@ FROM planet_osm_polygon p LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr',
     <StyleName><![CDATA[amenity-points-mall]]></StyleName>
     <StyleName><![CDATA[amenity-points-shop]]></StyleName>
     <StyleName><![CDATA[amenity-points-leisure]]></StyleName>
-    <StyleName><![CDATA[amenity-points-office]]></StyleName>
-    <StyleName><![CDATA[amenity-points-craft]]></StyleName>
+    <StyleName><![CDATA[amenity-points-other]]></StyleName>
     <Datasource>
       <Parameter name="type"><![CDATA[postgis]]></Parameter>
       <Parameter name="dbname"><![CDATA[osm]]></Parameter>
@@ -46795,20 +46781,18 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <Parameter name="max_async_connection">1</Parameter>
       <Parameter name="table"><![CDATA[/* roads-text-name */ (
   SELECT *,
-    coalesce(short_name, abrev_prenoms, w.name) as nom
+    coalesce(short_name, abrev_prenoms, w.name) as nom,
+    st_length(way) as way_len
   FROM (
-    SELECT st_linemerge(st_collect(way)) as way,
+    SELECT (st_dump(st_linemerge(st_collect(way)))).geom as way,
       highway,
       ways.name,
       short_name,
       railway,
       tunnel,
-      junction,
-      sum(way_len) as way_len,
-      z_order
+      junction
     FROM (
       SELECT way,
-        st_length(way) as way_len,
         highway,
         coalesce(tags->'name:fr',case
           when name ~ '[A-Za-z]' then name
@@ -46817,8 +46801,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
         railway,
         tunnel,
         junction,
-        oneway,
-        z_order
+        oneway
       FROM planet_osm_line p
       WHERE way && !bbox!
         AND route IS NULL
@@ -46829,12 +46812,13 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
         AND NOT tags ? 'land_area'
         AND (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1)
         AND coalesce(highway, railway, aeroway, man_made) IS NOT NULL
+        AND (z_order > 3 or !scale_denominator! < 60000 /* zoom >= 13 */)
       ) as ways
-    GROUP BY highway, name, short_name, railway, tunnel, junction, oneway, z_order
-    HAVING sum(way_len)> 32 * !pixel_width!
+    GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
   ) as w
   LEFT JOIN abrev a ON (a.long_name = w.name)
-  ORDER BY z_order, way_len
+  WHERE ST_length(way)> 32 * !pixel_width!
+  ORDER BY ST_length(way)
 ) as roads]]></Parameter>
       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
     </Datasource>
@@ -47622,8 +47606,8 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     p.tags->'heritage' as heritage,
     p.way_area,
     round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_PointOnSurface(p.way) as way,
-    coalesce(p.tags->'name:fr',p.name) as name,
-    coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom
+    coalesce(p.tags->'name:fr',p.name,p.brand) as name,
+    coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name,p.brand) as nom
   FROM  planet_osm_polygon p
   LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', p.name)
   LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)
@@ -48286,8 +48270,8 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     osm_id,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
-      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
     leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
     regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
     tags->'mountain_pass' as mountain_pass,
@@ -48310,8 +48294,8 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     osm_id,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
-      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
     leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
     regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
     tags->'mountain_pass' as mountain_pass,
@@ -51846,675 +51830,675 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'accountant')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'accountant')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'accountant')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'accountant')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'advertising_agency')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'advertising_agency')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'advertising_agency')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'advertising_agency')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'architect')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'architect')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'architect')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'architect')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'association')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'association')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'association')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'association')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'charity')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'charity')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'charity')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'charity')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'company')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'company')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'company')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'company')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'estate_agent')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'estate_agent')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'estate_agent')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'estate_agent')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'forestry')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'forestry')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'forestry')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'forestry')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'foundation')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'foundation')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'foundation')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'foundation')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'guide')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'guide')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'guide')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'guide')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'insurance')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'insurance')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'insurance')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'insurance')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'it')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'it')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'it')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'it')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'lawyer')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'lawyer')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'lawyer')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'lawyer')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'logistics')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'logistics')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'logistics')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'logistics')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'moving_company')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'moving_company')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'moving_company')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'moving_company')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'notary')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'notary')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'notary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'notary')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'physician')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'physician')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'physician')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'physician')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'private_investigator')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'private_investigator')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'private_investigator')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'private_investigator')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'property_management')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'property_management')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'property_management')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'property_management')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'surveyor')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'surveyor')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'surveyor')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'surveyor')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'tax_advisor')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'tax_advisor')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'tax_advisor')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'tax_advisor')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'therapist')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'therapist')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'therapist')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'therapist')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'travel_agent')]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'travel_agent')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([office] = 'travel_agent')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([office] = 'travel_agent')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != null) and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != '') and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != null) and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != '') and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != null) and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != '') and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
-      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != null) and ([craft] != 'vacant')]]></Filter>
+      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != '') and ([craft] != 'vacant')]]></Filter>
       <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
-      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != null) and ([craft] != 'vacant')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([office] != null) and ([office] != 'vacant') and ([craft] != '') and ([craft] != 'vacant')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52525,7 +52509,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'accountant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52542,7 +52526,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'accountant')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52553,7 +52537,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'advertising_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52570,7 +52554,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'advertising_agency')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52581,7 +52565,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'architect') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52598,7 +52582,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'architect')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52609,7 +52593,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'association') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52626,7 +52610,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'association')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52637,7 +52621,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'charity') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52654,7 +52638,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'charity')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52665,7 +52649,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52682,7 +52666,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'company')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52693,7 +52677,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'estate_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52710,7 +52694,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'estate_agent')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52721,7 +52705,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'forestry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52738,7 +52722,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'forestry')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52749,7 +52733,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'foundation') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52766,7 +52750,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'foundation')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52777,7 +52761,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'guide') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52794,7 +52778,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'guide')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52805,7 +52789,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'insurance') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52822,7 +52806,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'insurance')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52833,7 +52817,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'it') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52850,7 +52834,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'it')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52861,7 +52845,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'lawyer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52878,7 +52862,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'lawyer')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52889,7 +52873,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'logistics') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52906,7 +52890,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'logistics')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52917,7 +52901,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'moving_company') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52934,7 +52918,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'moving_company')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52945,7 +52929,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'notary') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52962,7 +52946,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'notary')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -52973,7 +52957,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'physician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -52990,7 +52974,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'physician')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53001,7 +52985,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'private_investigator') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53018,7 +53002,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'private_investigator')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53029,7 +53013,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'property_management') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53046,7 +53030,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'property_management')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53057,7 +53041,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'surveyor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53074,7 +53058,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'surveyor')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53085,7 +53069,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'tax_advisor') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53102,7 +53086,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'tax_advisor')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53113,7 +53097,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'therapist') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53130,7 +53114,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'therapist')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53141,7 +53125,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'travel_agent') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -53158,7 +53142,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([office] = 'travel_agent')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -53178,579 +53162,579 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'alcohol') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'alcohol') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'alcohol') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'alcohol') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'alcohol')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'alcohol')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'furniture') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'furniture') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'furniture') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'furniture') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'furniture')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'furniture')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'interior_decoration') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'interior_decoration') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'interior_decoration') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'interior_decoration') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'interior_decoration')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'interior_decoration')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hairdresser') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hairdresser') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hairdresser') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hairdresser') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hairdresser')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hairdresser')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'mobile_phone') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'mobile_phone') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'mobile_phone') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'mobile_phone') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'mobile_phone')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'mobile_phone')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'travel_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'travel_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'travel_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'travel_agency') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'travel_agency')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'travel_agency')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([amenity] = 'vehicle_inspection')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bakery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bakery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bakery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bakery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bakery')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bakery')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'beverages') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'beverages') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'beverages') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'beverages') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'beverages')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'beverages')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bicycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bicycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bicycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bicycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'bicycle')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'bicycle')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'butcher') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'butcher') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'butcher') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'butcher') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'butcher')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'butcher')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car_repair') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car_repair') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car_repair') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car_repair') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car_repair')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car_repair')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'car')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'car')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'clothes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'clothes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'clothes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'clothes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'clothes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'clothes')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'confectionery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'confectionery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'confectionery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'confectionery') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'confectionery')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'confectionery')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'chocolate') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'chocolate') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'chocolate') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'chocolate') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'chocolate')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'chocolate')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'convenience') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'convenience') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'convenience') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'convenience') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'convenience')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'convenience')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'computer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'computer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'computer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'computer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'computer')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'computer')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'copyshop') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'copyshop') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'copyshop') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'copyshop') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'copyshop')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'copyshop')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'doityourself') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'doityourself') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'doityourself') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'doityourself') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'doityourself')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'doityourself')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'dry_cleaning') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'dry_cleaning') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'dry_cleaning') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'dry_cleaning') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'dry_cleaning')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'dry_cleaning')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'fishmonger') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'fishmonger') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'fishmonger') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'fishmonger') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'fishmonger')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'fishmonger')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'garden_centre') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'garden_centre') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'garden_centre') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'garden_centre') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'garden_centre')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'garden_centre')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'greengrocer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'greengrocer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'greengrocer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'greengrocer') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'greengrocer')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'greengrocer')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hifi') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hifi') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hifi') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hifi') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'hifi')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'hifi')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'jewelry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'jewelry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'jewelry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'jewelry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'jewelry')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'jewelry')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'laundry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'laundry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'laundry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'laundry') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'laundry')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'laundry')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'motorcycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'motorcycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'motorcycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'motorcycle') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'motorcycle')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'motorcycle')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'musical_instrument') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'musical_instrument') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'musical_instrument') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'musical_instrument') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'musical_instrument')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'musical_instrument')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'optician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'optician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'optician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'optician') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'optician')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'optician')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo_studio') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo_studio') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo_studio') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo_studio') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo_studio')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo_studio')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'photo')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'photo')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'seafood') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'seafood') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'seafood') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'seafood') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'seafood')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'seafood')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'shoes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'shoes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'shoes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'shoes') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'shoes')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'shoes')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'toys') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'toys') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'toys') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'toys') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([shop] = 'toys')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([shop] = 'toys')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant') and ([power] != '') and ([pixels] > 1000)]]></Filter>
       <TextSymbolizer avoid-edges="true" fontset-name="fontset-0" halo-radius="1" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([craft] != null) and ([craft] != 'vacant')]]></Filter>
-      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="10" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
+      <Filter><![CDATA[([craft] != '') and ([craft] != 'vacant')]]></Filter>
+      <TextSymbolizer avoid-edges="true" dy="4" fill="#4863a0" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
@@ -54939,9 +54923,9 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     tags->'heritage' as heritage,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
-      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
     case when amenity='townhall' then 2 when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
     aeroway,
     shop,
     access,
@@ -54993,9 +54977,9 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     tags->'heritage' as heritage,
     coalesce(tags->'name:fr',case
       when name ~ '[A-Za-z]' then name
-      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+      else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
     case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+    coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
     aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
     substring('******',1,to_int(tags->'stars')::integer) as stars,
     regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
@@ -55184,28 +55168,41 @@ ORDER BY 2 desc ) as admin_boundaries_text]]></Parameter>
   <Style filter-mode="first" name="housenumbers">
     <Rule>
       <MaxScaleDenominator>2500</MaxScaleDenominator>
+      <Filter><![CDATA[([housenumber] != '') and ([entrance] != '')]]></Filter>
+      <TextSymbolizer dy="4" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="9" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
+      <TextSymbolizer dy="8" fill="#444444" fontset-name="fontset-0" placement="interior" size="9" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>5000</MaxScaleDenominator>
+      <MinScaleDenominator>2500</MinScaleDenominator>
+      <Filter><![CDATA[([housenumber] != '') and ([entrance] != '')]]></Filter>
+      <TextSymbolizer dy="4" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="7" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
+      <TextSymbolizer dy="8" fill="#444444" fontset-name="fontset-0" placement="interior" size="8" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>2500</MaxScaleDenominator>
       <Filter><![CDATA[([housenumber] != '')]]></Filter>
+      <TextSymbolizer fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="9" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
+      <TextSymbolizer dy="8" fill="#444444" fontset-name="fontset-0" placement="interior" size="9" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>5000</MaxScaleDenominator>
+      <MinScaleDenominator>2500</MinScaleDenominator>
+      <Filter><![CDATA[([housenumber] != '')]]></Filter>
+      <TextSymbolizer fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="7" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
+      <TextSymbolizer dy="8" fill="#444444" fontset-name="fontset-0" placement="interior" size="8" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>2500</MaxScaleDenominator>
+      <Filter><![CDATA[([entrance] != '')]]></Filter>
       <TextSymbolizer dy="4" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="9" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
       <TextSymbolizer fill="#444444" fontset-name="fontset-0" placement="interior" size="9" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>2500</MinScaleDenominator>
-      <Filter><![CDATA[([housenumber] != '')]]></Filter>
+      <Filter><![CDATA[([entrance] != '')]]></Filter>
       <TextSymbolizer dy="4" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="7" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
-      <TextSymbolizer fill="#444444" fontset-name="fontset-0" placement="interior" size="8" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>2500</MaxScaleDenominator>
-      <Filter><![CDATA[([entrance] != '')]]></Filter>
-      <TextSymbolizer dy="5" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="9" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
-      <TextSymbolizer fill="#444444" fontset-name="fontset-0" placement="interior" size="9" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <MinScaleDenominator>2500</MinScaleDenominator>
-      <Filter><![CDATA[([entrance] != '')]]></Filter>
-      <TextSymbolizer dy="5" fill="#585858" fontset-name="fontset-0" margin="2" placement="interior" size="7" wrap-width="0"><![CDATA[[housenumber]]]></TextSymbolizer>
       <TextSymbolizer fill="#444444" fontset-name="fontset-0" placement="interior" size="8" wrap-width="20"><![CDATA[[housename]]]></TextSymbolizer>
     </Rule>
     <Rule>
@@ -55236,7 +55233,7 @@ ORDER BY 2 desc ) as admin_boundaries_text]]></Parameter>
       <Parameter name="table"><![CDATA[/* housenumbers */ ( SELECT way,
   "addr:housenumber" as housenumber,
   "addr:housename" as housename,
-  null as entrance
+  '' as entrance
 FROM
   planet_osm_polygon
 WHERE way && !bbox!
@@ -55247,7 +55244,7 @@ UNION SELECT
   way,
   "addr:housenumber" as housenumber,
   "addr:housename" as housename,
-  tags->'entrance' as entrance
+  coalesce(tags->'entrance',barrier,'') as entrance
 FROM
   planet_osm_point
 WHERE way && !bbox!
