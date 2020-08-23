@@ -1,5 +1,5 @@
 #golf [zoom>=16] {
-  ::area [geo='polygon'],[geo='line'] {
+  [geo='1_polygon'],[geo='2_line'] {
     [golf = 'rough'],[golf = 'driving_range'] {
       polygon-fill: #adcc8f;
       polygon-opacity: 1;
@@ -26,7 +26,7 @@
     }
   }
 
-  ::line [geo='line'] {
+  [geo='2_line'] {
     [golf = 'hole'] {
     	line-color: black;
     	line-width: 0.5;
@@ -46,19 +46,19 @@
     }
   }
 
-  ::point [geo='point'] {
+  [geo='3_point'] {
     [golf = 'hole'],
     [golf='pin'] {
-  	point-file: url('symbols/fr/golf.svg');
-  	point-transform: "scale(0.4)";
-  	[ref!=''] {
-  		text-fill: #444;
-  		text-name: "[ref]";
-  		text-face-name: @book-fonts;
-  		text-dy: -10;
-  		text-halo-radius: 1;
-  		text-halo-fill: fadeout(white, 30%);
-  	}
+		point-file: url('symbols/fr/golf.svg');
+		point-transform: "scale(0.4)";
+		[ref!=''] {
+			text-fill: #444;
+			text-name: "[ref]";
+			text-face-name: @book-fonts;
+			text-dy: -10;
+			text-halo-radius: 1;
+			text-halo-fill: fadeout(white, 30%);
+		}
     }
     [golf='tee'] {
     	marker-fill: grey;
