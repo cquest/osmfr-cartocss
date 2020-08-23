@@ -1722,8 +1722,8 @@ Layer:
             p.tags->'heritage' as heritage,
             p.way_area,
             round(p.way_area::numeric / (!pixel_width!*!pixel_height!)) as area, ST_PointOnSurface(p.way) as way,
-            coalesce(p.tags->'name:fr',p.name) as name,
-            coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name) as nom
+            coalesce(p.tags->'name:fr',p.name,p.brand) as name,
+            coalesce(p.tags->'short_name:fr',p.tags->'short_name',abrev,p.tags->'name:fr',p.name,p.brand) as nom
           FROM  planet_osm_polygon p
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', p.name)
           LEFT JOIN  planet_osm_point n ON (n.place is not null and n.name=p.name and n.way && !bbox! and n.way && p.way)
@@ -1752,8 +1752,8 @@ Layer:
             osm_id,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
-              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
@@ -1776,8 +1776,8 @@ Layer:
             osm_id,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
-              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
-            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
             leisure, "natural", place, tourism, coalesce(aeroway,military) as aeroway,
             regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
@@ -1811,9 +1811,9 @@ Layer:
             tags->'heritage' as heritage,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
-              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
             case when amenity='townhall' then 2 when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
             aeroway,
             shop,
             access,
@@ -1865,9 +1865,9 @@ Layer:
             tags->'heritage' as heritage,
             coalesce(tags->'name:fr',case
               when name ~ '[A-Za-z]' then name
-              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+              else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name,brand) end) as name,
             case when amenity='townhall' then 2  when amenity in ('post_office','courthouse','police','public_building') then 1  else 0 end as prio,
-            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name) as nom,
+            coalesce(tags->'short_name:fr',tags->'short_name',abrev,tags->'alt_name',tags->'name:fr',tags->'int_name',name,brand) as nom,
             aeroway,shop,access,amenity,leisure,landuse,man_made,"natural",place,tourism,
             substring('******',1,to_int(tags->'stars')::integer) as stars,
             regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
