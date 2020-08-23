@@ -12,7 +12,7 @@
   text-face-name: @book-fonts;
   text-fill: #585858;
   text-size: 7;
-  [entrance!=''] { text-dy: 5; }
+  [entrance!=''] { text-dy: 4; }
   [zoom >= 18] {
     text-size: 9;
   }
@@ -23,7 +23,7 @@
   name/text-face-name: @book-fonts;
   name/text-size: 8;
   name/text-fill: #444;
-  [housenumber!=''] { text-dy: 4}
+  [housenumber!=''] { name/text-dy: 8}
   [zoom >= 18] {
     name/text-size: 9;
   }
