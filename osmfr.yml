@@ -1973,7 +1973,7 @@ Layer:
         SELECT way,
           "addr:housenumber" as housenumber,
           "addr:housename" as housename,
-          null as entrance
+          '' as entrance
         FROM
           planet_osm_polygon
         WHERE way && !bbox!
@@ -1985,7 +1985,7 @@ Layer:
           way,
           "addr:housenumber" as housenumber,
           "addr:housename" as housename,
-          tags->'entrance' as entrance
+          coalesce(tags->'entrance',barrier,'') as entrance
         FROM
           planet_osm_point
         WHERE way && !bbox!
