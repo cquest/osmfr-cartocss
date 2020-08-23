@@ -21,6 +21,7 @@ psql osm -c "CREATE INDEX planet_osm_point_poi_lz ON planet_osm_point USING gist
 psql osm -c "CREATE INDEX planet_osm_point_power ON planet_osm_point USING gist (way) $TABLESPACE WHERE power IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_point_railway ON planet_osm_point USING gist (way) $TABLESPACE WHERE railway IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_point_sea ON planet_osm_point USING gist (way) $TABLESPACE WHERE COALESCE(\"natural\", place) = ANY (ARRAY['archipelago'::text, 'island'::text, 'ocean'::text, 'sea'::text, 'bay'::text, 'strait'::text, 'isthmus'::text])" &
+psql osm -c "CREATE INDEX planet_osm_point_symbols_lz ON planet_osm_point USING gist (way) $TABLESPACE WHERE (aeroway = ANY (ARRAY['airport'::text, 'aerodrome'::text, 'helipad'::text, 'military'::text])) OR military = 'airfield'::text OR man_made = 'lighthouse'::text OR power = 'plant'::text OR (\"natural\" = ANY (ARRAY['peak'::text, 'volcano'::text])) OR tags ? 'mountain_pass'::text" &
 psql osm -c "CREATE INDEX planet_osm_polygon_admin_level ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE boundary = 'administrative'::text AND admin_level IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_polygon_boundary ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE boundary IS NOT NULL" &
 psql osm -c "CREATE INDEX planet_osm_polygon_landcover ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE COALESCE(landuse, wetland, leisure, aeroway, amenity, military, power, \"natural\", tourism, highway, man_made) IS NOT NULL OR (building = ANY (ARRAY['civic'::text, 'public'::text]))" &
@@ -35,6 +36,7 @@ psql osm -c "CREATE INDEX planet_osm_polygon_poi_lz ON planet_osm_polygon USING 
 psql osm -c "CREATE INDEX planet_osm_polygon_refinsee ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE tags ? 'ref:INSEE'::text" &
 psql osm -c "CREATE INDEX planet_osm_polygon_sea ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE COALESCE(\"natural\", place) = ANY (ARRAY['archipelago'::text, 'island'::text, 'ocean'::text, 'sea'::text, 'bay'::text, 'strait'::text, 'isthmus'::text])" &
 psql osm -c "CREATE INDEX planet_osm_polygon_stations ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE railway IS NOT NULL OR aeroway IS NOT NULL" &
+psql osm -c "CREATE INDEX planet_osm_polygon_symbols_lz ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE (aeroway = ANY (ARRAY['airport'::text, 'aerodrome'::text, 'helipad'::text, 'military'::text])) OR military = 'airfield'::text OR man_made = 'lighthouse'::text OR power = 'plant'::text OR (\"natural\" = ANY (ARRAY['peak'::text, 'volcano'::text])) OR tags ? 'mountain_pass'::text" &
 psql osm -c "CREATE INDEX planet_osm_polygon_water ON planet_osm_polygon USING gist (way) $TABLESPACE WHERE landuse IS NOT NULL OR waterway IS NOT NULL OR \"natural\" IS NOT NULL OR amenity = 'fountain'::text" &
 psql osm -c "CREATE INDEX planet_osm_roads_boundary ON planet_osm_roads USING gist (way) $TABLESPACE WHERE boundary = 'administrative'::text" &
 psql osm -c "CREATE INDEX planet_osm_roads_main ON planet_osm_roads USING gist (way) $TABLESPACE WHERE highway IS NOT NULL OR railway IS NOT NULL" &
