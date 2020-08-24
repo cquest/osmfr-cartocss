@@ -194,7 +194,7 @@ SELECT
     l.name as long_name,
     fr_prenoms(l.name) as abrev_prenoms,
     null as abrev
-FROM planet_osm_polygon p 
+FROM planet_osm_polygon p
 JOIN planet_osm_line l ON l.way && p.way
 WHERE p.boundary= 'administrative' and p.admin_level='3'
     and (p.tags ? 'ref:INSEE'
@@ -204,29 +204,13 @@ WHERE p.boundary= 'administrative' and p.admin_level='3'
 GROUP BY 1,2
 ON CONFLICT DO NOTHING;
 
--- remplissage de la table avec les odonymes des pays francophones (2 mn)
-INSERT INTO abrev
-SELECT
-    coalesce(l.tags->'name:fr',l.name) as long_name,
-    fr_prenoms(coalesce(l.tags->'name:fr',l.name)) as abrev_prenoms,
-    null as abrev
-FROM planet_osm_polygon p 
-JOIN planet_osm_line l ON l.way && p.way
-WHERE p.boundary= 'administrative' and p.admin_level='2'
-    and coalesce(p.tags->'name:fr', p.name) in ('Belgique','Bénin','Burkina Faso',E'Côte d\x027Ivoire', 'Gabon','Guinée','Mali','Monaco','Niger','Sénégal','Togo','Suisse')
-    AND l.name is not null
-    AND l.highway is not null
-GROUP BY 1,2
-ON CONFLICT DO NOTHING;
-
-
 -- remplissage de la table avec les toponymes
 INSERT INTO abrev
 SELECT
     l.name as long_name,
     fr_prenoms(l.name) as abrev_prenoms,
     null as abrev
-FROM planet_osm_polygon p 
+FROM planet_osm_polygon p
 JOIN planet_osm_point l ON l.way && p.way
 WHERE p.boundary= 'administrative' and p.admin_level='3'
     and (p.tags ? 'ref:INSEE'
@@ -239,13 +223,28 @@ SELECT
     l.name as long_name,
     fr_prenoms(l.name) as abrev_prenoms,
     null as abrev
-FROM planet_osm_polygon p 
+FROM planet_osm_polygon p
 JOIN planet_osm_polygon l ON l.way && p.way
 WHERE p.boundary= 'administrative' and p.admin_level='3'
     and (p.tags ? 'ref:INSEE'
         or p.name in ('France métropolitaine','Guadeloupe','Martinique','Mayotte','La Réunion','Guyane'))
     AND l.name is not null
 ON CONFLICT DO NOTHING; -- 25mn
+
+-- remplissage de la table avec les odonymes des pays francophones (2 mn)
+INSERT INTO abrev
+SELECT
+    coalesce(l.tags->'name:fr',l.name) as long_name,
+    fr_prenoms(coalesce(l.tags->'name:fr',l.name)) as abrev_prenoms,
+    null as abrev
+FROM planet_osm_polygon p
+JOIN planet_osm_line l ON l.way && p.way
+WHERE p.boundary= 'administrative' and p.admin_level='2'
+    and coalesce(p.tags->'name:fr', p.name) in ('Belgique','Bénin','Burkina Faso',E'Côte d\x027Ivoire', 'Gabon','Guinée','Mali','Monaco','Niger','Sénégal','Togo','Suisse')
+    AND l.name is not null
+    AND l.highway is not null
+GROUP BY 1,2
+ON CONFLICT DO NOTHING;
 
 
 -- application des règles d'abréviation générales (2mn)
