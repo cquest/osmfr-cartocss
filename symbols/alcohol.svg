@@ -6,7 +6,6 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xml:space="preserve"
-   enable-background="new 0 0 580 580"
    viewBox="0 0 580 580"
    height="580px"
    width="580px"
@@ -40,7 +39,6 @@
      transform="matrix(1.1990081,0,0,1.2591238,-72.990402,-108.62601)"
      id="g4243"><path
        d="   M310.774,316.614c-0.001,0.039-0.002,0.078-0.002,0.117c0,1.558,0.767,2.82,1.714,2.82s1.714-1.262,1.714-2.82   c0-0.039,0-0.078-0.002-0.117C312.935,316.305,311.558,316.41,310.774,316.614L310.774,316.614L310.774,316.614z"
-       enable-background="new    "
        stroke-linejoin="round"
        stroke-linecap="round"
        stroke-width="0.2439"

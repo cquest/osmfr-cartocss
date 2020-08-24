@@ -4,7 +4,7 @@
 <svg version="1.1"
 	 id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" sodipodi:docname="shopping_butcher2.svg" inkscape:version="0.48.0 r9654" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:dc="http://purl.org/dc/elements/1.1/" sodipodi:version="0.32" xmlns:cc="http://creativecommons.org/ns#" inkscape:output_extension="org.inkscape.output.svg.inkscape"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="580px" height="580px"
-	 viewBox="0 0 580 580" enable-background="new 0 0 580 580" xml:space="preserve">
+	 viewBox="0 0 580 580" xml:space="preserve">
 <sodipodi:namedview  showgrid="false" inkscape:current-layer="svg2" inkscape:window-y="24" inkscape:window-x="97" inkscape:cy="229.13057" inkscape:cx="300.45434" inkscape:zoom="1.0610557" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" objecttolerance="10.0" gridtolerance="10.0" guidetolerance="10.0" inkscape:window-height="1002" inkscape:window-width="1280" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:window-maximized="0" id="base">
 	</sodipodi:namedview>
 <defs>
@@ -52,7 +52,7 @@
 		c0.029,0.045,0.053,0.08,0.081,0.108L8.046,1044.435L8.046,1044.435z M7.945,1044.249c0-0.01,0.009-0.019,0.02-0.019
 		c0.011,0,0.02,0.008,0.02,0.019s-0.009,0.019-0.02,0.019C7.953,1044.268,7.945,1044.259,7.945,1044.249z"/>
 	
-		<path id="path4038" sodipodi:nodetypes="cccccccccscc" inkscape:connector-curvature="0" opacity="0.1" fill="#93278F" enable-background="new    " d="
+		<path id="path4038" sodipodi:nodetypes="cccccccccscc" inkscape:connector-curvature="0" opacity="0.1" fill="#93278F"  d="
 		M8.046,1044.435c0.002,0.02,0.07,0.113,0.093,0.13c0.009,0.007,0.015,0.001,0.03-0.009c0.015-0.01,0.021-0.02,0.015-0.032
 		c-0.011-0.026-0.06-0.12-0.083-0.135c-0.022-0.032-0.041-0.057-0.059-0.101c-0.019-0.046-0.031-0.093-0.038-0.121
 		c-0.026,0.007-0.068,0.026-0.094,0.038c-0.029,0.013-0.05,0.026-0.073,0.039c0.007,0.021,0.025,0.074,0.061,0.13

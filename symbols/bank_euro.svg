@@ -4,7 +4,7 @@
 <svg version="1.1"
 	 id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" sodipodi:docname="money_bank2.svg" inkscape:version="0.46" xmlns:svg="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:dc="http://purl.org/dc/elements/1.1/" sodipodi:version="0.32" xmlns:cc="http://creativecommons.org/ns#" inkscape:output_extension="org.inkscape.output.svg.inkscape" sodipodi:docbase="s:\Data\FacilityIcons"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="580px" height="580px"
-	 viewBox="0 0 580 580" enable-background="new 0 0 580 580" xml:space="preserve">
+	 viewBox="0 0 580 580" xml:space="preserve">
 <sodipodi:namedview  showgrid="false" inkscape:current-layer="svg2" inkscape:window-y="-4" inkscape:window-x="-4" inkscape:cy="403.69123" inkscape:cx="-94.380601" inkscape:zoom="0.46083856" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" objecttolerance="10.0" gridtolerance="10.0" guidetolerance="10.0" inkscape:window-height="1003" inkscape:window-width="1400" inkscape:pageshadow="2" inkscape:pageopacity="0.0" id="base">
 	</sodipodi:namedview>
 <defs>
@@ -31,11 +31,11 @@
 </g>
 <g id="g4372" transform="translate(-166.49217,52.019299)">
 </g>
-<path id="path645" sodipodi:nodetypes="cccccccccccc" opacity="0.2" fill="#CCCCCC" stroke="#666666" stroke-width="0.0314" enable-background="new    " d="
+<path id="path645" sodipodi:nodetypes="cccccccccccc" opacity="0.2" fill="#CCCCCC" stroke="#666666" stroke-width="0.0314" d="
 	M289.463,282.688l-6.38,4.857h1.276v7.793h3.829h2.639h3.741v-7.793h1.275L289.463,282.688L289.463,282.688L289.463,282.688z"/>
 <path id="path3198" sodipodi:nodetypes="cccccccccccc" fill="none" stroke="#666666" stroke-width="0.9" stroke-linejoin="round" d="
 	M289.463,282.435l-6.38,4.857h1.276v8.046h3.829h2.639h3.741v-8.046h1.275L289.463,282.435L289.463,282.435L289.463,282.435z"/>
-<g enable-background="new    ">
+<g>
 	<path fill="#333333" d="M291.875,293.419c-0.361,0.245-0.982,0.479-1.743,0.479c-0.948,0-1.802-0.363-2.375-1.041
 		c-0.444-0.492-0.737-1.171-0.843-2.013h-0.725v-0.584h0.667c0-0.058,0-0.117,0-0.174c0-0.176,0.012-0.352,0.023-0.515h-0.69v-0.585
 		h0.772c0.14-0.819,0.479-1.498,0.959-1.978c0.585-0.619,1.357-0.971,2.305-0.971c0.702,0,1.239,0.199,1.567,0.375l-0.234,0.772
