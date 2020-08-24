@@ -1,8 +1,6 @@
 #! /usr/bin/python3
 
-import json
-import time
-import sys
+import json, time, sys, subprocess
 
 import yaml
 import psycopg2
@@ -61,4 +59,12 @@ for l in yml['Layer']:
                 req = sql
                 req_max = time.time()-start
             objets = objets + db.rowcount
+            continue
+            # EXPLAIN !
+            db.execute("EXPLAIN (analyze, format text) " + sql)
+            explain = db.fetchall()
+            for i in explain:
+                if ' using ' in i[0]:
+                    print(l['id'] +": "+ i[0])
+
 print("zoom %s: %s layers in %sms with %s objets" % (zoom, layers, int(temps*1000), objets))
