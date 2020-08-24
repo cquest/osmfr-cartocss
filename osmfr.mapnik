@@ -8087,19 +8087,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -8128,19 +8128,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -8169,19 +8169,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -8210,19 +8210,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="26" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="15" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
+      <LineSymbolizer rasterizer="fast" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9406,13 +9406,13 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'service') and ([service] = 'INT-normal') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="14" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="14" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'service') and ([service] = 'INT-normal') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>50000</MaxScaleDenominator>
@@ -9423,13 +9423,13 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'service') and ([service] = 'INT-normal')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="14" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="14" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'service') and ([service] = 'INT-normal')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>50000</MaxScaleDenominator>
@@ -9577,19 +9577,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9612,19 +9612,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'residential')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9647,19 +9647,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9682,19 +9682,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'unclassified')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9717,19 +9717,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'road') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'road') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'road') and ([junction] = 'roundabout')]]></Filter>
-      <LineSymbolizer clip="false" rasterizer="full" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer clip="false" rasterizer="fast" smooth="0.8" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
@@ -9752,19 +9752,19 @@ ORDER BY z_order,way_area desc ) as buildings]]></Parameter>
     <Rule>
       <MaxScaleDenominator>1500</MaxScaleDenominator>
       <Filter><![CDATA[([highway] = 'road')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="28" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
       <MinScaleDenominator>1500</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'road')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="16" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>12500</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
       <Filter><![CDATA[([highway] = 'road')]]></Filter>
-      <LineSymbolizer rasterizer="full" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
+      <LineSymbolizer rasterizer="fast" stroke="#999999" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>25000</MaxScaleDenominator>
