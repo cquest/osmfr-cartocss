@@ -491,7 +491,7 @@
     }
     [zoom >= 14] { line-width: 4.5; }
     [zoom >= 15] { line-width: 8;  }
-    [zoom >= 16] { line-width: 11; line-rasterizer: full; }
+    [zoom >= 16] { line-width: 11; }
     [zoom >= 17] { line-width: 16; }
     [zoom >= 19] { line-width: 28; }
   }
@@ -514,7 +514,7 @@
       line-cap: round;
       line-join: round;
       line-rasterizer: fast;
-      [zoom >= 16] { line-width: 7; line-rasterizer: full; }
+      [zoom >= 16] { line-width: 7; }
       [zoom >= 19] { line-width: 14; }
     }
     [service = 'INT-minor'] [zoom >= 16] {
@@ -766,7 +766,7 @@
       line-rasterizer: fast;
       [zoom >= 14] { line-width: 4; }
       [zoom >= 15] { line-width: 7.5; }
-      [zoom >= 16] { line-width: 10; line-rasterizer: full; }
+      [zoom >= 16] { line-width: 10; }
       [zoom >= 17] { line-width: 15; }
       [zoom >= 19] { line-width: 26; }
     }
