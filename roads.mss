@@ -1761,24 +1761,24 @@
 
 #bridges [zoom >= 12] {
   // fixe l'ordre de rendu des sublayers
-  ::casing_l0 [layer=0] { line-color: black; }
-  ::casing2_l0 [layer=0] { line-color: black; }
-  ::fill_l0   [layer=0] { line-color: white; }
-  ::casing_l1 [layer=1] { line-color: black; }
-  ::casing2_l1 [layer=1] { line-color: black; }
-  ::fill_l1   [layer=1] { line-color: white; }
-  ::casing_l2 [layer=2] { line-color: black; }
-  ::casing2_l2 [layer=2] { line-color: black; }
-  ::fill_l2   [layer=2] { line-color: white; }
-  ::casing_l3 [layer=3] { line-color: black; }
-  ::casing2_l3 [layer=3] { line-color: black; }
-  ::fill_l3   [layer=3] { line-color: white; }
-  ::casing_l4 [layer=4] { line-color: black; }
-  ::casing2_l4 [layer=4] { line-color: black; }
-  ::fill_l4   [layer=4] { line-color: white; }
-  ::casing_l5 [layer=5] { line-color: black; }
-  ::casing2_l5 [layer=5] { line-color: black; }
-  ::fill_l5   [layer=5] { line-color: white; }
+  ::casing_l0 [layer=0] { line-color: black; line-width: 0; }
+  ::casing2_l0 [layer=0] { line-color: black; line-width: 0; }
+  ::fill_l0   [layer=0] { line-color: white; line-width: 0; }
+  ::casing_l1 [layer=1] { line-color: black; line-width: 0; }
+  ::casing2_l1 [layer=1] { line-color: black; line-width: 0; }
+  ::fill_l1   [layer=1] { line-color: white; line-width: 0; }
+  ::casing_l2 [layer=2] { line-color: black; line-width: 0; }
+  ::casing2_l2 [layer=2] { line-color: black; line-width: 0; }
+  ::fill_l2   [layer=2] { line-color: white; line-width: 0; }
+  ::casing_l3 [layer=3] { line-color: black; line-width: 0; }
+  ::casing2_l3 [layer=3] { line-color: black; line-width: 0; }
+  ::fill_l3   [layer=3] { line-color: white; line-width: 0; }
+  ::casing_l4 [layer=4] { line-color: black; line-width: 0; }
+  ::casing2_l4 [layer=4] { line-color: black; line-width: 0; }
+  ::fill_l4   [layer=4] { line-color: white; line-width: 0; }
+  ::casing_l5 [layer=5] { line-color: black; line-width: 0; }
+  ::casing2_l5 [layer=5] { line-color: black; line-width: 0; }
+  ::fill_l5   [layer=5] { line-color: white; line-width: 0; }
 
   ::casing_l0 [layer=0],
   ::casing_l1 [layer=1],
