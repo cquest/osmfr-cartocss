@@ -21,6 +21,7 @@
   [landuse = 'salt_pond'][zoom >= 13]::water,
   [landuse = 'basin'][zoom >= 13]::water {
     polygon-pattern-file: url('symbols/basin.png');
+    polygon-pattern-alignment: global;
     line-color: @water-color;
   }
 
@@ -43,6 +44,7 @@
   [surface = 'mud'][zoom >= 13]::surface
   {
     polygon-pattern-file: url('symbols/mud.png');
+    polygon-pattern-alignment: global;
     polygon-pattern-opacity: 0.5;
   }
 
@@ -51,6 +53,7 @@
   [surface = 'gravel'][zoom >= 13]::surface
   {
     polygon-pattern-file: url('symbols/beach.png');
+    polygon-pattern-alignment: global;
     polygon-pattern-opacity: 0.5;
   }
 
