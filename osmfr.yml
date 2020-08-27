@@ -1675,7 +1675,7 @@ Layer:
             and osm_id>0
             and ref is not null
             and char_length(ref) between 1 and 8
-            and st_length(way)>1000
+            and ST_length(way)> 10 * !pixel_width!
           order by prio, way_len desc
         ) as roads
       simplify_geometries: 'true'
