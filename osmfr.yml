@@ -1674,11 +1674,31 @@ Layer:
 
   - id: roads-text-ref-low-zoom
     <<: *extents
-    zoom_min: 10
-    zoom_max: 12
+    properties:
+      minzoom: 10
+      maxzoom: 13
     Datasource:
       <<: *osm2pgsql
-      table: " /* roads-text-ref-low-zoom */ (select way,highway,ref, char_length(ref) as length, st_length(way) as way_len, case when highway='motorway' then 0 when highway='trunk' then 2 when highway='primary' then 3 when highway='secondary' then 4 end as prio  from  planet_osm_roads  where way && !bbox! AND highway in ('motorway','trunk','primary','secondary') and osm_id>0  and ref is not null and char_length(ref) between 1 and 8 and st_length(way)>1000 order by prio, way_len desc) as roads"
+      table: >-
+        /* roads-text-ref-low-zoom */ (
+          select way,
+            highway,
+            ref,
+            char_length(ref) as length,
+            st_length(way) as way_len,
+            case when highway='motorway' then 0
+              when highway='trunk' then 2
+              when highway='primary' then 3
+              when highway='secondary' then 4 end as prio
+          from  planet_osm_roads
+          where way && !bbox!
+            AND highway in ('motorway','trunk','primary','secondary')
+            and osm_id>0
+            and ref is not null
+            and char_length(ref) between 1 and 8
+            and st_length(way)>1000
+          order by prio, way_len desc
+        ) as roads
       simplify_geometries: 'true'
 
 
@@ -1721,9 +1741,61 @@ Layer:
         ) as crossroad_names
 
 
+  - id: roads-text-name-lz
+    <<: *extents
+    properties:
+      minzoom: 13
+      maxzoom: 14
+    Datasource:
+      <<: *osm2pgsql
+      table: >-
+        /* roads-text-name-lz */ (
+          SELECT *,
+            coalesce(short_name, abrev_prenoms, w.name) as nom,
+            st_length(way) as way_len
+          FROM (
+            SELECT (st_dump(st_linemerge(st_collect(way)))).geom as way,
+              highway,
+              ways.name,
+              short_name,
+              railway,
+              tunnel,
+              junction
+            FROM (
+              SELECT way,
+                highway,
+                coalesce(tags->'name:fr',case
+                  when name ~ '[A-Za-z]' then name
+                  else coalesce(tags->'int_name',tags->'name:en',tags->'name:es',tags->'name:de',tags->'int_name',name) end) as name,
+                coalesce(tags->'short_name:fr',tags->'short_name') as short_name,
+                railway,
+                tunnel,
+                junction,
+                oneway
+              FROM planet_osm_roads p
+              WHERE way && !bbox!
+                AND route IS NULL
+                AND waterway IS NULL
+                AND leisure IS NULL
+                AND landuse IS NULL
+                AND name is not null
+                AND NOT tags ? 'land_area'
+                AND (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1)
+                AND coalesce(highway, railway, aeroway, man_made) IS NOT NULL
+              ) as ways
+            GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
+          ) as w
+          LEFT JOIN abrev a ON (a.long_name = w.name)
+          WHERE ST_length(way)> 32 * !pixel_width!
+          ORDER BY ST_length(way)
+        ) as roads
+      simplify_geometries: 'true'
+
+
   - id: roads-text-name
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 15
     Datasource:
       <<: *osm2pgsql
       table: >-
@@ -1760,7 +1832,6 @@ Layer:
                 AND NOT tags ? 'land_area'
                 AND (position('GR' in name)!=1 AND position('G.R' in name) !=1 AND position('G R ' in name) !=1)
                 AND coalesce(highway, railway, aeroway, man_made) IS NOT NULL
-                AND (z_order > 3 or !scale_denominator! < 60000 /* zoom >= 13 */)
               ) as ways
             GROUP BY highway, name, short_name, railway, tunnel, junction, oneway
           ) as w
@@ -1773,7 +1844,8 @@ Layer:
 
   - id: roads-text-ref
     <<: *extents
-    zoom_min: 13
+    properties:
+      minzoom: 14
     Datasource:
       <<: *osm2pgsql
       table: >-

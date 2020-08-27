@@ -583,6 +583,7 @@
       line-width: 4;
       line-cap: round;
       line-join: round;
+      line-rasterizer: fast;
       [zoom >= 19] { line-width: 12; }
     }
   }
@@ -593,6 +594,7 @@
     line-opacity: 0.4;
     line-join: round;
     line-cap: round;
+    line-rasterizer: fast;
   }
 
 }
@@ -803,6 +805,7 @@
     line-color: #fff;
     line-join: round;
     line-cap: round;
+    line-rasterizer: fast;
     [zoom >= 19] { line-width: 10; }
   }
 
@@ -2438,7 +2441,7 @@
 }
 
 
-#roads-text-ref-low-zoom [zoom>=10][zoom <= 12][length < 9] {
+#roads-text-ref-low-zoom [length < 9] {
   // valeurs par défaut
   shield-name: "";
   shield-fill: #fff;
@@ -2484,7 +2487,7 @@
 	}
 }
 
-#roads-text-ref [zoom >= 13][length < 9] {
+#roads-text-ref [length < 9] {
   [highway = 'motorway'],
   [highway = 'trunk'],
   [highway = 'primary'],
@@ -2560,7 +2563,9 @@
   }
 }
 
-#roads-text-name [zoom >= 13] {
+
+#roads-text-name-lz,
+#roads-text-name {
   // fixes #50 et valeurs par défaut
   text-clip: true;
   text-avoid-edges: true;
