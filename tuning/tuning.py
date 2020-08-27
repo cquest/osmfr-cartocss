@@ -26,6 +26,7 @@ yml = yaml.load(open(sys.argv[1], 'r'), Loader=yaml.FullLoader)
 pg = psycopg2.connect(
     "dbname=osm user=fr password=m4d31nfr4nc3 host=osmdb")
 db = pg.cursor()
+db.execute('SET statement_timeout = 5000;') # 5s max execution time
 
 temps = 0
 objets = 0
