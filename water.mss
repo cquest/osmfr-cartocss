@@ -1,13 +1,9 @@
 #water-areas [zoom >= 8] {
-  [natural = 'glacier']::glacier {
-    [zoom >= 6] {
-      line-dasharray: 4,2;
-      line-width: 1.5;
-      line-color: #9cf;
-      polygon-pattern-file: url('symbols/glacier.png');
-      [zoom >= 8] {
-        polygon-pattern-file: url('symbols/glacier2.png');
-      }
+  [natural = 'glacier']::water {
+    polygon-pattern-file: url('symbols/glacier.png');
+    [zoom >= 8] {
+      polygon-pattern-file: url('symbols/glacier2.png');
+      polygon-pattern-alignment: global;
     }
   }
 
@@ -62,21 +58,8 @@
   [surface = 'rocky'][zoom >= 13]::surface
   {
     polygon-pattern-file: url('symbols/fr/rocky_overlay.png');
+    polygon-pattern-alignment: global;
     polygon-pattern-opacity: 0.5;
-  }
-
-}
-
-#glaciers-text [zoom >= 8] {
-  [way_area >= 10000000][zoom >= 10],
-  [way_area >= 5000000][way_area < 10000000][zoom >= 11],
-  [way_area < 5000000][zoom >= 12] {
-    text-name: "[name]";
-    text-size: 9;
-    text-fill: #99f;
-    text-face-name: @book-fonts;
-    text-halo-radius: 1;
-    text-wrap-width: 20;
   }
 }
 

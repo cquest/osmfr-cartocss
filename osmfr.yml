@@ -321,27 +321,6 @@ Layer:
       simplify_geometries: 'true'
 
 
-  - id: glaciers-text
-    # à merger avec placenames-sea ?
-    <<: *extents
-    properties:
-      minzoom: 8
-    Datasource:
-      <<: *osm2pgsql
-      table: >-
-        /* glaciers-text */ (
-        SELECT ST_PointOnSurface(way) as way,
-          coalesce(tags->'name:fr',tags->'int_name',name) as name,
-          way_area
-        FROM planet_osm_polygon
-        WHERE "natural"='glacier'
-          AND building is null
-          AND way && !bbox!
-          AND way_area > !pixel_width!*!pixel_height!*100
-        ORDER BY way_area desc
-        ) as glaciers
-
-
   - id: water-lines
     <<: *extents
     properties:
@@ -1917,6 +1896,7 @@ Layer:
             regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             way_area,
+            way_area / (!pixel_width!*!pixel_height!) as pixels,
             power
           FROM planet_osm_polygon
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -1941,6 +1921,7 @@ Layer:
             regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
             tags->'mountain_pass' as mountain_pass,
             0 as way_area,
+            0 as pixels,
             power
           FROM planet_osm_point
           LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
