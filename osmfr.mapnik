@@ -3525,37 +3525,37 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([natural] = 'bare_rock')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/fr/rocky_overlay.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/fr/rocky_overlay.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([surface] = 'rocky')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/fr/rocky_overlay.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/fr/rocky_overlay.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([natural] = 'sand')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/beach.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/beach.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([surface] = 'sand')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/beach.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/beach.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([surface] = 'gravel')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/beach.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/beach.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([natural] = 'mud')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/mud.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/mud.png" opacity="0.5" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([surface] = 'mud')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/mud.png" opacity="0.5" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/mud.png" opacity="0.5" />
     </Rule>
   </Style>
   <Style filter-mode="first" name="water-areas-dam">
@@ -3569,6 +3569,48 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>3000000</MaxScaleDenominator>
       <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3576,7 +3618,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3589,7 +3631,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'lake')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3602,7 +3644,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3615,7 +3657,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway] = 'riverbank')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3628,7 +3670,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'bay')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3641,7 +3683,34 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3653,7 +3722,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([amenity] = 'fountain')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3666,7 +3735,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'lake')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3679,7 +3748,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'water')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3692,7 +3761,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent') and ([natural] = 'bay')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3705,7 +3774,49 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([water] = 'intermittent')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3718,7 +3829,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3731,7 +3842,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'lake')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3744,7 +3855,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3757,7 +3868,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway] = 'riverbank')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3770,7 +3881,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'bay')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3783,7 +3894,34 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3795,7 +3933,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([amenity] = 'fountain')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3808,7 +3946,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'lake')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3821,7 +3959,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'water')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3834,7 +3972,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin') and ([natural] = 'bay')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -3847,14 +3985,118 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'basin')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3873,7 +4115,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'lake')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3892,7 +4134,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3911,7 +4153,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([landuse] = 'reservoir')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3930,7 +4172,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway] = 'riverbank')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3949,7 +4191,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([landuse] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3968,7 +4210,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'bay')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3987,7 +4229,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -3995,11 +4237,65 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MinScaleDenominator>100000</MinScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([amenity] = 'fountain')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4012,7 +4308,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'lake')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4025,7 +4321,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'water')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4038,7 +4334,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([landuse] = 'reservoir')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4051,7 +4347,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([landuse] = 'water')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4064,7 +4360,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent') and ([natural] = 'bay')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4077,14 +4373,76 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([water] = 'intermittent')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4103,7 +4461,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'lake')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4122,7 +4480,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'water')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4141,7 +4499,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway] = 'riverbank')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4160,7 +4518,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'bay')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4179,7 +4537,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
     </Rule>
     <Rule>
@@ -4187,11 +4545,37 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <MinScaleDenominator>100000</MinScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([waterway].match('(dock|mill_pond|canal)'))]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>100000</MaxScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
+      <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>100000</MinScaleDenominator>
+      <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([amenity] = 'fountain')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4204,7 +4588,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'lake')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4217,7 +4601,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'water')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4230,7 +4614,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond') and ([natural] = 'bay')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4243,8 +4627,72 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     <Rule>
       <MaxScaleDenominator>100000</MaxScaleDenominator>
       <Filter><![CDATA[([landuse] = 'salt_pond')]]></Filter>
-      <PolygonPatternSymbolizer file="symbols/basin.png" />
+      <PolygonPatternSymbolizer alignment="global" file="symbols/basin.png" />
       <LineSymbolizer stroke="#b5d0d0" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier') and ([waterway] = 'riverbank')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>1500000</MaxScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <MinScaleDenominator>1500000</MinScaleDenominator>
+      <Filter><![CDATA[([waterway].match('(dock|mill_pond|canal)')) and ([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
     </Rule>
     <Rule>
       <MaxScaleDenominator>1500000</MaxScaleDenominator>
@@ -4330,6 +4778,29 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
     </Rule>
     <Rule>
       <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier') and ([amenity] = 'fountain')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier') and ([landuse] = 'reservoir')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier') and ([landuse] = 'water')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+      <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
+      <Filter><![CDATA[([natural] = 'glacier')]]></Filter>
+      <PolygonPatternSymbolizer alignment="global" file="symbols/glacier2.png" />
+    </Rule>
+    <Rule>
+      <MaxScaleDenominator>3000000</MaxScaleDenominator>
       <Filter><![CDATA[([amenity] = 'fountain')]]></Filter>
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
@@ -4359,16 +4830,7 @@ FROM planet_osm_line WHERE waterway in ('river','canal','dam')
       <PolygonSymbolizer fill="#b5d0d0" gamma="0.75" />
     </Rule>
   </Style>
-  <Style filter-mode="first" name="water-areas-glacier">
-    <Rule>
-      <MaxScaleDenominator>3000000</MaxScaleDenominator>
-      <Filter><![CDATA[([natural] = 'glacier')]]></Filter>
-      <LineSymbolizer stroke="#99ccff" stroke-dasharray="4, 2" stroke-width="1.5" />
-      <PolygonPatternSymbolizer file="symbols/glacier2.png" />
-    </Rule>
-  </Style>
   <Layer maximum-scale-denominator="3000000" name="water-areas" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
-    <StyleName><![CDATA[water-areas-glacier]]></StyleName>
     <StyleName><![CDATA[water-areas-water]]></StyleName>
     <StyleName><![CDATA[water-areas-dam]]></StyleName>
     <StyleName><![CDATA[water-areas-surface]]></StyleName>
@@ -4405,46 +4867,6 @@ FROM planet_osm_polygon WHERE (waterway in ('dock','mill_pond','riverbank','cana
   and way && !bbox!
 ORDER BY z_order,way_area desc ) as water_areas]]></Parameter>
       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
-    </Datasource>
-  </Layer>
-  <Style filter-mode="first" name="glaciers-text">
-    <Rule>
-      <MaxScaleDenominator>400000</MaxScaleDenominator>
-      <Filter><![CDATA[([way_area] >= 5000000) and ([way_area] < 10000000)]]></Filter>
-      <TextSymbolizer fill="#9999ff" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="20"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>750000</MaxScaleDenominator>
-      <Filter><![CDATA[([way_area] >= 10000000)]]></Filter>
-      <TextSymbolizer fill="#9999ff" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="20"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-    <Rule>
-      <MaxScaleDenominator>200000</MaxScaleDenominator>
-      <Filter><![CDATA[([way_area] < 5000000)]]></Filter>
-      <TextSymbolizer fill="#9999ff" fontset-name="fontset-0" halo-radius="1" size="9" wrap-width="20"><![CDATA[[name]]]></TextSymbolizer>
-    </Rule>
-  </Style>
-  <Layer maximum-scale-denominator="3000000" name="glaciers-text" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over" status="on">
-    <StyleName><![CDATA[glaciers-text]]></StyleName>
-    <Datasource>
-      <Parameter name="type"><![CDATA[postgis]]></Parameter>
-      <Parameter name="dbname"><![CDATA[osm]]></Parameter>
-      <Parameter name="geometry_field"><![CDATA[way]]></Parameter>
-      <Parameter name="extent"><![CDATA[-20037508,-20037508,20037508,20037508]]></Parameter>
-      <Parameter name="host"><![CDATA[osmdb]]></Parameter>
-      <Parameter name="port">5432</Parameter>
-      <Parameter name="user"><![CDATA[fr]]></Parameter>
-      <Parameter name="password"><![CDATA[m4d31nfr4nc3]]></Parameter>
-      <Parameter name="asynchronous_request">false</Parameter>
-      <Parameter name="max_async_connection">1</Parameter>
-      <Parameter name="table"><![CDATA[/* glaciers-text */ ( SELECT ST_PointOnSurface(way) as way,
-  coalesce(tags->'name:fr',tags->'int_name',name) as name,
-  way_area
-FROM planet_osm_polygon WHERE "natural"='glacier'
-  AND building is null
-  AND way && !bbox!
-  AND way_area > !pixel_width!*!pixel_height!*100
-ORDER BY way_area desc ) as glaciers]]></Parameter>
     </Datasource>
   </Layer>
   <Style filter-mode="first" name="water-lines-rivernames">
@@ -43524,7 +43946,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     and osm_id>0
     and ref is not null
     and char_length(ref) between 1 and 8
-    and st_length(way)>1000
+    and ST_length(way)> 10 * !pixel_width!
   order by prio, way_len desc
 ) as roads]]></Parameter>
       <Parameter name="simplify_geometries"><![CDATA[true]]></Parameter>
@@ -48931,62 +49353,62 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([area] > 16000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 16000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,16,15,14,13,12,11,10,9" size="16" wrap-width="80"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>400000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([area] > 16000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 16000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,16,15,14,13,12,11,10,9" size="16" wrap-width="80"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([area] > 8000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 8000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,14,13,12,11,10,9" size="14" wrap-width="60"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>400000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([area] > 8000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 8000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,14,13,12,11,10,9" size="14" wrap-width="60"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([area] > 4000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 4000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,12,11,10,9" size="12" wrap-width="50"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>400000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([area] > 4000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 4000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,12,11,10,9" size="12" wrap-width="50"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([area] > 2000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 2000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,11,10,9" size="11" wrap-width="40"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>400000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([area] > 2000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 2000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,11,10,9" size="11" wrap-width="40"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([area] > 1000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 1000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,10,9" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>400000</MaxScaleDenominator>
       <MinScaleDenominator>5000</MinScaleDenominator>
-      <Filter><![CDATA[([area] > 1000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([area] > 1000) and ([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,10,9" size="10" wrap-width="30"><![CDATA[[nom]]]></TextSymbolizer>
     </Rule>
     <Rule>
       <MaxScaleDenominator>5000</MaxScaleDenominator>
-      <Filter><![CDATA[([kind].match('(water|reservoir|basin|salt_pond|marina|bay)'))]]></Filter>
+      <Filter><![CDATA[([kind].match('(water|reservoir|basin|salt_pond|marina|bay|glacier)'))]]></Filter>
       <TextSymbolizer avoid-edges="true" fill="#006688" fontset-name="fontset-2" halo-radius="1" margin="4" placement="interior" placement-type="simple" placements="X,10,9" size="10" wrap-width="30"><![CDATA[[name]]]></TextSymbolizer>
     </Rule>
     <Rule>
@@ -52894,6 +53316,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     regexp_replace(regexp_replace(coalesce(tags->'ele',tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
     tags->'mountain_pass' as mountain_pass,
     way_area,
+    way_area / (!pixel_width!*!pixel_height!) as pixels,
     power
   FROM planet_osm_polygon
   LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -52918,6 +53341,7 @@ ORDER BY prio desc, way_area desc ) as points]]></Parameter>
     regexp_replace(regexp_replace(coalesce(ele,tags->'ele:local',''),'[\.,][0-9]*',''),'([0-9]$)','\1m') as ele,
     tags->'mountain_pass' as mountain_pass,
     0 as way_area,
+    0 as pixels,
     power
   FROM planet_osm_point
   LEFT JOIN abrev ON long_name=coalesce(tags->'name:fr', tags->'int_name', name)
@@ -60768,4 +61192,4 @@ UNION
     </Datasource>
   </Layer>
 </Map>
-<!-- 1971 bad filters (rules removed), 9942 rules kept -->
+<!-- 1971 bad filters (rules removed), 10008 rules kept -->
